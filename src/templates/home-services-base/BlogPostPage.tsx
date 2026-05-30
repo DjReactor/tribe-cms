@@ -87,7 +87,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="font-heading text-3xl font-bold text-gray-900 mb-12 text-center">Keep Reading</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedPosts.map((related) => (
+              {relatedPosts?.map((related) => (
                 <Link 
                   key={related.id} 
                   href={`/blog/${related.slug}`} 

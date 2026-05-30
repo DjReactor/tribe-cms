@@ -38,7 +38,7 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
           <div>
             <h3 className="font-bold text-lg mb-6">Our Services</h3>
             <ul className="space-y-3 text-sm text-gray-400">
-              {services.map((service) => (
+              {services?.map((service) => (
                 <li key={service.id}>
                   <Link href={`/services/${service.slug}`} className="hover:text-white transition-colors">
                     {service.name}
@@ -54,7 +54,7 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
           <div>
             <h3 className="font-bold text-lg mb-6">Areas We Serve</h3>
             <ul className="space-y-3 text-sm text-gray-400">
-              {serviceAreas.map((area) => (
+              {serviceAreas?.map((area) => (
                 <li key={area.id}>
                   <Link href={`/${area.slug}`} className="hover:text-white transition-colors">
                     {area.name}

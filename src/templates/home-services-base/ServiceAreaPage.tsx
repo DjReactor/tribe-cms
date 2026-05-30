@@ -56,7 +56,7 @@ export function ServiceAreaPage({ area, businessInfo, resolvedCopy, services, co
               <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100">
                 <h3 className="font-heading text-xl font-bold text-gray-900 mb-6">Services Offered in {area.name}</h3>
                 <div className="space-y-4">
-                  {services.map((service) => (
+                  {services?.map((service) => (
                     <Link 
                       key={service.id} 
                       href={`/services/${service.slug}`} 

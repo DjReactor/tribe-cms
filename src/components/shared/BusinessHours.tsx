@@ -20,7 +20,7 @@ export function BusinessHours({ hours, className = '' }: BusinessHoursProps) {
 
   return (
     <div className={`space-y-3 ${className}`}>
-      {hours.map((hour) => (
+      {hours?.map((hour) => (
         <div key={hour.day} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
           <span className="font-medium text-gray-900">{daysMap[hour.day] || hour.day}</span>
           <span className={hour.enabled ? 'text-gray-600' : 'text-gray-400 italic'}>
