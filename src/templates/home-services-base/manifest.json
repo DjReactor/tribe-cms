@@ -1,6 +1,42 @@
 {
   "id": "home-services-base",
   "name": "Home Services Base",
+  "description": "A professional, highly-converting design for local home service businesses.",
   "version": "1.0.0",
-  "config_schema": []
+  "preview_image": "/template-previews/home-services-base.jpg",
+  "tags": ["professional", "clean", "modern"],
+  "supports": [],
+  "config_schema": [
+    {
+      "key": "accent_color",
+      "label": "Accent Color",
+      "description": "Primary brand color used for buttons, links, and highlights.",
+      "type": "color",
+      "default": "#2D6A4F"
+    },
+    {
+      "key": "hero_style",
+      "label": "Hero Style",
+      "description": "Controls the layout of the homepage hero section.",
+      "type": "select",
+      "default": "fullwidth",
+      "options": [
+        { "value": "fullwidth", "label": "Full Width Background" },
+        { "value": "centered",  "label": "Centered Text" },
+        { "value": "split",     "label": "Split: Text + Image" }
+      ]
+    },
+    {
+      "key": "show_testimonials_on_homepage",
+      "label": "Show testimonials section on homepage",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "show_service_areas_on_homepage",
+      "label": "Show service areas section on homepage",
+      "type": "boolean",
+      "default": true
+    }
+  ]
 }

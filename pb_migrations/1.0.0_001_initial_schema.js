@@ -1,6 +1,17 @@
 migrate((db) => {
-  // Empty migration - schema is applied via API in deploy steps
-  // This file ensures the migrations folder exists and is valid
+  const schema = require("../pb_schema/schema.json");
+  schema.forEach((c) => {
+    try {
+      let collection = db.findCollectionByNameOrId(c.name);
+      if (!collection) {
+        collection = new Collection(c);
+        db.save(collection);
+      }
+    } catch(e) {
+      const collection = new Collection(c);
+      db.save(collection);
+    }
+  });
 }, (db) => {
   // down
 });
