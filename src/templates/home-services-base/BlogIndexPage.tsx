@@ -28,7 +28,7 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-20">
-        {posts.length === 0 ? (
+        {!posts || posts.length === 0 ? (
           <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">No Posts Yet</h2>
             <p className="text-gray-600">Check back soon for our first blog post.</p>

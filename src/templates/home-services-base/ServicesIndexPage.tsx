@@ -17,7 +17,7 @@ export function ServicesIndexPage({ services, businessInfo, resolvedCopy, config
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-20">
-        {services.length === 0 ? (
+        {!services || services.length === 0 ? (
           <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">No Services Listed Yet</h2>
             <p className="text-gray-600">Please check back soon for our full list of services.</p>

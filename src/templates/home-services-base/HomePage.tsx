@@ -51,7 +51,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
       </section>
 
       {/* Services Grid */}
-      {services.length > 0 && (
+      {services?.length > 0 && (
         <section className="py-24 px-6 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -92,7 +92,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
       </section>
 
       {/* Testimonials */}
-      {showTestimonials && testimonials.length > 0 && (
+      {showTestimonials && testimonials?.length > 0 && (
         <section className="py-24 px-6 bg-white">
           <div className="max-w-6xl mx-auto">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16">What Our Customers Say</h2>
@@ -113,7 +113,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
       )}
 
       {/* Service Areas */}
-      {showAreas && serviceAreas.length > 0 && (
+      {showAreas && serviceAreas?.length > 0 && (
         <section className="py-24 px-6 bg-gray-50 border-y border-gray-200">
           <div className="max-w-6xl mx-auto text-center">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-12">Areas We Serve</h2>

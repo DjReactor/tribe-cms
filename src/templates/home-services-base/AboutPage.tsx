@@ -68,7 +68,7 @@ export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: 
             </div>
 
             {/* Service Areas */}
-            {serviceAreas.length > 0 && (
+            {serviceAreas?.length > 0 && (
               <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
                 <h3 className="font-heading text-2xl font-bold text-gray-900 mb-6">Areas We Serve</h3>
                 <ul className="grid grid-cols-2 gap-3">

@@ -82,7 +82,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
       </article>
 
       {/* Related Posts */}
-      {relatedPosts.length > 0 && (
+      {relatedPosts?.length > 0 && (
         <div className="bg-gray-50 py-24 border-t border-gray-200">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="font-heading text-3xl font-bold text-gray-900 mb-12 text-center">Keep Reading</h2>

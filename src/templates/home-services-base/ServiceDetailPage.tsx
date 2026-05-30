@@ -78,7 +78,7 @@ export function ServiceDetailPage({ service, businessInfo, serviceAreas, config 
               </Link>
             </div>
 
-            {serviceAreas.length > 0 && (
+            {serviceAreas?.length > 0 && (
               <div className="bg-white p-8 rounded-2xl border border-gray-200">
                 <h3 className="font-heading text-xl font-bold text-gray-900 mb-4">Areas We Serve</h3>
                 <ul className="space-y-3">

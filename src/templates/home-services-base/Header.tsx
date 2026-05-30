@@ -14,7 +14,7 @@ export function Header({ businessInfo, serviceAreas, blogEnabled, config }: Head
               Services
             </Link>
           </li>
-          {serviceAreas.length > 0 && (
+          {serviceAreas?.length > 0 && (
             <li>
               {serviceAreas.length === 1 ? (
                 <Link href={`/${serviceAreas[0].slug}`} className="hover:text-[var(--color-accent)] transition-colors">

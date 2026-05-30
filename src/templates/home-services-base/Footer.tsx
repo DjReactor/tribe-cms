@@ -34,7 +34,7 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
         </div>
 
         {/* Column 2: Services */}
-        {services.length > 0 && (
+        {services?.length > 0 && (
           <div>
             <h3 className="font-bold text-lg mb-6">Our Services</h3>
             <ul className="space-y-3 text-sm text-gray-400">
@@ -50,7 +50,7 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
         )}
 
         {/* Column 3: Service Areas */}
-        {serviceAreas.length > 0 && (
+        {serviceAreas?.length > 0 && (
           <div>
             <h3 className="font-bold text-lg mb-6">Areas We Serve</h3>
             <ul className="space-y-3 text-sm text-gray-400">
