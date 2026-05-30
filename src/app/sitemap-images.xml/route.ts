@@ -11,15 +11,15 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>\${domain}</loc>`;
+    <loc>${domain}</loc>`;
     
   media.forEach(m => {
     if (m.url || m.file) {
-      const url = m.url || \`\${domain}/api/files/media/\${m.id}/\${m.file}\`;
+      const url = m.url || `${domain}/api/files/media/${m.id}/${m.file}`;
       xml += `
     <image:image>
-      <image:loc>\${url}</image:loc>
-      <image:caption>\${m.alt_text || ''}</image:caption>
+      <image:loc>${url}</image:loc>
+      <image:caption>${m.alt_text || ''}</image:caption>
     </image:image>`;
     }
   });
