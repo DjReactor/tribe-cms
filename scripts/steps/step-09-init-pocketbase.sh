@@ -12,6 +12,12 @@ PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 fuser -k "${PB_PORT}/tcp" 2>/dev/null || true
 sleep 1
 
+info "Creating admin account..."
+"$BASE/pocketbase" superuser upsert "admin@successforce.com" "${PB_ADMIN_PW}" --dir "$BASE/pb_data" > /dev/null 2>&1
+RC=$?
+[ $RC -ne 0 ] && \
+  { mark_step_failed "$SLUG" "09_init_pocketbase" "Admin creation failed via CLI"; exit_fail "Admin creation failed"; }
+
 info "Starting PocketBase on port $PB_PORT for initialization..."
 "$BASE/pocketbase" serve \
   --http "127.0.0.1:${PB_PORT}" \
@@ -22,19 +28,9 @@ trap "kill $PB_PID 2>/dev/null; wait $PB_PID 2>/dev/null" EXIT
 wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 20 2 || \
   { mark_step_failed "$SLUG" "09_init_pocketbase" "PocketBase did not start within 40s"; exit_fail "PocketBase failed to start"; }
 
-info "PocketBase ready. Creating admin account..."
-ADMIN_RESP=$(curl -sf -X POST \
-  "http://127.0.0.1:${PB_PORT}/api/admins" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"admin@successforce.com\",\"password\":\"${PB_ADMIN_PW}\",\"passwordConfirm\":\"${PB_ADMIN_PW}\"}" 2>/dev/null)
-
-ADMIN_ID=$(echo "$ADMIN_RESP" | jq -r '.id // empty')
-[ -z "$ADMIN_ID" ] && \
-  { mark_step_failed "$SLUG" "09_init_pocketbase" "Failed to create PB admin: $(echo $ADMIN_RESP | jq -r '.message // .')"; exit_fail "Admin creation failed"; }
-
 info "Authenticating as admin..."
 AUTH_RESP=$(curl -sf -X POST \
-  "http://127.0.0.1:${PB_PORT}/api/admins/auth-with-password" \
+  "http://127.0.0.1:${PB_PORT}/api/collections/_superusers/auth-with-password" \
   -H "Content-Type: application/json" \
   -d "{\"identity\":\"admin@successforce.com\",\"password\":\"${PB_ADMIN_PW}\"}" 2>/dev/null)
 

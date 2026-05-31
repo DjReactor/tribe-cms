@@ -90,7 +90,7 @@ exit_fail() { fail "$1"; exit 1; }
 pb_authenticate() {
   local PB_URL=$1 EMAIL=$2 PASSWORD=$3
   local RESPONSE=$(curl -sf -X POST \
-    "${PB_URL}/api/admins/auth-with-password" \
+    "${PB_URL}/api/collections/_superusers/auth-with-password" \
     -H "Content-Type: application/json" \
     -d "{\"identity\":\"${EMAIL}\",\"password\":\"${PASSWORD}\"}" 2>/dev/null)
   echo "$RESPONSE" | jq -r '.token // empty'
