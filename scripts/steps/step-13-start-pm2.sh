@@ -33,7 +33,6 @@ pm2 start pnpm \
   --time \
   --restart-delay 3000 \
   --max-restarts 10 \
-  --env-file "$BASE/.env" \
   -- start -- --port "$NEXTJS_PORT"
 
 sleep 8  # Give Next.js time to boot
