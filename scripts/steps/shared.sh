@@ -45,29 +45,29 @@ set_state() {
 }
 
 mark_step_running() {
-  set_state "$1" ".steps.${2}.status = \"running\" | .steps.${2}.ran_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\""
+  set_state "$1" ".steps[\"${2}\"].status = \"running\" | .steps[\"${2}\"].ran_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\""
 }
 
 mark_step_ok() {
-  set_state "$1" ".steps.${2}.status = \"run_ok\" | .steps.${2}.ran_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" | .steps.${2}.error = null"
+  set_state "$1" ".steps[\"${2}\"].status = \"run_ok\" | .steps[\"${2}\"].ran_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" | .steps[\"${2}\"].error = null"
 }
 
 mark_step_failed() {
   local SLUG=$1 STEP=$2 ERROR=$3
-  set_state "$SLUG" ".steps.${STEP}.status = \"run_failed\" | .steps.${STEP}.error = $(echo "$ERROR" | jq -Rs .)"
+  set_state "$SLUG" ".steps[\"${STEP}\"].status = \"run_failed\" | .steps[\"${STEP}\"].error = $(echo "$ERROR" | jq -Rs .)"
 }
 
 mark_step_verified() {
-  set_state "$1" ".steps.${2}.status = \"verified\" | .steps.${2}.verified_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" | .steps.${2}.error = null"
+  set_state "$1" ".steps[\"${2}\"].status = \"verified\" | .steps[\"${2}\"].verified_at = \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" | .steps[\"${2}\"].error = null"
 }
 
 mark_step_verify_failed() {
   local SLUG=$1 STEP=$2 ERROR=$3
-  set_state "$SLUG" ".steps.${STEP}.status = \"verify_failed\" | .steps.${STEP}.error = $(echo "$ERROR" | jq -Rs .)"
+  set_state "$SLUG" ".steps[\"${STEP}\"].status = \"verify_failed\" | .steps[\"${STEP}\"].error = $(echo "$ERROR" | jq -Rs .)"
 }
 
 mark_step_skipped() {
-  set_state "$1" ".steps.${2}.status = \"skipped\""
+  set_state "$1" ".steps[\"${2}\"].status = \"skipped\""
 }
 
 # ── Output helpers ─────────────────────────────────────────────────────────────
