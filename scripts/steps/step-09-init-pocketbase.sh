@@ -40,14 +40,20 @@ PB_TOKEN=$(echo "$AUTH_RESP" | jq -r '.token // empty')
 
 info "Importing collection schema..."
 SCHEMA_JSON=$(cat "$BASE/pb_schema/schema.json")
-IMPORT_RESP=$(curl -sf -X PUT \
+IMPORT_RESP=$(curl -s -w "\n%{http_code}" -X PUT \
   "http://127.0.0.1:${PB_PORT}/api/collections/import" \
   -H "Authorization: ${PB_TOKEN}" \
   -H "Content-Type: application/json" \
   -d "{\"collections\":${SCHEMA_JSON},\"deleteMissing\":false}" 2>/dev/null)
 
-echo "$IMPORT_RESP" | jq -e '.code >= 400' > /dev/null 2>&1 && \
-  { mark_step_failed "$SLUG" "09_init_pocketbase" "Schema import failed: $(echo $IMPORT_RESP | jq -r '.message // .')"; exit_fail "Schema import failed"; }
+HTTP_CODE=$(echo "$IMPORT_RESP" | tail -n1)
+BODY=$(echo "$IMPORT_RESP" | head -n-1)
+
+if [ "$HTTP_CODE" -ge 400 ]; then
+  ERR_MSG=$(echo "$BODY" | jq -r '.message // .')
+  mark_step_failed "$SLUG" "09_init_pocketbase" "Schema import failed: $ERR_MSG"
+  exit_fail "Schema import failed: $ERR_MSG ($HTTP_CODE)"
+fi
 
 # Store token in state (expires in 1 day, enough for all steps)
 set_state "$SLUG" ".runtime.pb_admin_token = \"$PB_TOKEN\" | .runtime.pb_admin_token_expires = \"$(date -u -d '+23 hours' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u +%Y-%m-%dT%H:%M:%SZ)\""
