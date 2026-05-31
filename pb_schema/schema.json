@@ -245,5 +245,19 @@
       { "name": "update_available", "type": "bool" },
       { "name": "last_updated", "type": "date" }
     ]
+  },
+  {
+    "name": "users",
+    "type": "auth",
+    "listRule": "id = @request.auth.id",
+    "viewRule": "id = @request.auth.id",
+    "createRule": "",
+    "updateRule": "id = @request.auth.id",
+    "deleteRule": "id = @request.auth.id",
+    "fields": [
+      { "name": "role", "type": "text", "required": true },
+      { "name": "display_name", "type": "text" },
+      { "name": "must_change_password", "type": "bool" }
+    ]
   }
 ]
