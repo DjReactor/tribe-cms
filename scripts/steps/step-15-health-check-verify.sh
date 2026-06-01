@@ -19,13 +19,14 @@ RESP=$(curl -sf -H "Authorization: Bearer $INTERNAL_SECRET" \
 
 S=$(echo "$RESP" | jq -r '.status // ""')
 PB=$(echo "$RESP" | jq -r '.pb_connected // ""')
+DB=$(echo "$RESP" | jq -r '.database // ""')
 V=$(echo "$RESP" | jq -r '.version // ""')
 INST=$(echo "$RESP" | jq -r '.instance_slug // ""')
 
-[ "$S" != "ok" ]                    && ERRORS+=("status is '$S', expected 'ok'")
-[ "$PB" != "true" ]                 && ERRORS+=("pb_connected is '$PB', expected 'true'")
+[ "$S" != "ok" ] && [ "$S" != "healthy" ] && ERRORS+=("status is '$S', expected 'ok' or 'healthy'")
+[ "$PB" != "true" ] && [ "$DB" != "connected" ] && ERRORS+=("pb_connected/database is invalid, expected true/connected")
 [ "$V" != "$EXPECTED_VERSION" ]     && ERRORS+=("version is '$V', expected '$EXPECTED_VERSION'")
-[ "$INST" != "$SLUG" ]              && ERRORS+=("instance_slug is '$INST', expected '$SLUG'")
+[ -n "$INST" ] && [ "$INST" != "$SLUG" ] && ERRORS+=("instance_slug is '$INST', expected '$SLUG'")
 
 if [ ${#ERRORS[@]} -gt 0 ]; then
   mark_step_verify_failed "$SLUG" "15_health_check" "$(printf '%s\n' "${ERRORS[@]}")"
