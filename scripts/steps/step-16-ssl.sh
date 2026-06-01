@@ -20,11 +20,23 @@ info "DNS check: $DOMAIN → $DNS_IP (VPS: $VPS_IP)"
 [ "$DNS_IP" != "$VPS_IP" ] && \
   warn "DNS does not point to VPS. Certbot may fail. Expected $VPS_IP, got $DNS_IP"
 
-certbot --nginx \
-  -d "$DOMAIN" -d "www.${DOMAIN}" \
-  --non-interactive --agree-tos \
-  -m "${SF_SSL_EMAIL:-ssl@successforce.com}" \
-  --redirect 2>&1
+WWW_DNS_IP=$(dig +short "www.$DOMAIN" 2>/dev/null | tail -1)
+
+if [ "$WWW_DNS_IP" = "$VPS_IP" ]; then
+  info "DNS check: www.$DOMAIN → $WWW_DNS_IP"
+  certbot --nginx \
+    -d "$DOMAIN" -d "www.${DOMAIN}" \
+    --non-interactive --agree-tos \
+    -m "${SF_SSL_EMAIL:-ssl@successforce.com}" \
+    --redirect 2>&1
+else
+  info "DNS for www.$DOMAIN missing or mismatch. Requesting SSL for $DOMAIN only."
+  certbot --nginx \
+    -d "$DOMAIN" \
+    --non-interactive --agree-tos \
+    -m "${SF_SSL_EMAIL:-ssl@successforce.com}" \
+    --redirect 2>&1
+fi
 
 RC=$?
 if [ $RC -ne 0 ]; then
