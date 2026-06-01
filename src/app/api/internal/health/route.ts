@@ -15,6 +15,7 @@ export async function GET(req: Request) {
       status: 'ok',
       pb_connected: true,
       version,
+      instance_slug: process.env.INSTANCE_SLUG || '',
       timestamp: new Date().toISOString()
     });
   } catch (error: any) {
