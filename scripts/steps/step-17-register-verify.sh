@@ -13,16 +13,24 @@ ERRORS=()
 [ -z "$RECORD_ID" ] || [ "$RECORD_ID" = "null" ] && \
   ERRORS+=("No record ID in state file — registration may have failed")
 
-if [ -n "$RECORD_ID" ] && [ "$RECORD_ID" != "null" ]; then
-  SA_TOKEN=$(pb_authenticate "$SF_SUPERADMIN_PB_URL" \
-    "$SF_SUPERADMIN_PB_ADMIN_EMAIL" "$SF_SUPERADMIN_PB_ADMIN_PASSWORD")
-  [ -z "$SA_TOKEN" ] && ERRORS+=("Cannot reach Super Admin PocketBase")
+SA_DB="/opt/sf-superadmin/sf-superadmin/data/instances.db"
 
-  if [ -n "$SA_TOKEN" ]; then
-    RECORD=$(pb_api "$SA_TOKEN" GET \
-      "${SF_SUPERADMIN_PB_URL}/api/collections/instances/records/${RECORD_ID}")
-    R_SLUG=$(echo "$RECORD" | jq -r '.slug // ""')
-    [ "$R_SLUG" != "$SLUG" ] && ERRORS+=("Record slug mismatch: got '$R_SLUG', expected '$SLUG'")
+if [ -n "$RECORD_ID" ] && [ "$RECORD_ID" != "null" ]; then
+  if [ ! -f "$SA_DB" ]; then
+    ERRORS+=("SuperAdmin instances.db not found at $SA_DB")
+  else
+    DB_SLUG=$(node -e "
+const { DatabaseSync } = require('node:sqlite');
+const db = new DatabaseSync(process.argv[1]);
+try {
+  const row = db.prepare('SELECT slug FROM instances WHERE id = ?').get(process.argv[2]);
+  process.stdout.write(row ? row.slug : '');
+} catch(e) { process.stdout.write(''); }
+" "$SA_DB" "$RECORD_ID" 2>/dev/null)
+
+    if [ "$DB_SLUG" != "$SLUG" ]; then
+      ERRORS+=("Record slug mismatch in instances.db: got '$DB_SLUG', expected '$SLUG'")
+    fi
   fi
 fi
 
@@ -32,4 +40,4 @@ if [ ${#ERRORS[@]} -gt 0 ]; then
 fi
 
 mark_step_verified "$SLUG" "17_register"
-ok "Instance record verified in Super Admin (ID: $RECORD_ID)"
+ok "Instance record verified in SuperAdmin SQLite registry (ID: $RECORD_ID)"
