@@ -4,7 +4,6 @@ SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."13_start_pm2".status')
-[ "$STATUS" = "verified" ] && exit_ok "Already verified"
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')

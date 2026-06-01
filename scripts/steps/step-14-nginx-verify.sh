@@ -4,7 +4,6 @@ SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."14_nginx".status')
-[ "$STATUS" = "verified" ] && exit_ok "Already verified"
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
 DOMAIN=$(echo "$STATE" | jq -r '.input.domain')

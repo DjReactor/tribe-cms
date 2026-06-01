@@ -4,7 +4,6 @@ SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."16_ssl".status')
-[ "$STATUS" = "verified" ] && exit_ok "Already verified"
 [ "$STATUS" = "skipped" ]  && exit_ok "SSL was intentionally skipped"
 [ "$STATUS" = "pending" ]  && exit_fail "Step not run yet"
 

@@ -5,7 +5,6 @@ SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."01_validate".status')
 
-[ "$STATUS" = "verified" ] && exit_ok "Already verified"
 [ "$STATUS" != "run_ok" ] && [ "$STATUS" != "verify_failed" ] && \
   exit_fail "Step has not been run yet (status: $STATUS). Run step-01-validate.sh first."
 

@@ -4,7 +4,6 @@ SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."18_notify".status')
-[ "$STATUS" = "verified" ] && exit_ok "Already verified"
 [ "$STATUS" = "pending" ]  && exit_fail "Step not run yet"
 [ "$STATUS" = "run_failed" ] && \
   { warn "Notification failed. You can re-run or mark as skipped if email was sent manually."
