@@ -41,7 +41,10 @@ NODE_ENV=production pnpm build
 
 # Step 3: Artifact Generation
 echo "[2/4] Generating release tarballs..."
-tar -czf sf-template-v${VERSION}-source.tar.gz src/ public/ package.json pnpm-lock.yaml next.config.ts tailwind.config.ts tsconfig.json pb_migrations/ pb_schema/ pb_seed/ .sf-version CHANGELOG.md
+tar -czf sf-template-v${VERSION}-source.tar.gz \
+  src/ public/ scripts/ pb_migrations/ \
+  package.json pnpm-lock.yaml postcss.config.mjs tsconfig.json next.config.ts \
+  .sf-version README.md
 tar -czf sf-template-v${VERSION}-build.tar.gz .next/
 
 # Step 4: Cryptographic Checksums
