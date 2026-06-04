@@ -49,7 +49,9 @@ tar -czf sf-template-v${VERSION}-build.tar.gz .next/
 
 # Step 4: Cryptographic Checksums
 echo "[3/4] Generating cryptographic checksums..."
-sha256sum sf-template-v${VERSION}-source.tar.gz sf-template-v${VERSION}-build.tar.gz > checksums.sha256
+mv sf-template-v${VERSION}-source.tar.gz source.tar.gz
+mv sf-template-v${VERSION}-build.tar.gz build.tar.gz
+sha256sum source.tar.gz build.tar.gz > checksums.sha256
 
 # Step 5: Registry Update
 echo "[4/4] Copying artifacts to local registry..."
@@ -57,8 +59,8 @@ REGISTRY_DIR="/opt/sf-registry"
 RELEASE_DIR="${REGISTRY_DIR}/releases/v${VERSION}"
 
 mkdir -p "$RELEASE_DIR"
-cp sf-template-v${VERSION}-source.tar.gz "$RELEASE_DIR/source.tar.gz"
-cp sf-template-v${VERSION}-build.tar.gz "$RELEASE_DIR/build.tar.gz"
+cp source.tar.gz "$RELEASE_DIR/source.tar.gz"
+cp build.tar.gz "$RELEASE_DIR/build.tar.gz"
 cp checksums.sha256 "$RELEASE_DIR/checksums.sha256"
 
 echo "Updating manifest.json..."
@@ -85,8 +87,8 @@ jq --arg version "$VERSION" \
 cp new-manifest.json "$REGISTRY_DIR/manifest.json"
 
 echo "Cleaning up..."
-rm sf-template-v${VERSION}-source.tar.gz
-rm sf-template-v${VERSION}-build.tar.gz
+rm source.tar.gz
+rm build.tar.gz
 rm checksums.sha256
 rm current-manifest.json new-manifest.json
 
