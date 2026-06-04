@@ -6,7 +6,7 @@ export default async function MediaPage() {
   const media = await getMedia();
   // Using the PB_URL environment variable to pass to the client components.
   // Fallback to localhost for local dev if not set.
-  const pbUrl = process.env.PB_URL || 'http://127.0.0.1:8090';
+  const pbUrl = process.env['PB_URL'] || 'http://127.0.0.1:8090';
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">

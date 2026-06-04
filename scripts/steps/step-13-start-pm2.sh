@@ -26,6 +26,12 @@ wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 15 2 || \
 info "PocketBase online"
 
 info "Starting Next.js under PM2..."
+# Explicitly load .env variables into the environment before starting PM2
+# so Next.js doesn't have to rely on next start's internal dotenv loading
+set -a
+[ -f "$BASE/.env" ] && source "$BASE/.env"
+set +a
+
 pm2 start pnpm \
   --name "sf-${SLUG}-next" \
   --cwd "$BASE" \

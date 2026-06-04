@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 
 export async function getPocketBaseClient() {
-  const url = process.env.PB_URL || 'http://127.0.0.1:8090';
+  const url = process.env['PB_URL'] || 'http://127.0.0.1:8090';
   const pb = new PocketBase(url);
   
   try {

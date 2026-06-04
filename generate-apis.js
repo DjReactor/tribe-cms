@@ -10,7 +10,7 @@ import PocketBase from 'pocketbase';
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
-    const pb = new PocketBase(process.env.PB_URL || 'http://127.0.0.1:8090');
+    const pb = new PocketBase(process.env['PB_URL'] || 'http://127.0.0.1:8090');
     
     await pb.collection('users').authWithPassword(email, password);
     
