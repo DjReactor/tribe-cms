@@ -18,7 +18,7 @@ TMP_PID=$!
 trap "kill $TMP_PID 2>/dev/null; wait $TMP_PID 2>/dev/null" EXIT
 wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 15 2 || { kill $TMP_PID 2>/dev/null; exit_fail "PocketBase won't start for verification"; }
 
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "admin@successforce.com" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
 
 # Verify all expected collections exist (schema + migration additions)
 EXPECTED="business_info services service_areas testimonials blog_posts media contacts ai_call_logs settings seo_settings redirects seo_404_log site_content template_meta users"

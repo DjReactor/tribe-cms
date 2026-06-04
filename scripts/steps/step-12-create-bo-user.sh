@@ -17,7 +17,7 @@ PB_PID=$!
 trap "kill $PB_PID 2>/dev/null; wait $PB_PID 2>/dev/null" EXIT
 wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 15 2 || exit_fail "PocketBase won't start"
 
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "admin@successforce.com" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
 [ -z "$TOKEN" ] && exit_fail "PB auth failed"
 
 EXISTING_USER=$(pb_api "$TOKEN" GET "http://127.0.0.1:${PB_PORT}/api/collections/users/records?filter=(email='$(echo "$BO_EMAIL" | jq -R -r @uri)')")

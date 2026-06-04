@@ -27,7 +27,7 @@ else
 fi
 
 # Get fresh token
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "admin@successforce.com" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
 [ -z "$TOKEN" ] && ERRORS+=("Could not authenticate as PocketBase admin")
 
 if [ -n "$TOKEN" ]; then

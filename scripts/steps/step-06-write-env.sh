@@ -33,7 +33,7 @@ cat > "$ENV_FILE" << ENVEOF
 
 PB_URL=http://127.0.0.1:${PB_PORT}
 PB_PORT=${PB_PORT}
-PB_ADMIN_EMAIL=admin@successforce.com
+PB_ADMIN_EMAIL=${PB_ADMIN_EMAIL:-admin@successforce.com}
 PB_ADMIN_PASSWORD=${PB_ADMIN_PW}
 
 PORT=${NEXTJS_PORT}
