@@ -48,22 +48,29 @@ tar -czf sf-template-v${VERSION}-build.tar.gz .next/
 echo "[3/4] Generating cryptographic checksums..."
 sha256sum sf-template-v${VERSION}-source.tar.gz sf-template-v${VERSION}-build.tar.gz > checksums.sha256
 
-# Step 5: Upload & Registry Update
-echo "[4/4] Uploading artifacts to registry..."
-# Note: Ensure AWS CLI is configured with the correct Cloudflare R2 / S3 credentials
-aws s3 cp sf-template-v${VERSION}-source.tar.gz s3://successforce-registry/releases/v${VERSION}/source.tar.gz
-aws s3 cp sf-template-v${VERSION}-build.tar.gz s3://successforce-registry/releases/v${VERSION}/build.tar.gz
-aws s3 cp checksums.sha256 s3://successforce-registry/releases/v${VERSION}/checksums.sha256
+# Step 5: Registry Update
+echo "[4/4] Copying artifacts to local registry..."
+REGISTRY_DIR="/opt/sf-registry"
+RELEASE_DIR="${REGISTRY_DIR}/releases/v${VERSION}"
+
+mkdir -p "$RELEASE_DIR"
+cp sf-template-v${VERSION}-source.tar.gz "$RELEASE_DIR/source.tar.gz"
+cp sf-template-v${VERSION}-build.tar.gz "$RELEASE_DIR/build.tar.gz"
+cp checksums.sha256 "$RELEASE_DIR/checksums.sha256"
 
 echo "Updating manifest.json..."
-aws s3 cp s3://successforce-registry/manifest.json current-manifest.json || echo '{"channels": {"stable": {}}, "versions": []}' > current-manifest.json
+if [ -f "$REGISTRY_DIR/manifest.json" ]; then
+  cp "$REGISTRY_DIR/manifest.json" current-manifest.json
+else
+  echo '{"channels": {"stable": {}}, "versions": []}' > current-manifest.json
+fi
 
 # Using jq to update the manifest
 jq --arg version "$VERSION" \
    --arg date "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-   --arg source "https://updates.successforce.agency/releases/v${VERSION}/source.tar.gz" \
-   --arg build "https://updates.successforce.agency/releases/v${VERSION}/build.tar.gz" \
-   --arg checksums "https://updates.successforce.agency/releases/v${VERSION}/checksums.sha256" \
+   --arg source "file://${RELEASE_DIR}/source.tar.gz" \
+   --arg build "file://${RELEASE_DIR}/build.tar.gz" \
+   --arg checksums "file://${RELEASE_DIR}/checksums.sha256" \
    '.channels.stable.version = $version | 
     .channels.stable.released_at = $date | 
     .channels.stable.source_url = $source | 
@@ -72,7 +79,7 @@ jq --arg version "$VERSION" \
     .versions += [{"version": $version, "channel": "stable", "released_at": $date}]' \
    current-manifest.json > new-manifest.json
 
-aws s3 cp new-manifest.json s3://successforce-registry/manifest.json
+cp new-manifest.json "$REGISTRY_DIR/manifest.json"
 
 echo "Cleaning up..."
 rm sf-template-v${VERSION}-source.tar.gz
