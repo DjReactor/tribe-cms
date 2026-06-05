@@ -1,4 +1,5 @@
-import { getBusinessInfo } from '@/lib/settings';
+import { getBusinessInfo, getSettings } from '@/lib/settings';
+import { getPocketBaseClient } from '@/lib/pocketbase';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { CheckCircle2, Circle } from 'lucide-react';
@@ -6,6 +7,18 @@ import Link from 'next/link';
 
 export default async function DashboardHome() {
   const businessInfo = await getBusinessInfo();
+  const settings = await getSettings();
+  
+  let totalContacts = 0;
+  if (settings?.crm_enabled) {
+    try {
+      const pb = await getPocketBaseClient();
+      const contactsList = await pb.collection('contacts').getList(1, 1);
+      totalContacts = contactsList.totalItems;
+    } catch (e) {
+      // safe fallback
+    }
+  }
   
   const setupSteps = [
     {
@@ -39,15 +52,17 @@ export default async function DashboardHome() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Total Contacts</CardDescription>
-            <CardTitle className="text-4xl font-light">24</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs text-emerald-600 font-medium">+3 from last week</div>
-          </CardContent>
-        </Card>
+        {settings?.crm_enabled && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription>Total Contacts</CardDescription>
+              <CardTitle className="text-4xl font-light">{totalContacts}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xs text-slate-500">All time leads</div>
+            </CardContent>
+          </Card>
+        )}
         
         <Card>
           <CardHeader className="pb-2">
