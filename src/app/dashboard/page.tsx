@@ -8,17 +8,51 @@ import Link from 'next/link';
 export default async function DashboardHome() {
   const businessInfo = await getBusinessInfo();
   const settings = await getSettings();
-  
+
   let totalContacts = 0;
-  if (settings?.crm_enabled) {
+  let activeServicesCount = 0;
+  let seoScore = 100;
+  try {
+    const pb = await getPocketBaseClient();
+
+    // Fetch active contacts (if CRM enabled)
+    if (settings?.crm_enabled) {
+      try {
+        const contactsList = await pb.collection('contacts').getList(1, 1);
+        totalContacts = contactsList.totalItems;
+      } catch (e) {
+        // safe fallback
+      }
+    }
+
+    // Fetch active services count
     try {
-      const pb = await getPocketBaseClient();
-      const contactsList = await pb.collection('contacts').getList(1, 1);
-      totalContacts = contactsList.totalItems;
+      const servicesList = await pb.collection('services').getList(1, 1, {
+        filter: 'is_active=true',
+      });
+      activeServicesCount = servicesList.totalItems;
     } catch (e) {
       // safe fallback
     }
+
+    // Compute SEO score (mirrors /dashboard/seo logic)
+    try {
+      const seoSettings = await pb.collection('seo_settings').getFirstListItem('').catch(() => null);
+      const logs404 = await pb.collection('seo_404_log').getFullList({ sort: '-last_seen' }).catch(() => []);
+      const unresolved404s = logs404.filter((l: any) => !l.resolved).length;
+
+      if (!seoSettings?.site_name) seoScore -= 10;
+      if (!seoSettings?.default_og_image) seoScore -= 5;
+      if (!seoSettings?.google_verification) seoScore -= 5;
+      if (unresolved404s > 0) seoScore -= Math.min(20, unresolved404s * 2);
+    } catch (e) {
+      // safe fallback
+    }
+  } catch (e) {
+    // outer PocketBase connection failure — use defaults
   }
+
+  const seoScoreLabel = seoScore >= 90 ? 'Looking good!' : seoScore >= 70 ? 'Needs attention' : 'Action required';
   
   const setupSteps = [
     {
@@ -67,7 +101,7 @@ export default async function DashboardHome() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Active Services</CardDescription>
-            <CardTitle className="text-4xl font-light">6</CardTitle>
+            <CardTitle className="text-4xl font-light">{activeServicesCount}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-slate-500">Live on website</div>
@@ -76,11 +110,13 @@ export default async function DashboardHome() {
         
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Avg. SEO Score</CardDescription>
-            <CardTitle className="text-4xl font-light text-blue-600">92/100</CardTitle>
+            <CardDescription>SEO Health Score</CardDescription>
+            <CardTitle className="text-4xl font-light text-blue-600">{seoScore}/100</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-emerald-600 font-medium">Looking good!</div>
+            <div className={`text-xs font-medium ${
+              seoScore >= 90 ? 'text-emerald-600' : seoScore >= 70 ? 'text-amber-600' : 'text-red-600'
+            }`}>{seoScoreLabel}</div>
           </CardContent>
         </Card>
       </div>
