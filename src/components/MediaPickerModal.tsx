@@ -35,20 +35,24 @@ export function MediaPickerModal({ isOpen, onClose, onSelect }: MediaPickerModal
     if (!file) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('label', file.name);
-    
-    const res = await uploadMedia(formData);
-    if (res.success) {
-      const freshData = await getMedia();
-      setMediaList(freshData as unknown as MediaItem[]);
-    } else {
-      addToast({ title: 'Upload failed', description: res.error, type: 'error' });
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('label', file.name);
+      
+      const res = await uploadMedia(formData);
+      if (res.success) {
+        const freshData = await getMedia();
+        setMediaList(freshData as unknown as MediaItem[]);
+      } else {
+        addToast({ title: 'Upload failed', description: res.error || 'Unknown error', type: 'error' });
+      }
+    } catch (err: any) {
+      addToast({ title: 'Upload error', description: err.message || 'An unexpected error occurred during upload.', type: 'error' });
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setIsUploading(false);
     }
-    
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    setIsUploading(false);
   };
 
   const handleSelect = (item: MediaItem) => {
