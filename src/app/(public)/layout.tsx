@@ -4,6 +4,8 @@ import { getPocketBaseClient } from "@/lib/pocketbase";
 import type { ServiceArea, Testimonial, Service } from "@/types";
 import { buildLocalBusinessSchema } from "@/lib/seo";
 
+export const dynamic = 'force-dynamic';
+
 export default async function PublicLayout({
   children,
 }: {

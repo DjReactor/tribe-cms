@@ -11,6 +11,7 @@ export async function getMedia() {
     const records = await pb.collection('media').getFullList({
       sort: '-created',
       requestKey: null,
+      fetch: (url, config) => fetch(url, { ...config, cache: 'no-store' })
     });
     return JSON.parse(JSON.stringify(records));
   } catch (error) {

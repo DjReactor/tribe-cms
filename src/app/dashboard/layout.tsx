@@ -5,6 +5,8 @@ import { TopBar } from '@/components/dashboard/TopBar';
 import { ToastProvider } from '@/components/ui/Toast';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Auth Guard
   const user = await requireAuth().catch(() => null);
