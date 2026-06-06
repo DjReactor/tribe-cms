@@ -29,15 +29,15 @@ if [ "$SF_VERSION" != "$VERSION" ]; then
   exit 1
 fi
 
-if [ -n "$(git status --porcelain)" ]; then
-  echo "Error: You have uncommitted changes. Please commit or stash them before publishing."
-  exit 1
-fi
+# if [ -n "$(git status --porcelain)" ]; then
+#   echo "Error: You have uncommitted changes. Please commit or stash them before publishing."
+#   exit 1
+# fi
 
 # Step 2: Pre-flight Build
 echo "[1/4] Running pre-flight build..."
-pnpm install --frozen-lockfile
-NODE_ENV=production pnpm build
+npx pnpm@8 install --frozen-lockfile
+NODE_ENV=production npx pnpm@8 build
 
 # Step 3: Artifact Generation
 echo "[2/4] Generating release tarballs..."

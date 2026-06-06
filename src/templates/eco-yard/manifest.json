@@ -1,0 +1,10 @@
+{
+  "id": "eco-yard",
+  "name": "EcoYard",
+  "description": "A modern, vibrant template for landscaping and tree services.",
+  "version": "1.0.0",
+  "preview_image": "/template-previews/eco-yard.jpg",
+  "tags": ["modern", "clean", "light", "bold"],
+  "supports": ["gallery", "before_after"],
+  "config_schema": []
+}
