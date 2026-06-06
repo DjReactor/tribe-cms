@@ -54,10 +54,14 @@ export async function saveImageOverrides(overrides: Record<string, string>) {
           imageOverrides: overrides
         }
       });
-      revalidatePath('/', 'layout');
-      return { success: true };
+    } else {
+      await pb.collection('settings').create({
+        active_template: 'modern',
+        template_config: { imageOverrides: overrides }
+      });
     }
-    return { success: false, error: 'Settings record not found' };
+    revalidatePath('/', 'layout');
+    return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
