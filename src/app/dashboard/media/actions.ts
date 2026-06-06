@@ -6,9 +6,14 @@ import { revalidatePath } from 'next/cache';
 
 export async function getMedia() {
   const pb = await getPocketBaseClient();
-  return pb.collection('media').getFullList({
-    sort: '-created',
-  }).catch(() => []);
+  try {
+    const records = await pb.collection('media').getFullList({
+      sort: '-created',
+    });
+    return JSON.parse(JSON.stringify(records));
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function uploadMedia(formData: FormData) {
