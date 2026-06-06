@@ -12,7 +12,7 @@ REQUIRED_FILES=(
   "$BASE/src" "$BASE/public" "$BASE/package.json" "$BASE/pnpm-lock.yaml"
   "$BASE/next.config.ts" "$BASE/tsconfig.json"
   "$BASE/pb_schema/schema.json" "$BASE/pb_seed/defaults.json"
-  "$BASE/pocketbase" "$BASE/.sf-version"
+  "$BASE/pb_migrations" "$BASE/pocketbase" "$BASE/.sf-version"
 )
 
 for F in "${REQUIRED_FILES[@]}"; do
