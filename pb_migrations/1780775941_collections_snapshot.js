@@ -1130,6 +1130,17 @@ migrate((app) => {
           "required": false,
           "system": false,
           "type": "url"
+        },
+        {
+          "help": "",
+          "hidden": false,
+          "id": "json_niche_attributes",
+          "maxSize": 0,
+          "name": "niche_attributes",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "json"
         }
       ],
       "id": "pbc_1915096619",
@@ -2520,6 +2531,17 @@ migrate((app) => {
           "required": false,
           "system": false,
           "type": "text"
+        },
+        {
+          "help": "",
+          "hidden": false,
+          "id": "json_niche_schema",
+          "maxSize": 0,
+          "name": "niche_schema",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "json"
         }
       ],
       "id": "pbc_2769025244",
