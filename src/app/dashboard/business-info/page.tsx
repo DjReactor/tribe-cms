@@ -1,8 +1,9 @@
 import BusinessInfoForm from './BusinessInfoForm';
-import { getBusinessInfo } from '@/lib/settings';
+import { getBusinessInfo, getSettings } from '@/lib/settings';
 
 export default async function BusinessInfoPage() {
   const data = await getBusinessInfo();
+  const settings = await getSettings();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -11,7 +12,7 @@ export default async function BusinessInfoPage() {
         <p className="text-gray-500 mt-2">Manage your core business details that appear across the site.</p>
       </div>
       
-      <BusinessInfoForm initialData={data} />
+      <BusinessInfoForm initialData={data} nicheSchema={settings?.niche_schema} />
     </div>
   );
 }

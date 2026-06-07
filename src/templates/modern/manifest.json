@@ -6,5 +6,11 @@
   "preview_image": "/template-previews/modern.jpg",
   "tags": ["professional", "clean", "light", "modern"],
   "supports": ["gallery", "before_after"],
+  "supportedImageKeys": {
+    "hero_bg": {
+      "label": "Hero Background Image",
+      "defaultFallback": ""
+    }
+  },
   "config_schema": []
 }

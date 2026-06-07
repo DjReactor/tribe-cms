@@ -85,6 +85,26 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
         </div>
       </section>
 
+      {/* Niche Details */}
+      {businessInfo.niche_attributes && Object.keys(businessInfo.niche_attributes).length > 0 && (
+        <section className="py-16 px-6 bg-white border-y border-gray-100">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {Object.entries(businessInfo.niche_attributes).map(([key, value]) => {
+                if (!value || typeof value !== 'string' || value.startsWith('http') || value.startsWith('/api')) return null;
+                const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return (
+                  <div key={key} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                    <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">{label}</p>
+                    <p className="text-xl font-bold text-gray-900">{value === 'true' ? 'Yes' : value === 'false' ? 'No' : value}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Testimonials */}
       {testimonials?.length > 0 && (
         <section className="py-24 px-6 bg-white">

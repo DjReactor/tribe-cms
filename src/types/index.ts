@@ -27,6 +27,7 @@ export interface BusinessInfo {
   social_google: string
   social_yelp: string
   social_other: string
+  niche_attributes?: Record<string, string>
 }
 
 export interface Service {
@@ -132,4 +133,18 @@ export interface TemplateSettings {
     imageOverrides?: Record<string, string>
     [key: string]: any
   }
+  niche_schema?: NicheSchema
+}
+
+export interface NicheSchemaField {
+  key: string
+  label: string
+  type: 'text' | 'textarea' | 'number' | 'boolean' | 'image'
+  required?: boolean
+}
+
+export interface NicheSchema {
+  niche_id: string
+  niche_name: string
+  custom_attributes: NicheSchemaField[]
 }

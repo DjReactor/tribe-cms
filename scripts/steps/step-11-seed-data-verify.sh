@@ -30,12 +30,16 @@ BIZ_RESP=$(pb_api "$TOKEN" GET "http://127.0.0.1:${PB_PORT}/api/collections/busi
 BN=$(echo "$BIZ_RESP" | jq -r '.items[0].business_name // ""')
 EXPECTED_BN=$(echo "$STATE" | jq -r '.input.business_name')
 [ "$BN" != "$EXPECTED_BN" ] && ERRORS+=("business_name mismatch: got '$BN', expected '$EXPECTED_BN'")
+NICHE_ATTRS_TYPE=$(echo "$BIZ_RESP" | jq -r '.items[0].niche_attributes | type')
+[ "$NICHE_ATTRS_TYPE" != "object" ] && ERRORS+=("business_info.niche_attributes is missing or not an object (type: $NICHE_ATTRS_TYPE)")
 
 # Check settings template is correct
 SET_RESP=$(pb_api "$TOKEN" GET "http://127.0.0.1:${PB_PORT}/api/collections/settings/records?perPage=1")
 AT=$(echo "$SET_RESP" | jq -r '.items[0].active_template // ""')
 EXPECTED_T=$(echo "$STATE" | jq -r '.input.template')
 [ "$AT" != "$EXPECTED_T" ] && ERRORS+=("active_template mismatch: got '$AT', expected '$EXPECTED_T'")
+NICHE_SCHEMA_TYPE=$(echo "$SET_RESP" | jq -r '.items[0].niche_schema | type')
+[ "$NICHE_SCHEMA_TYPE" != "object" ] && ERRORS+=("settings.niche_schema is missing or not an object (type: $NICHE_SCHEMA_TYPE)")
 
 kill $TMP_PID 2>/dev/null; wait $TMP_PID 2>/dev/null; trap - EXIT
 

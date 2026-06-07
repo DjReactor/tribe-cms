@@ -97,6 +97,26 @@ export function HomePage({
         </div>
       </section>
 
+      {/* Niche Details */}
+      {businessInfo.niche_attributes && Object.keys(businessInfo.niche_attributes).length > 0 && (
+        <section className="py-16 bg-white border-b border-slate-100">
+          <div className={styles.container}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {Object.entries(businessInfo.niche_attributes).map(([key, value]) => {
+                if (!value || typeof value !== 'string' || value.startsWith('http') || value.startsWith('/api')) return null;
+                const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return (
+                  <div key={key} className="bg-slate-50 rounded-xl p-6 border border-slate-100 flex flex-col justify-center">
+                    <h4 className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">{label}</h4>
+                    <p className="text-xl font-bold text-slate-900">{value === 'true' ? 'Yes' : value === 'false' ? 'No' : value}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Before/After Portfolio */}
       {beforeAfterPairs && beforeAfterPairs.length > 0 && (
         <section className="py-24 bg-white border-b border-slate-100">

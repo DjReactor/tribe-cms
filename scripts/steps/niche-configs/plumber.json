@@ -1,0 +1,9 @@
+{
+  "niche_id": "plumber",
+  "niche_name": "Plumbing Services",
+  "custom_attributes": [
+    { "key": "emergency_fee", "label": "Emergency Callout Fee", "type": "number" },
+    { "key": "certified_master_plumber", "label": "Certified Master Plumber", "type": "boolean" },
+    { "key": "specialties", "label": "Specialties", "type": "textarea" }
+  ]
+}

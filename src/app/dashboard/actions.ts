@@ -19,6 +19,7 @@ const businessInfoSchema = z.object({
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_google: z.string().url('Invalid URL').optional().or(z.literal('')),
+  niche_attributes: z.record(z.string()).optional(),
 });
 
 export async function updateBusinessInfo(data: any) {

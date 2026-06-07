@@ -1,0 +1,10 @@
+{
+  "niche_id": "tree_service",
+  "niche_name": "Tree Services",
+  "custom_attributes": [
+    { "key": "stump_extractor_model", "label": "Stump Extractor Model", "type": "text" },
+    { "key": "tree_remover_model", "label": "Tree Remover Model", "type": "text" },
+    { "key": "has_crane", "label": "Has Crane", "type": "boolean" },
+    { "key": "insurance_details", "label": "Insurance Details", "type": "textarea" }
+  ]
+}
