@@ -31,10 +31,16 @@ export async function updateBusinessInfo(data: any) {
     const parsedData = businessInfoSchema.parse(data);
 
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('business_info').getFullList(1).catch(() => []);
+    let recordId = null;
+    try {
+      const record = await pb.collection('business_info').getFirstListItem('');
+      recordId = record.id;
+    } catch (e) {
+      // Not found
+    }
     
-    if (records.length > 0) {
-      await pb.collection('business_info').update(records[0].id, parsedData);
+    if (recordId) {
+      await pb.collection('business_info').update(recordId, parsedData);
     } else {
       await pb.collection('business_info').create(parsedData);
     }
@@ -53,9 +59,16 @@ export async function updateSeoSettings(data: any) {
   try {
     await requireAuth();
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('seo_settings').getFullList(1).catch(() => []);
-    if (records.length > 0) {
-      await pb.collection('seo_settings').update(records[0].id, data);
+    let recordId = null;
+    try {
+      const record = await pb.collection('seo_settings').getFirstListItem('');
+      recordId = record.id;
+    } catch (e) {
+      // Not found
+    }
+
+    if (recordId) {
+      await pb.collection('seo_settings').update(recordId, data);
     } else {
       await pb.collection('seo_settings').create(data);
     }

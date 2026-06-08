@@ -6,9 +6,13 @@ export async function POST(request: Request) {
     const { email, password } = await request.json();
     const pb = new PocketBase(process.env['PB_URL'] || 'http://127.0.0.1:8090');
     
-    await pb.collection('users').authWithPassword(email, password);
+    try {
+      await pb.collection('_superusers').authWithPassword(email, password);
+    } catch (e) {
+      await pb.collection('users').authWithPassword(email, password);
+    }
     
-    const response = NextResponse.json({ success: true, user: pb.authStore.model });
+    const response = NextResponse.json({ success: true, user: pb.authStore.record });
     
     // Export standard pocketbase auth cookie format
     response.cookies.set('pb_auth', pb.authStore.exportToCookie({ httpOnly: true, secure: process.env.NODE_ENV === 'production' }).split('pb_auth=')[1] || '');

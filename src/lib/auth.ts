@@ -3,12 +3,12 @@ import { getPocketBaseClient } from './pocketbase';
 
 export async function verifySession() {
   const pb = await getPocketBaseClient();
-  if (pb.authStore.isValid && pb.authStore.model) {
-    if (pb.authStore.isSuperuser || pb.authStore.isAdmin || !pb.authStore.model.collectionId) {
+  if (pb.authStore.isValid && pb.authStore.record) {
+    if (pb.authStore.isSuperuser || !pb.authStore.record.collectionId) {
       // If it's a Superuser/Admin record, map it to agency_admin for the Next.js frontend
-      return { ...pb.authStore.model, role: 'agency_admin', id: pb.authStore.model.id || 'admin' };
+      return { ...pb.authStore.record, role: 'agency_admin', id: pb.authStore.record.id || 'admin' };
     }
-    return pb.authStore.model;
+    return pb.authStore.record;
   }
   return null;
 }

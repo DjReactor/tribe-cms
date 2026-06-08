@@ -19,14 +19,21 @@ export async function activateTemplate(
     // Validate that the requested template actually exists
     const available = getTemplateManifests();
     if (!available.find((t) => t.id === templateId)) {
-      return { success: false, error: 'Template not found.' };
+      return { success: false, error: 'Template not found in registry.' };
     }
 
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('settings').getFullList(1).catch(() => []);
+    let settingId = null;
 
-    if (records.length > 0) {
-      await pb.collection('settings').update(records[0].id, {
+    try {
+      const record = await pb.collection('settings').getFirstListItem('');
+      settingId = record.id;
+    } catch (e) {
+      // Record might not exist
+    }
+
+    if (settingId) {
+      await pb.collection('settings').update(settingId, {
         active_template: templateId,
       });
     } else {
@@ -36,6 +43,7 @@ export async function activateTemplate(
     revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
+    console.error('activateTemplate error:', error);
     return { success: false, error: error.message || 'Failed to activate template.' };
   }
 }
@@ -44,11 +52,19 @@ export async function saveImageOverrides(overrides: Record<string, string>) {
   try {
     await requireAuth();
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('settings').getFullList(1).catch(() => []);
+    let settingId = null;
+    let currentConfig = {};
+
+    try {
+      const record = await pb.collection('settings').getFirstListItem('');
+      settingId = record.id;
+      currentConfig = record.template_config || {};
+    } catch (e) {
+      // Record might not exist
+    }
     
-    if (records.length > 0) {
-      const currentConfig = records[0].template_config || {};
-      await pb.collection('settings').update(records[0].id, {
+    if (settingId) {
+      await pb.collection('settings').update(settingId, {
         template_config: {
           ...currentConfig,
           imageOverrides: overrides

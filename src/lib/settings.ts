@@ -5,21 +5,21 @@ import { cache } from 'react';
 export const getSettings = cache(async (): Promise<TemplateSettings & { id: string; template_config: any }> => {
   try {
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('settings').getFullList(1);
-    if (records[0]) {
+    const record = await pb.collection('settings').getFirstListItem('');
+    if (record) {
       return {
-        id: records[0].id,
-        blog_enabled: records[0].blog_enabled ?? false,
-        crm_enabled: records[0].crm_enabled ?? false,
-        retell_enabled: records[0].retell_enabled ?? false,
-        reviews_enabled: records[0].reviews_enabled ?? false,
-        show_powered_by: records[0].show_powered_by ?? false,
-        active_template: records[0].active_template || 'modern',
-        active_palette_id: records[0].active_palette_id || '',
-        template_config: records[0].template_config || {},
-        lead_webhook_url:    records[0].lead_webhook_url    || '',
-        lead_webhook_secret: records[0].lead_webhook_secret || '',
-        niche_schema: records[0].niche_schema || null,
+        id: record.id,
+        blog_enabled: record.blog_enabled ?? false,
+        crm_enabled: record.crm_enabled ?? false,
+        retell_enabled: record.retell_enabled ?? false,
+        reviews_enabled: record.reviews_enabled ?? false,
+        show_powered_by: record.show_powered_by ?? false,
+        active_template: record.active_template || 'modern',
+        active_palette_id: record.active_palette_id || '',
+        template_config: record.template_config || {},
+        lead_webhook_url:    record.lead_webhook_url    || '',
+        lead_webhook_secret: record.lead_webhook_secret || '',
+        niche_schema: record.niche_schema || null,
       };
     }
   } catch (e) {
@@ -45,8 +45,8 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
 export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
   try {
     const pb = await getPocketBaseClient();
-    const records = await pb.collection('business_info').getFullList<BusinessInfo>(1);
-    if (records[0]) return records[0];
+    const record = await pb.collection('business_info').getFirstListItem<BusinessInfo>('');
+    if (record) return record;
   } catch (e) {
     // console.error(e);
   }
