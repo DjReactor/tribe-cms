@@ -8,7 +8,7 @@ export function PrivacyPage({
 }: StandardPageProps) {
 
   return (
-    <div className="w-full bg-white pt-32 pb-24">
+    <div className="w-full bg-[var(--sf-surface)] pt-32 pb-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <div className="flex items-center text-sm font-medium text-gray-500 mb-6">

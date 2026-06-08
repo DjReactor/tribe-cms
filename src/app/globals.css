@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+:root {
+  --sf-brand:       #B9FF24;
+  --sf-brand-text:  #0D1F05;
+  --sf-accent:      #7CC504;
+  --sf-bg:          #0D1F05;
+  --sf-surface:     #162B0B;
+  --sf-surface-alt: #1E3810;
+  --sf-text:        #E5F5D5;
+  --sf-text-muted:  #7A9E6A;
+  --sf-border:      #284B16;
+  --sf-heading:     #FFFFFF;
+}
+
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #171717;

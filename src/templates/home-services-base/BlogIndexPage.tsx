@@ -14,7 +14,7 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
   }
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-[var(--sf-surface)] min-h-screen">
       {/* Header */}
       <div className="bg-gray-50 py-16 px-6 border-b border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
@@ -40,7 +40,7 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
                 <Link 
                   key={post.id} 
                   href={`/blog/${post.slug}`} 
-                  className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
+                  className="group flex flex-col bg-[var(--sf-surface)] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
                 >
                   {/* Cover Image */}
                   <div className="relative aspect-video w-full bg-gray-100 overflow-hidden">
@@ -61,11 +61,11 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
                   {/* Content */}
                   <div className="p-8 flex flex-col flex-1">
                     {post.published_at && (
-                      <div className="text-sm font-semibold text-[#2D6A4F] mb-4">
+                      <div className="text-sm font-semibold text-[var(--sf-brand)] mb-4">
                         {formatDate(post.published_at)}
                       </div>
                     )}
-                    <h2 className="font-heading font-bold text-2xl text-gray-900 mb-4 group-hover:text-[#2D6A4F] transition-colors">
+                    <h2 className="font-heading font-bold text-2xl text-gray-900 mb-4 group-hover:text-[var(--sf-brand)] transition-colors">
                       {post.title}
                     </h2>
                     {post.excerpt && (
@@ -73,7 +73,7 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
                         {post.excerpt}
                       </p>
                     )}
-                    <div className="mt-auto flex items-center gap-2 font-medium text-gray-900 group-hover:text-[#2D6A4F] transition-colors">
+                    <div className="mt-auto flex items-center gap-2 font-medium text-gray-900 group-hover:text-[var(--sf-brand)] transition-colors">
                       Read Article
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </div>

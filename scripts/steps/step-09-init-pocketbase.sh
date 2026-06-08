@@ -12,10 +12,6 @@ PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 fuser -k "${PB_PORT}/tcp" 2>/dev/null || true
 sleep 1
 
-# Hotfix: Ensure migrations are up to date since Auto Deploy resumes from here
-info "Syncing latest migrations from template..."
-rsync -a --delete /opt/sf-template/pb_migrations/ "$BASE/pb_data/../pb_migrations/" 2>/dev/null || true
-
 info "Creating admin account..."
 "$BASE/pocketbase" superuser upsert "${PB_ADMIN_EMAIL:-admin@successforce.com}" "${PB_ADMIN_PW}" --dir "$BASE/pb_data" > /dev/null 2>&1
 RC=$?

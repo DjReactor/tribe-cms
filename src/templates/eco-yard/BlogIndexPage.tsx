@@ -31,16 +31,16 @@ export function BlogIndexPage({
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-white leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold text-[var(--sf-text)] leading-tight mb-4">
               Lawn & Garden Insights
             </h1>
             <p className="text-lg text-gray-300 mb-6">
               Practical tips, seasonal guides, and project spotlights to help you maintain a beautiful outdoor space.
             </p>
             <div className="flex items-center justify-center text-sm font-medium text-gray-400">
-              <Link href="/" className="hover:text-[#B9FF24] transition-colors">Home</Link>
+              <Link href="/" className="hover:text-[var(--sf-brand)] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-[#B9FF24]">Blog</span>
+              <span className="text-[var(--sf-brand)]">Blog</span>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@ export function BlogIndexPage({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {posts && posts.length > 0 ? (
               posts.map((post) => (
-                <article key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col h-full group">
+                <article key={post.id} className="bg-[var(--sf-surface)] rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col h-full group">
                   <div className="relative h-64 overflow-hidden">
                     <Image 
                       src={post.featured_image_url || '/assets/eco-yard/784b169a2d14e99d7c105a9433dc6a0e.webp'}
@@ -62,7 +62,7 @@ export function BlogIndexPage({
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {post.category && (
-                      <div className="absolute top-4 left-4 bg-[#B9FF24] text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
+                      <div className="absolute top-4 left-4 bg-[var(--sf-brand)] text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
                         {post.category}
                       </div>
                     )}
@@ -91,7 +91,7 @@ export function BlogIndexPage({
               ))
             ) : (
               // Empty State
-              <div className="col-span-full py-20 text-center bg-white rounded-3xl border border-gray-200 border-dashed">
+              <div className="col-span-full py-20 text-center bg-[var(--sf-surface)] rounded-3xl border border-gray-200 border-dashed">
                 <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3m0 0l3-3m-3 3V8" /></svg>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">No Articles Yet</h3>
                 <p className="text-gray-500">Check back soon for new tips and guides.</p>

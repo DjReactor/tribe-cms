@@ -3,25 +3,25 @@ import type { HeaderProps } from '@/types/template'
 
 export function Header({ businessInfo, serviceAreas, blogEnabled, config }: HeaderProps) {
   return (
-    <header className="bg-white border-b border-gray-100 px-6 py-4 sticky top-0 z-50 shadow-sm">
+    <header className="bg-[var(--sf-surface)] border-b border-gray-100 px-6 py-4 sticky top-0 z-50 shadow-sm">
       <nav className="max-w-6xl mx-auto flex items-center justify-between">
         <Link href="/" className="font-heading font-bold text-2xl text-gray-900 hover:opacity-90 transition-opacity">
           {businessInfo.business_name}
         </Link>
         <ul className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
           <li>
-            <Link href="/services" className="hover:text-[#2D6A4F] transition-colors">
+            <Link href="/services" className="hover:text-[var(--sf-brand)] transition-colors">
               Services
             </Link>
           </li>
           {serviceAreas?.length > 0 && (
             <li>
               {serviceAreas.length === 1 ? (
-                <Link href={`/${serviceAreas[0].slug}`} className="hover:text-[#2D6A4F] transition-colors">
+                <Link href={`/${serviceAreas[0].slug}`} className="hover:text-[var(--sf-brand)] transition-colors">
                   Service Area
                 </Link>
               ) : (
-                <Link href={`/${serviceAreas[0].slug}`} className="hover:text-[#2D6A4F] transition-colors">
+                <Link href={`/${serviceAreas[0].slug}`} className="hover:text-[var(--sf-brand)] transition-colors">
                   Areas We Serve
                 </Link>
               )}
@@ -29,18 +29,18 @@ export function Header({ businessInfo, serviceAreas, blogEnabled, config }: Head
           )}
           {blogEnabled && (
             <li>
-              <Link href="/blog" className="hover:text-[#2D6A4F] transition-colors">
+              <Link href="/blog" className="hover:text-[var(--sf-brand)] transition-colors">
                 Blog
               </Link>
             </li>
           )}
           <li>
-            <Link href="/about" className="hover:text-[#2D6A4F] transition-colors">
+            <Link href="/about" className="hover:text-[var(--sf-brand)] transition-colors">
               About
             </Link>
           </li>
           <li>
-            <Link href="/contact" className="hover:text-[#2D6A4F] transition-colors">
+            <Link href="/contact" className="hover:text-[var(--sf-brand)] transition-colors">
               Contact
             </Link>
           </li>
@@ -48,7 +48,7 @@ export function Header({ businessInfo, serviceAreas, blogEnabled, config }: Head
         {businessInfo.phone && (
           <a
             href={`tel:${businessInfo.phone}`}
-            className="hidden lg:flex items-center justify-center px-6 py-2.5 bg-[#2D6A4F] text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity"
+            className="hidden lg:flex items-center justify-center px-6 py-2.5 bg-[var(--sf-brand)] text-[var(--sf-brand-text)] text-sm font-semibold rounded-full hover:opacity-90 transition-opacity"
           >
             {businessInfo.phone}
           </a>

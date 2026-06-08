@@ -3,6 +3,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import type { ServiceArea, Testimonial, Service } from "@/types";
 import { buildLocalBusinessSchema } from "@/lib/seo";
+import { getActivePalette, generatePaletteCss } from "@/lib/color-palette";
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +14,7 @@ export default async function PublicLayout({
 }) {
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
+  const palette = await getActivePalette();
   
   const pb = await getPocketBaseClient();
   let serviceAreas: ServiceArea[] = [];
@@ -35,9 +37,11 @@ export default async function PublicLayout({
   const template = await loadTemplate(settings.active_template);
   const LayoutComponent = template.Layout;
   const jsonLd = buildLocalBusinessSchema(businessInfo, seoSettings, testimonials, services, serviceAreas);
+  const paletteCss = generatePaletteCss(palette.colors);
 
   return (
     <>
+      <style dangerouslySetInnerHTML={{ __html: paletteCss }} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

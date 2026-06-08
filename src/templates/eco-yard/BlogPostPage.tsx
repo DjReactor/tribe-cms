@@ -11,7 +11,7 @@ export function BlogPostPage({
 }: BlogPostProps) {
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-[var(--sf-surface)]">
       {/* Blog Post Header */}
       <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <div className="flex items-center text-sm font-medium text-gray-500 mb-8 space-x-2">
@@ -23,7 +23,7 @@ export function BlogPostPage({
         </div>
         
         {post.category && (
-          <div className="inline-block bg-[#B9FF24] text-gray-900 text-xs font-bold px-3 py-1 rounded-full mb-6">
+          <div className="inline-block bg-[var(--sf-brand)] text-gray-900 text-xs font-bold px-3 py-1 rounded-full mb-6">
             {post.category}
           </div>
         )}
@@ -71,7 +71,7 @@ export function BlogPostPage({
       {/* Post Content */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto pb-24">
         <div 
-          className="prose prose-lg prose-gray max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-[#0C1810] prose-a:font-bold hover:prose-a:text-[#B9FF24] prose-img:rounded-2xl"
+          className="prose prose-lg prose-gray max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-[#0C1810] prose-a:font-bold hover:prose-a:text-[var(--sf-brand)] prose-img:rounded-2xl"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
         
@@ -82,7 +82,7 @@ export function BlogPostPage({
               <h3 className="text-xl font-bold text-gray-900 mb-2">Need Help With Your Outdoor Space?</h3>
               <p className="text-gray-600 mb-6 sm:mb-0">Contact {businessInfo.name} for professional landscaping services.</p>
             </div>
-            <Link href="/contact" className="inline-block bg-gray-900 hover:bg-gray-800 text-white rounded-full px-8 py-3 font-medium transition-colors whitespace-nowrap">
+            <Link href="/contact" className="inline-block bg-gray-900 hover:bg-gray-800 text-[var(--sf-text)] rounded-full px-8 py-3 font-medium transition-colors whitespace-nowrap">
               Get a Quote
             </Link>
           </div>

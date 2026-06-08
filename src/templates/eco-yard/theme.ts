@@ -13,4 +13,3 @@ export const headingFont = Plus_Jakarta_Sans({
 })
 
 // Vibrant lime green used for buttons and highlights
-export const ACCENT = '#B9FF24'

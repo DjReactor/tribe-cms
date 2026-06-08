@@ -3,11 +3,11 @@ import { styles } from './theme';
 
 export function TermsPage({ businessInfo, pageContent, config }: StaticPageProps) {
   return (
-    <div className="py-20 bg-white min-h-screen">
+    <div className="py-20 bg-[var(--sf-surface)] min-h-screen">
       <div className={`${styles.container} max-w-4xl`}>
         <div className="mb-12">
           <h1 className={`${styles.headingBase} text-4xl md:text-5xl font-bold mb-6`}>Terms of Service</h1>
-          <p className="text-slate-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p className="text-[var(--sf-text-muted)]">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
         </div>
 
         <div 
