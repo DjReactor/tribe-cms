@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
-import { Trash2, Copy, Check } from 'lucide-react';
+import { Trash2, Copy, Check, Eye, EyeOff } from 'lucide-react';
 
 export function SecurityClient({ userRole, apiKeys }: { userRole: string, apiKeys: any[] }) {
   const { addToast } = useToast();
   const [isPendingKeys, startTransitionKeys] = useTransition();
   const [isPendingCreds, startTransitionCreds] = useTransition();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { handleSubmit: handleApiKeySubmit, register: registerApiKey, reset: resetApiKey } = useForm();
   const { handleSubmit: handleCredsSubmit, register: registerCreds, reset: resetCreds } = useForm();
@@ -143,7 +144,23 @@ export function SecurityClient({ userRole, apiKeys }: { userRole: string, apiKey
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
-              <Input type="password" placeholder="Leave blank to keep unchanged" minLength={8} {...registerCreds('password')} />
+              <div className="relative">
+                <Input 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Leave blank to keep unchanged" 
+                  minLength={8} 
+                  {...registerCreds('password')} 
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
             <div className="pt-2">
               <Button type="submit" isLoading={isPendingCreds}>Save Credentials</Button>
