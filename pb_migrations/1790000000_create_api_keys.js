@@ -1,7 +1,7 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((app) => {
   const collection = new Collection({
-    id: "pbc_" + app.utility.randomString(10),
+    id: "pbc_api_keys_col",
     name: "api_keys",
     type: "base",
     system: false,
