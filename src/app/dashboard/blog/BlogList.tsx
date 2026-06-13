@@ -53,8 +53,10 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
               {posts.map((post) => (
                 <tr key={post.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="font-medium text-slate-900">{post.title}</div>
-                    <div className="text-xs text-slate-500 mt-1">/{post.slug}</div>
+                    <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="group block">
+                      <div className="font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{post.title}</div>
+                      <div className="text-xs text-slate-500 mt-1">/{post.slug}</div>
+                    </a>
                   </td>
                   <td className="px-6 py-4">
                     <Badge variant={post.status === 'published' ? 'success' : 'default'} className="capitalize">
@@ -62,7 +64,7 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
                     </Badge>
                   </td>
                   <td className="px-6 py-4 text-slate-500 whitespace-nowrap">
-                    {new Date(post.created).toLocaleDateString()}
+                    {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Draft'}
                   </td>
                   <td className="px-6 py-4 text-right space-x-2 whitespace-nowrap">
                     <Link href={`/dashboard/blog/${post.id}`}>
