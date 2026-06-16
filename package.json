@@ -2,6 +2,7 @@
   "name": "tribe-cms",
   "version": "0.3.6",
   "private": true,
+  "packageManager": "pnpm@11.5.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack && echo 'turbopack' > .next/BUILD_ID",

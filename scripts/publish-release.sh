@@ -36,8 +36,8 @@ fi
 
 # Step 2: Pre-flight Build
 echo "[1/4] Running pre-flight build..."
-npx pnpm@8 install --frozen-lockfile
-NODE_ENV=production npx pnpm@8 build
+pnpm install --frozen-lockfile
+NODE_ENV=production pnpm build
 
 # Step 3: Artifact Generation
 echo "[2/4] Generating release tarballs..."
