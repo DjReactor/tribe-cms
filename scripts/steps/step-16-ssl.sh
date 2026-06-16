@@ -27,14 +27,14 @@ if [ "$WWW_DNS_IP" = "$VPS_IP" ]; then
   certbot --nginx \
     -d "$DOMAIN" -d "www.${DOMAIN}" \
     --non-interactive --agree-tos \
-    -m "${TRIBE_SSL_EMAIL:-ssl@tribecms.io}" \
+    -m "${TRIBE_SSL_EMAIL:-${SYSTEM_SSL_EMAIL}}" \
     --redirect 2>&1
 else
   info "DNS for www.$DOMAIN missing or mismatch. Requesting SSL for $DOMAIN only."
   certbot --nginx \
     -d "$DOMAIN" \
     --non-interactive --agree-tos \
-    -m "${TRIBE_SSL_EMAIL:-ssl@tribecms.io}" \
+    -m "${TRIBE_SSL_EMAIL:-${SYSTEM_SSL_EMAIL}}" \
     --redirect 2>&1
 fi
 
