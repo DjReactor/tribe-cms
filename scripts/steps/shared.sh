@@ -1,14 +1,14 @@
 #!/bin/bash
-# /opt/sf-template/scripts/steps/shared.sh
+# /opt/tribe-instances/scripts/steps/shared.sh
 # Shared utilities for all deploy step scripts
 
 # ── State file helpers ────────────────────────────────────────────────────────
 
 STATE_DIR="/tmp"
-MIRROR_BASE="/opt/sf-instances"
+MIRROR_BASE="/opt/tribe-sites"
 
 state_file() {
-  echo "${STATE_DIR}/sf-deploy-${1}.json"
+  echo "${STATE_DIR}/tribe-deploy-${1}.json"
 }
 
 mirror_state_file() {

@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "14_nginx"
 
@@ -7,8 +7,8 @@ STATE=$(read_state "$SLUG")
 DOMAIN=$(echo "$STATE" | jq -r '.input.domain')
 NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 WWW_MODE=$(echo "$STATE" | jq -r '.input.www_mode')
-BASE="/opt/sf-instances/${SLUG}"
-CONFIG="/etc/nginx/sites-available/sf-${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
+CONFIG="/etc/nginx/sites-available/tribe-${SLUG}"
 
 # Generate www redirect block based on mode
 case "$WWW_MODE" in
@@ -27,7 +27,7 @@ case "$WWW_MODE" in
 esac
 
 cat > "$CONFIG" << NGINXEOF
-# SuccessForce CMS — ${SLUG}
+# Tribe CMS — ${SLUG}
 # Domain: ${DOMAIN} | Port: ${NEXTJS_PORT}
 # Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 
@@ -66,7 +66,7 @@ NGINXEOF
 nginx -t 2>&1 || { rm "$CONFIG"; mark_step_failed "$SLUG" "14_nginx" "Nginx config validation failed"; exit_fail "Nginx config is invalid"; }
 
 # Enable
-ln -sf "$CONFIG" "/etc/nginx/sites-enabled/sf-${SLUG}"
+ln -sf "$CONFIG" "/etc/nginx/sites-enabled/tribe-${SLUG}"
 
 # Reload
 systemctl reload nginx || { mark_step_failed "$SLUG" "14_nginx" "nginx reload failed"; exit_fail "nginx reload failed"; }

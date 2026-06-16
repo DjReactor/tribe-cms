@@ -12,6 +12,9 @@ export interface BusinessInfo {
   phone: string
   email: string
   address: string
+  city: string
+  state?: string
+  zip?: string
   google_maps_url: string
   license_number: string
   year_established: number
@@ -20,7 +23,6 @@ export interface BusinessInfo {
   emergency_service: 'No' | 'Yes — Business Hours' | 'Yes — 24/7' | ''
   service_radius: number
   business_type: string
-  city: string
   hours: BusinessHour[]
   social_facebook: string
   social_instagram: string
@@ -38,10 +40,12 @@ export interface Service {
   icon: string
   is_active: boolean
   sort_order: number
-  page_content: Record<string, unknown> | null
+  page_content: unknown[] | null
   seo_title: string
   seo_description: string
   cover_image_url: string
+  noindex?: boolean
+  updated?: string
 }
 
 export interface ServiceArea {
@@ -52,9 +56,13 @@ export interface ServiceArea {
   sort_order: number
   custom_h1: string
   custom_intro: string
-  page_content: Record<string, unknown> | null
+  page_content: unknown[] | null
   seo_title: string
   seo_description: string
+  noindex?: boolean
+  geo_latitude?: string
+  geo_longitude?: string
+  updated?: string
 }
 
 export interface Testimonial {
@@ -84,7 +92,7 @@ export interface BlogPost {
   id: string
   title: string
   slug: string
-  content: Record<string, unknown>
+  content: unknown[]
   excerpt: string
   cover_image_url: string
   status: 'draft' | 'published'
@@ -92,6 +100,9 @@ export interface BlogPost {
   published_at: string
   seo_title: string
   seo_description: string
+  noindex?: boolean
+  canonical_url?: string
+  updated?: string
 }
 
 export interface MediaItem {
@@ -124,14 +135,24 @@ export interface TemplateManifest {
   name: string
   slug: string
   supportedImageKeys: Record<string, TemplateImageSlot>
-  supportedCopyKeys?: Record<string, TemplateCopyKey>
+  supportedCopyKeys: Record<string, TemplateCopyKey>
 }
 
 export interface SeoSettings {
   id: string
   schema_business_type: string
-  enable_aggregate_rating: boolean
+  schema_price_range?: string
+  enable_aggregate_rating?: boolean
+  enable_breadcrumbs?: boolean
   title_separator: string
+  site_name?: string
+  twitter_handle?: string
+  google_verification?: string
+  bing_verification?: string
+  noindex_blog?: boolean
+  noindex_service_areas?: boolean
+  custom_robots_rules?: string
+  default_og_image?: string
 }
 
 export interface TemplateSettings {
@@ -143,6 +164,7 @@ export interface TemplateSettings {
   retell_enabled?: boolean
   reviews_enabled?: boolean
   lead_webhook_url?: string
+  lead_webhook_secret?: string  // Server-side only — do not use in templates
   template_config?: {
     imageOverrides?: Record<string, string>
     copyOverrides?: Record<string, string>   // User-saved overrides for template copy slots

@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -12,7 +12,7 @@ ERRORS=()
 [ -z "$RECORD_ID" ] || [ "$RECORD_ID" = "null" ] && \
   ERRORS+=("No record ID in state file — registration may have failed")
 
-SA_DB="/opt/sf-superadmin/sf-superadmin/data/instances.db"
+SA_DB="/opt/tribe-superadmin/data/instances.db"
 
 if [ -n "$RECORD_ID" ] && [ "$RECORD_ID" != "null" ]; then
   if [ ! -f "$SA_DB" ]; then

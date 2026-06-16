@@ -26,9 +26,9 @@ export async function middleware(request: NextRequest) {
   // We'll skip complex DB fetching in middleware to ensure fast response times.
 
   // 3. Template Preview Mode
-  // If `sf_preview_template` cookie is present, we could append it as a query param or header
+  // If `tribe_preview_template` cookie is present, we could append it as a query param or header
   // so the layout/template-loader can pick it up.
-  const previewTemplate = request.cookies.get('sf_preview_template');
+  const previewTemplate = request.cookies.get('tribe_preview_template');
   if (previewTemplate && !pathname.startsWith('/dashboard') && !pathname.startsWith('/api')) {
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-preview-template', previewTemplate.value);

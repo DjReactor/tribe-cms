@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, Service, Testimonial, MediaItem } from "@/types";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const businessInfo = await getBusinessInfo();
+  const siteUrl = process.env.SITE_URL || '';
+
+  return {
+    title: 'About',
+    description: businessInfo.short_description || `Learn more about ${businessInfo.business_name}.`,
+    alternates: { canonical: `${siteUrl}/about` },
+  };
+}
 
 export default async function AboutPageWrapper() {
   const settings = await getSettings();

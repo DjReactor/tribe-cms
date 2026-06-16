@@ -6,7 +6,7 @@ import { Footer } from './Footer';
 export function Layout({ children, businessInfo, serviceAreas, settings, config }: LayoutProps) {
   return (
     <div
-      className={`${bodyFont.variable} ${headingFont.variable} font-sans min-h-screen flex flex-col bg-[var(--sf-surface)] text-[var(--sf-text)]`}
+      className={`${bodyFont.variable} ${headingFont.variable} font-sans min-h-screen flex flex-col bg-[var(--tribe-surface)] text-[var(--tribe-text)]`}
     >
       <Header
         businessInfo={businessInfo}

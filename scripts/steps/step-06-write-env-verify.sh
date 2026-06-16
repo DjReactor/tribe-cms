@@ -1,12 +1,12 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."06_write_env".status')
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
-ENV_FILE="/opt/sf-instances/${SLUG}/.env"
+ENV_FILE="/opt/tribe-sites/${SLUG}/.env"
 ERRORS=()
 REQUIRED_KEYS="PB_URL PB_PORT PB_ADMIN_EMAIL PB_ADMIN_PASSWORD PORT NODE_ENV SITE_URL INSTANCE_SLUG TEMPLATE_NAME NEXTAUTH_SECRET INTERNAL_SECRET AGENCY_TOKEN BLOG_WEBHOOK_SECRET RETELL_WEBHOOK_SECRET REVIEWS_WEBHOOK_SECRET"
 

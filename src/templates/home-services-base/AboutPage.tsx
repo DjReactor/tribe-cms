@@ -4,13 +4,13 @@ import { BusinessHours } from '@/components/shared/BusinessHours'
 
 export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: AboutPageProps) {
   return (
-    <div className="bg-[var(--sf-surface)]">
+    <div className="bg-[var(--tribe-surface)]">
       <div className="bg-gray-50 py-16 px-6 border-b border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {resolvedCopy.heading}
+            {resolvedCopy.about_page_heading}
           </h1>
-          <p className="text-xl text-[var(--sf-brand)] font-semibold">
+          <p className="text-xl text-[var(--tribe-brand)] font-semibold">
             {businessInfo.business_name}
           </p>
         </div>
@@ -28,13 +28,13 @@ export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: 
             <div className="mt-10 grid grid-cols-2 gap-6">
               {businessInfo.year_established > 0 && (
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-                  <div className="text-3xl font-bold text-[var(--sf-brand)] mb-2">{businessInfo.year_established}</div>
+                  <div className="text-3xl font-bold text-[var(--tribe-brand)] mb-2">{businessInfo.year_established}</div>
                   <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Year Established</div>
                 </div>
               )}
               {businessInfo.employee_count && (
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-                  <div className="text-3xl font-bold text-[var(--sf-brand)] mb-2">{businessInfo.employee_count}</div>
+                  <div className="text-3xl font-bold text-[var(--tribe-brand)] mb-2">{businessInfo.employee_count}</div>
                   <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Team Members</div>
                 </div>
               )}
@@ -54,7 +54,7 @@ export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: 
           {/* Right Column: Details & Hours */}
           <div className="space-y-10">
             {/* Hours */}
-            <div className="bg-[var(--sf-surface)] rounded-2xl shadow-xl border border-gray-100 p-8">
+            <div className="bg-[var(--tribe-surface)] rounded-2xl shadow-xl border border-gray-100 p-8">
               <h3 className="font-heading text-2xl font-bold text-gray-900 mb-6">Business Hours</h3>
               <BusinessHours hours={businessInfo.hours} className="text-gray-700" />
               {businessInfo.emergency_service && businessInfo.emergency_service !== 'No' && (
@@ -74,8 +74,8 @@ export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: 
                 <ul className="grid grid-cols-2 gap-3">
                   {serviceAreas?.map((area) => (
                     <li key={area.id}>
-                      <Link href={`/${area.slug}`} className="text-gray-600 hover:text-[var(--sf-brand)] font-medium flex items-center gap-2">
-                        <svg className="w-4 h-4 text-[var(--sf-brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                      <Link href={`/${area.slug}`} className="text-gray-600 hover:text-[var(--tribe-brand)] font-medium flex items-center gap-2">
+                        <svg className="w-4 h-4 text-[var(--tribe-brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         {area.name}
                       </Link>
                     </li>

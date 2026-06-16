@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -17,7 +17,7 @@ ERRORS=()
 
 # Confirm ports not taken by another instance since allocation
 if [ -n "$NEXTJS_PORT" ] && [ "$NEXTJS_PORT" != "null" ]; then
-  for ENV in /opt/sf-instances/*/.env; do
+  for ENV in /opt/tribe-sites/*/.env; do
     [ -f "$ENV" ] || continue
     grep -q "^PORT=${NEXTJS_PORT}$" "$ENV" 2>/dev/null && \
       ERRORS+=("Next.js port $NEXTJS_PORT is now used by $(basename $(dirname $ENV))")
@@ -27,7 +27,7 @@ if [ -n "$NEXTJS_PORT" ] && [ "$NEXTJS_PORT" != "null" ]; then
 fi
 
 if [ -n "$PB_PORT" ] && [ "$PB_PORT" != "null" ]; then
-  for ENV in /opt/sf-instances/*/.env; do
+  for ENV in /opt/tribe-sites/*/.env; do
     [ -f "$ENV" ] || continue
     grep -q "^PB_PORT=${PB_PORT}$" "$ENV" 2>/dev/null && \
       ERRORS+=("PB port $PB_PORT is now used by $(basename $(dirname $ENV))")

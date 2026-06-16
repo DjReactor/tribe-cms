@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")

@@ -33,16 +33,16 @@ export function TestimonialsPage({
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--sf-text)] leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--tribe-text)] leading-tight mb-4">
               Client Stories
             </h1>
             <p className="text-lg text-gray-300 mb-6 max-w-xl">
               We've worked with homeowners and businesses on outdoor projects. Here's what they shared.
             </p>
             <div className="flex items-center text-sm font-medium text-gray-400">
-              <Link href="/" className="hover:text-[var(--sf-brand)] transition-colors">Home</Link>
+              <Link href="/" className="hover:text-[var(--tribe-brand)] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-[var(--sf-brand)]">Testimonials</span>
+              <span className="text-[var(--tribe-brand)]">Testimonials</span>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@ export function TestimonialsPage({
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="bg-[var(--sf-surface)] p-10 rounded-3xl shadow-sm border border-gray-100 relative">
+              <div key={idx} className="bg-[var(--tribe-surface)] p-10 rounded-3xl shadow-sm border border-gray-100 relative">
                 {/* Quote Icon watermark */}
                 <div className="absolute top-8 left-8 text-gray-100">
                   <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
@@ -99,7 +99,7 @@ export function TestimonialsPage({
             ))}
             
             {testimonials.length === 0 && (
-              <div className="col-span-full py-16 text-center text-gray-500 bg-[var(--sf-surface)] rounded-3xl border border-gray-200 border-dashed">
+              <div className="col-span-full py-16 text-center text-gray-500 bg-[var(--tribe-surface)] rounded-3xl border border-gray-200 border-dashed">
                 No client stories available yet.
               </div>
             )}
@@ -119,18 +119,18 @@ export function TestimonialsPage({
           <div className="absolute inset-0 bg-gray-900/80 backdrop-blur-[2px]"></div>
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-5xl font-heading font-bold text-[var(--sf-text)] mb-6 leading-tight">
+          <h2 className="text-3xl md:text-5xl font-heading font-bold text-[var(--tribe-text)] mb-6 leading-tight">
             Ready to Improve Your Outdoor Space?
           </h2>
           <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
             Tell us about your project, and we'll guide you with a clear plan, timeline, and next steps based on your needs.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <Link href="#contact-form" className="inline-flex items-center bg-[var(--sf-brand)] hover:bg-[var(--sf-surface)] text-gray-900 rounded-full px-8 py-3 font-bold transition-colors w-full sm:w-auto justify-center">
+            <Link href="#contact-form" className="inline-flex items-center bg-[var(--tribe-brand)] hover:bg-[var(--tribe-surface)] text-gray-900 rounded-full px-8 py-3 font-bold transition-colors w-full sm:w-auto justify-center">
               Request a Quote
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </Link>
-            <Link href="/contact" className="inline-flex items-center bg-transparent border-2 border-white hover:bg-[var(--sf-surface)] hover:text-gray-900 text-[var(--sf-text)] rounded-full px-8 py-3 font-bold transition-colors w-full sm:w-auto justify-center">
+            <Link href="/contact" className="inline-flex items-center bg-transparent border-2 border-white hover:bg-[var(--tribe-surface)] hover:text-gray-900 text-[var(--tribe-text)] rounded-full px-8 py-3 font-bold transition-colors w-full sm:w-auto justify-center">
               Contact Us
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </Link>
@@ -139,7 +139,7 @@ export function TestimonialsPage({
       </section>
 
       {/* 4. Contact Form Section */}
-      <section id="contact-form" className="py-24 bg-[var(--sf-surface)] border-t border-gray-100">
+      <section id="contact-form" className="py-24 bg-[var(--tribe-surface)] border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-xl w-full">
@@ -153,7 +153,7 @@ export function TestimonialsPage({
             
             <div>
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">Get In Touch</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6 leading-tight">

@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "09_init_pocketbase"
 
 STATE=$(read_state "$SLUG")
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 
@@ -13,7 +13,7 @@ fuser -k "${PB_PORT}/tcp" 2>/dev/null || true
 sleep 1
 
 info "Creating admin account..."
-"$BASE/pocketbase" superuser upsert "${PB_ADMIN_EMAIL:-admin@successforce.com}" "${PB_ADMIN_PW}" --dir "$BASE/pb_data" > /dev/null 2>&1
+"$BASE/pocketbase" superuser upsert "${PB_ADMIN_EMAIL:-admin@tribecms.local}" "${PB_ADMIN_PW}" --dir "$BASE/pb_data" > /dev/null 2>&1
 RC=$?
 [ $RC -ne 0 ] && \
   { mark_step_failed "$SLUG" "09_init_pocketbase" "Admin creation failed via CLI"; exit_fail "Admin creation failed"; }
@@ -32,7 +32,7 @@ info "Authenticating as admin..."
 AUTH_RESP=$(curl -sf -X POST \
   "http://127.0.0.1:${PB_PORT}/api/collections/_superusers/auth-with-password" \
   -H "Content-Type: application/json" \
-  -d "{\"identity\":\"${PB_ADMIN_EMAIL:-admin@successforce.com}\",\"password\":\"${PB_ADMIN_PW}\"}" 2>/dev/null)
+  -d "{\"identity\":\"${PB_ADMIN_EMAIL:-admin@tribecms.local}\",\"password\":\"${PB_ADMIN_PW}\"}" 2>/dev/null)
 
 PB_TOKEN=$(echo "$AUTH_RESP" | jq -r '.token // empty')
 [ -z "$PB_TOKEN" ] && \

@@ -4,10 +4,10 @@ import { useState, useTransition } from 'react';
 import Image from 'next/image';
 import { CheckCircle2, Loader2, Layers } from 'lucide-react';
 import { activateTemplate } from './actions';
-import type { TemplateManifest } from '@/lib/template-registry';
+import type { TemplateRegistryManifest } from '@/lib/template-registry';
 
 interface DesignClientProps {
-  templates: TemplateManifest[];
+  templates: TemplateRegistryManifest[];
   activeTemplateId: string;
 }
 
@@ -19,7 +19,7 @@ function ConfirmModal({
   onCancel,
   isPending,
 }: {
-  template: TemplateManifest;
+  template: TemplateRegistryManifest;
   onConfirm: () => void;
   onCancel: () => void;
   isPending: boolean;
@@ -100,9 +100,9 @@ function TemplateCard({
   isActive,
   onActivate,
 }: {
-  template: TemplateManifest;
+  template: TemplateRegistryManifest;
   isActive: boolean;
-  onActivate: (t: TemplateManifest) => void;
+  onActivate: (t: TemplateRegistryManifest) => void;
 }) {
   const [imgError, setImgError] = useState(false);
 
@@ -187,11 +187,11 @@ function TemplateCard({
 
 export function DesignClient({ templates, activeTemplateId }: DesignClientProps) {
   const [pending, startTransition] = useTransition();
-  const [confirmTarget, setConfirmTarget] = useState<TemplateManifest | null>(null);
+  const [confirmTarget, setConfirmTarget] = useState<TemplateRegistryManifest | null>(null);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [currentActive, setCurrentActive] = useState(activeTemplateId);
 
-  function handleActivate(template: TemplateManifest) {
+  function handleActivate(template: TemplateRegistryManifest) {
     if (template.id === currentActive) return;
     setConfirmTarget(template);
   }

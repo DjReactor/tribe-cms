@@ -17,10 +17,10 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
   const authorName = post.author_type === 'manual' ? `By ${businessInfo.business_name}` : `Published by ${businessInfo.business_name}`
 
   return (
-    <div className="bg-[var(--sf-surface)]">
+    <div className="bg-[var(--tribe-surface)]">
       {/* Article Header */}
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-12 text-center">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--sf-brand)] hover:text-gray-900 mb-8 transition-colors">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--tribe-brand)] hover:text-gray-900 mb-8 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           Back to Blog
         </Link>
@@ -36,7 +36,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
         </h1>
         
         <div className="flex items-center justify-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[var(--sf-brand)] flex items-center justify-center text-[var(--sf-text)] font-bold text-sm">
+          <div className="w-10 h-10 rounded-full bg-[var(--tribe-brand)] flex items-center justify-center text-[var(--tribe-text)] font-bold text-sm">
             {businessInfo.business_name.charAt(0)}
           </div>
           <span className="font-medium text-gray-700">{authorName}</span>
@@ -61,7 +61,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
       {/* Article Content */}
       <article className="max-w-3xl mx-auto px-6 pb-20">
         {post.content ? (
-          <div className="prose prose-lg md:prose-xl prose-[var(--sf-brand)] prose-img:rounded-2xl max-w-none">
+          <div className="prose prose-lg md:prose-xl prose-[var(--tribe-brand)] prose-img:rounded-2xl max-w-none">
             <BlockNoteRenderer content={post.content} />
           </div>
         ) : (
@@ -91,7 +91,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
                 <Link 
                   key={related.id} 
                   href={`/blog/${related.slug}`} 
-                  className="group flex flex-col bg-[var(--sf-surface)] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
+                  className="group flex flex-col bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
                 >
                   <div className="relative aspect-video w-full bg-gray-100 overflow-hidden">
                     {related.cover_image_url && (
@@ -105,11 +105,11 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
                   </div>
                   <div className="p-8">
                     {related.published_at && (
-                      <div className="text-xs font-bold text-[var(--sf-brand)] mb-3 uppercase tracking-wider">
+                      <div className="text-xs font-bold text-[var(--tribe-brand)] mb-3 uppercase tracking-wider">
                         {formatDate(related.published_at)}
                       </div>
                     )}
-                    <h3 className="font-heading font-bold text-xl text-gray-900 group-hover:text-[var(--sf-brand)] transition-colors">
+                    <h3 className="font-heading font-bold text-xl text-gray-900 group-hover:text-[var(--tribe-brand)] transition-colors">
                       {related.title}
                     </h3>
                   </div>
@@ -121,16 +121,16 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
       )}
 
       {/* CTA Banner */}
-      <section className="bg-[var(--sf-brand)] py-20 px-6 text-center text-[var(--sf-text)]">
+      <section className="bg-[var(--tribe-brand)] py-20 px-6 text-center text-[var(--tribe-text)]">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">Need expert assistance?</h2>
-          <p className="text-lg text-[var(--sf-text)]/90 mb-10">Our team at {businessInfo.business_name} is here to help with all your needs.</p>
+          <p className="text-lg text-[var(--tribe-text)]/90 mb-10">Our team at {businessInfo.business_name} is here to help with all your needs.</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="px-8 py-4 bg-[var(--sf-surface)] text-[var(--sf-brand)] font-bold rounded-lg hover:bg-gray-50 transition-colors">
+            <Link href="/contact" className="px-8 py-4 bg-[var(--tribe-surface)] text-[var(--tribe-brand)] font-bold rounded-lg hover:bg-gray-50 transition-colors">
               Get in Touch
             </Link>
             {businessInfo.phone && (
-              <a href={`tel:${businessInfo.phone}`} className="px-8 py-4 border-2 border-white/30 font-bold rounded-lg hover:bg-[var(--sf-surface)]/10 transition-colors">
+              <a href={`tel:${businessInfo.phone}`} className="px-8 py-4 border-2 border-white/30 font-bold rounded-lg hover:bg-[var(--tribe-surface)]/10 transition-colors">
                 Call {businessInfo.phone}
               </a>
             )}

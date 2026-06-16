@@ -1,12 +1,12 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."07_install_deps".status')
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 ERRORS=()
 
 [ ! -d "$BASE/node_modules" ] && ERRORS+=("node_modules directory missing")

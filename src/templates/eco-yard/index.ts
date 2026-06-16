@@ -32,6 +32,23 @@ export const manifest: TemplateManifest = {
       label: "Contact Banner Background",
       defaultFallback: "/assets/eco-yard/8da3caff9e07af4fe3aad4bea44e0275.webp"
     }
+  },
+  supportedCopyKeys: {
+    // ── Service Area Pages ────────────────────────────────────────────────
+    "service_area_h1": {
+      label: "Service Area Page Headline",
+      default: "{{business_type}} in {{city}}",
+      type: "text",
+      page: "Service Area Pages",
+      hint: "Shown as the H1 on each service area page. {{business_type}} and {{city}} are replaced automatically."
+    },
+    "service_area_intro": {
+      label: "Service Area Page Intro",
+      default: "Professional {{business_type}} services serving {{city}} and surrounding areas.",
+      type: "textarea",
+      page: "Service Area Pages",
+      hint: "Introductory paragraph under the H1 on service area pages."
+    }
   }
 }
 

@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, MediaItem } from "@/types";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const businessInfo = await getBusinessInfo();
+  const siteUrl = process.env.SITE_URL || '';
+
+  return {
+    title: 'Contact',
+    description: `Contact ${businessInfo.business_name}${businessInfo.city ? ` in ${businessInfo.city}` : ''}. Call us at ${businessInfo.phone}.`,
+    alternates: { canonical: `${siteUrl}/contact` },
+  };
+}
 
 export default async function ContactPageWrapper() {
   const settings = await getSettings();

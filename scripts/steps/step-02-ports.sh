@@ -1,11 +1,11 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "02_ports"
 
 # Build list of ports already used by instances
 USED_PORTS=()
-for ENV in /opt/sf-instances/*/.env; do
+for ENV in /opt/tribe-sites/*/.env; do
   [ -f "$ENV" ] || continue
   while IFS= read -r LINE; do
     echo "$LINE" | grep -qE '^(PORT|PB_PORT)=' && \
@@ -14,7 +14,7 @@ for ENV in /opt/sf-instances/*/.env; do
 done
 
 # Also include ports from other in-progress deploys (lock files)
-for LOCK in /tmp/sf-port-lock-*; do
+for LOCK in /tmp/tribe-port-lock-*; do
   [ -f "$LOCK" ] && USED_PORTS+=($(basename "$LOCK" | grep -oE '[0-9]+'))
 done
 
@@ -42,8 +42,8 @@ PB_PORT=$(find_port 8001 8999) || \
   { mark_step_failed "$SLUG" "02_ports" "No available ports in 8001-8999"; exit_fail "No PocketBase ports available (8001-8999)"; }
 
 # Reserve with lock files
-touch "/tmp/sf-port-lock-${NEXTJS_PORT}"
-touch "/tmp/sf-port-lock-${PB_PORT}"
+touch "/tmp/tribe-port-lock-${NEXTJS_PORT}"
+touch "/tmp/tribe-port-lock-${PB_PORT}"
 
 # Write to state
 set_state "$SLUG" ".ports.nextjs_port = $NEXTJS_PORT | .ports.pb_port = $PB_PORT"

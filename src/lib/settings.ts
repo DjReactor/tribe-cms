@@ -1,5 +1,5 @@
 import { getPocketBaseClient } from './pocketbase';
-import type { TemplateSettings, BusinessInfo } from '@/types/index';
+import type { TemplateSettings, BusinessInfo, SeoSettings } from '@/types/index';
 import { cache } from 'react';
 
 export const getSettings = cache(async (): Promise<TemplateSettings & { id: string; template_config: any }> => {
@@ -19,7 +19,7 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
         template_config: record.template_config || {},
         lead_webhook_url:    record.lead_webhook_url    || '',
         lead_webhook_secret: record.lead_webhook_secret || '',
-        niche_schema: record.niche_schema || null,
+        niche_schema: record.niche_schema || undefined,
       };
     }
   } catch (e) {
@@ -38,8 +38,18 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
     template_config: {},
     lead_webhook_url:    '',
     lead_webhook_secret: '',
-    niche_schema: null,
+    niche_schema: undefined,
   };
+});
+
+export const getSeoSettings = cache(async (): Promise<SeoSettings | null> => {
+  try {
+    const pb = await getPocketBaseClient();
+    const record = await pb.collection('seo_settings').getFirstListItem<SeoSettings>('');
+    return record || null;
+  } catch {
+    return null;
+  }
 });
 
 export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
@@ -54,7 +64,7 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
   // Default mock info
   return {
     id: 'mock',
-    business_name: 'SuccessForce Preview',
+    business_name: 'Tribe CMS Preview',
     tagline: 'Your Trusted Local Partner',
     phone: '(555) 123-4567',
     email: 'contact@example.com',

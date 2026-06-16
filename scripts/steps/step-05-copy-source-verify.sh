@@ -1,18 +1,18 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."05_copy_source".status')
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 ERRORS=()
 REQUIRED_FILES=(
   "$BASE/src" "$BASE/public" "$BASE/package.json" "$BASE/pnpm-lock.yaml"
   "$BASE/next.config.ts" "$BASE/tsconfig.json"
   "$BASE/pb_migrations" "$BASE/pb_seed/defaults.json"
-  "$BASE/pocketbase" "$BASE/.sf-version"
+  "$BASE/pocketbase" "$BASE/.tribe-version"
 )
 
 for F in "${REQUIRED_FILES[@]}"; do
@@ -23,8 +23,8 @@ done
 [ -x "$BASE/pocketbase" ] || ERRORS+=("PocketBase binary is not executable")
 
 # Check version matches master
-INST_VER=$(cat "$BASE/.sf-version" 2>/dev/null)
-TMPL_VER=$(cat "/opt/sf-template/.sf-version" 2>/dev/null)
+INST_VER=$(cat "$BASE/.tribe-version" 2>/dev/null)
+TMPL_VER=$(cat "/opt/tribe-instances/.tribe-version" 2>/dev/null)
 [ "$INST_VER" != "$TMPL_VER" ] && ERRORS+=("Version mismatch: instance=$INST_VER, master=$TMPL_VER")
 
 # Check state version was set

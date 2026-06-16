@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export interface TemplateManifest {
+export interface TemplateRegistryManifest {
   id: string;
   name: string;
   description: string;
@@ -9,10 +9,9 @@ export interface TemplateManifest {
   preview_image: string;
   tags: string[];
   supports?: string[];
-  config_schema: any[];
 }
 
-export function getTemplateManifests(): TemplateManifest[] {
+export function getTemplateManifests(): TemplateRegistryManifest[] {
   const templatesDir = path.join(process.cwd(), 'src', 'templates');
   
   if (!fs.existsSync(templatesDir)) return [];
@@ -21,7 +20,7 @@ export function getTemplateManifests(): TemplateManifest[] {
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 
-  const manifests: TemplateManifest[] = [];
+  const manifests: TemplateRegistryManifest[] = [];
 
   for (const dirName of templateDirs) {
     const manifestPath = path.join(templatesDir, dirName, 'manifest.json');
@@ -39,7 +38,7 @@ export function getTemplateManifests(): TemplateManifest[] {
   return manifests;
 }
 
-export function getTemplateManifest(id: string): TemplateManifest | null {
+export function getTemplateManifest(id: string): TemplateRegistryManifest | null {
   const manifests = getTemplateManifests();
   return manifests.find(m => m.id === id) || null;
 }

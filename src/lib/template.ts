@@ -17,19 +17,6 @@ export function resolveTemplateTokens(text: string, businessInfo: BusinessInfo):
 }
 
 /**
- * Convenience method to resolve multiple strings at once.
- * @deprecated Prefer buildResolvedCopy for new route files — it reads defaults
- * from the template manifest and merges user overrides automatically.
- */
-export function resolveCopyObject(copyMap: Record<string, string>, businessInfo: BusinessInfo): Record<string, string> {
-  const resolved: Record<string, string> = {};
-  for (const [key, value] of Object.entries(copyMap)) {
-    resolved[key] = resolveTemplateTokens(value, businessInfo);
-  }
-  return resolved;
-}
-
-/**
  * Builds the final resolvedCopy map for a page by merging user overrides with
  * template manifest defaults, then resolving {{tokens}} against businessInfo.
  *

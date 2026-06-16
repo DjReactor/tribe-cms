@@ -1,12 +1,12 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."04_directories".status')
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 REQUIRED=("$BASE" "$BASE/pb_data" "$BASE/pb_data/storage" "$BASE/logs" "$BASE/backups" "$BASE/custom")
 ERRORS=()
 

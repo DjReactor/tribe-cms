@@ -43,7 +43,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   return (
     <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col h-full border-r border-slate-800 shrink-0">
       <div className="p-6 shrink-0">
-        <h1 className="text-xl font-bold text-white tracking-tight">SuccessForce</h1>
+        <h1 className="text-xl font-bold text-white tracking-tight">Tribe CMS</h1>
         <p className="text-xs font-medium text-slate-500 mt-1 uppercase tracking-wider">Business Portal</p>
       </div>
 

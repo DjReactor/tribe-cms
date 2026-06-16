@@ -38,24 +38,24 @@ export function HomePage({
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center space-x-2 bg-[var(--sf-surface)]/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 text-[var(--sf-brand)] text-sm font-medium border border-white/20">
-              <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+            <div className="inline-flex items-center space-x-2 bg-[var(--tribe-surface)]/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 text-[var(--tribe-brand)] text-sm font-medium border border-white/20">
+              <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
               <span>Residential & Commercial Projects</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--sf-text)] leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--tribe-text)] leading-tight mb-6">
               {resolvedCopy.hero_h1 || `Landscaping That Works in Every Season`}
             </h1>
             <p className="text-lg text-gray-200 mb-8 max-w-xl">
               {resolvedCopy.hero_subtitle || `We help homeowners and businesses improve their outdoor areas with practical landscaping, lawn care, and garden design.`}
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="#quote-section" className="bg-[var(--sf-brand)] hover:bg-[#a5e61e] text-gray-900 font-bold px-8 py-4 rounded-full transition-colors flex items-center">
+              <a href="#quote-section" className="bg-[var(--tribe-brand)] hover:bg-[#a5e61e] text-gray-900 font-bold px-8 py-4 rounded-full transition-colors flex items-center">
                 {resolvedCopy.cta_primary || 'Request a Quote'}
                 <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </a>
-              <Link href="/services" className="bg-transparent hover:bg-[var(--sf-surface)]/10 text-[var(--sf-text)] font-medium border border-white/30 px-8 py-4 rounded-full transition-colors flex items-center">
+              <Link href="/services" className="bg-transparent hover:bg-[var(--tribe-surface)]/10 text-[var(--tribe-text)] font-medium border border-white/30 px-8 py-4 rounded-full transition-colors flex items-center">
                 View Projects
                 <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -67,7 +67,7 @@ export function HomePage({
       </section>
 
       {/* 2. About Us Section */}
-      <section className="py-20 bg-[var(--sf-surface)]">
+      <section className="py-20 bg-[var(--tribe-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-xl w-full">
@@ -80,7 +80,7 @@ export function HomePage({
             </div>
             <div>
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">About Us</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6 leading-tight">
@@ -113,8 +113,8 @@ export function HomePage({
               { title: "Skilled Installation Work", desc: "Our team handles each project step with care and proper materials." },
               { title: "Ongoing Maintenance Support", desc: "We offer regular care services to keep lawns and plants healthy." }
             ].map((feature, idx) => (
-              <div key={idx} className="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-[var(--sf-brand)] transition-colors group">
-                <div className="w-12 h-12 bg-[var(--sf-surface)] rounded-full flex items-center justify-center shadow-sm mb-6 text-[#0C1810] group-hover:bg-[var(--sf-brand)] transition-colors">
+              <div key={idx} className="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:border-[var(--tribe-brand)] transition-colors group">
+                <div className="w-12 h-12 bg-[var(--tribe-surface)] rounded-full flex items-center justify-center shadow-sm mb-6 text-[#0C1810] group-hover:bg-[var(--tribe-brand)] transition-colors">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
@@ -131,7 +131,7 @@ export function HomePage({
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div className="max-w-2xl">
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">Our Services</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 leading-tight">
@@ -139,9 +139,9 @@ export function HomePage({
               </h2>
             </div>
             <div className="mt-6 md:mt-0">
-              <Link href="/services" className="inline-flex items-center bg-gray-900 hover:bg-gray-800 text-[var(--sf-text)] rounded-full pl-6 pr-2 py-2 transition-all">
+              <Link href="/services" className="inline-flex items-center bg-gray-900 hover:bg-gray-800 text-[var(--tribe-text)] rounded-full pl-6 pr-2 py-2 transition-all">
                 <span className="text-sm font-medium mr-3">View All Services</span>
-                <div className="w-8 h-8 rounded-full bg-[var(--sf-brand)] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-[var(--tribe-brand)] flex items-center justify-center">
                   <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -165,11 +165,11 @@ export function HomePage({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="text-2xl font-bold text-[var(--sf-text)] mb-2">{service.name}</h3>
+                  <h3 className="text-2xl font-bold text-[var(--tribe-text)] mb-2">{service.name}</h3>
                   <p className="text-gray-300 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
                     {service.short_description}
                   </p>
-                  <Link href={`/services/${service.slug}`} className="inline-flex items-center text-[var(--sf-brand)] font-medium group-hover:text-[var(--sf-text)] transition-colors">
+                  <Link href={`/services/${service.slug}`} className="inline-flex items-center text-[var(--tribe-brand)] font-medium group-hover:text-[var(--tribe-text)] transition-colors">
                     Learn More
                     <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </Link>
@@ -181,12 +181,12 @@ export function HomePage({
       </section>
 
       {/* 4. Why Choose Us */}
-      <section className="py-20 bg-[var(--sf-surface)]">
+      <section className="py-20 bg-[var(--tribe-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">Why Choose Us</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6 leading-tight">
@@ -203,7 +203,7 @@ export function HomePage({
                   { title: "Support After Completion", desc: "We remain available for maintenance and follow-up support when needed." }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--sf-brand)] flex items-center justify-center font-bold text-gray-900 text-sm mt-1">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--tribe-brand)] flex items-center justify-center font-bold text-gray-900 text-sm mt-1">
                       {idx + 1}
                     </div>
                     <div className="ml-4">
@@ -230,7 +230,7 @@ export function HomePage({
       <section className="py-20 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
           <div className="inline-flex items-center justify-center space-x-2 text-[#0C1810] font-bold mb-4">
-            <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+            <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
             <span className="uppercase tracking-wider text-sm">Our Process</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 leading-tight max-w-2xl mx-auto">
@@ -244,8 +244,8 @@ export function HomePage({
               { step: '02', title: 'Project Execution', desc: 'Our team completes the work with proper tools and methods, ensuring everything is built to last.' },
               { step: '03', title: 'Final Setup & Care', desc: 'We review the finished work and provide guidance or maintenance support to keep everything in good condition.' },
             ].map((process, idx) => (
-              <div key={idx} className="bg-[var(--sf-surface)] p-8 rounded-3xl shadow-sm border border-gray-100 text-center relative pt-12 mt-6">
-                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-[var(--sf-brand)] rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-50">
+              <div key={idx} className="bg-[var(--tribe-surface)] p-8 rounded-3xl shadow-sm border border-gray-100 text-center relative pt-12 mt-6">
+                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-[var(--tribe-brand)] rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-50">
                   {idx + 1}
                 </div>
                 <div className="text-3xl font-heading font-black text-gray-100 mb-4 tracking-widest">STEP {process.step}</div>
@@ -259,12 +259,12 @@ export function HomePage({
 
       {/* 6. Testimonials Section */}
       {testimonials && testimonials.length > 0 && (
-        <section className="py-20 bg-[var(--sf-surface)]">
+        <section className="py-20 bg-[var(--tribe-surface)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-end justify-between mb-16">
               <div className="max-w-2xl">
                 <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                  <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                  <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                   <span className="uppercase tracking-wider text-sm">Client Feedback</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 leading-tight">
@@ -279,7 +279,7 @@ export function HomePage({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {testimonials.slice(0, 2).map((testimonial) => (
                 <div key={testimonial.id} className="bg-gray-50 p-8 rounded-3xl border border-gray-100">
-                  <div className="text-[var(--sf-brand)] mb-6">
+                  <div className="text-[var(--tribe-brand)] mb-6">
                     <svg className="w-10 h-10 opacity-50" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                     </svg>
@@ -293,7 +293,7 @@ export function HomePage({
                         {testimonial.author_photo_url ? (
                           <Image src={testimonial.author_photo_url} alt={testimonial.author_name} fill className="object-cover" />
                         ) : (
-                          <div className="w-full h-full bg-[var(--sf-brand)] flex items-center justify-center font-bold text-[#0C1810]">
+                          <div className="w-full h-full bg-[var(--tribe-brand)] flex items-center justify-center font-bold text-[#0C1810]">
                             {testimonial.author_name.charAt(0)}
                           </div>
                         )}
@@ -326,15 +326,15 @@ export function HomePage({
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-heading font-bold text-[var(--sf-text)] mb-6 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-[var(--tribe-text)] mb-6 leading-tight">
                 Ready to Improve Your Outdoor Space?
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-lg">
                 Tell us about your project, and we'll guide you with a clear plan, timeline, and next steps based on your needs.
               </p>
               <div className="flex items-center space-x-6">
-                <div className="flex items-center text-[var(--sf-text)]">
-                  <svg className="w-6 h-6 text-[var(--sf-brand)] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center text-[var(--tribe-text)]">
+                  <svg className="w-6 h-6 text-[var(--tribe-brand)] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span className="font-bold text-xl">{businessInfo.phone}</span>
@@ -342,7 +342,7 @@ export function HomePage({
               </div>
             </div>
             
-            <div className="bg-[var(--sf-surface)] rounded-3xl p-8 md:p-10 shadow-2xl">
+            <div className="bg-[var(--tribe-surface)] rounded-3xl p-8 md:p-10 shadow-2xl">
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Request a Quote</h3>
               <p className="text-gray-500 mb-8">Fill out the form below and our team will get back to you shortly.</p>
               <ContactForm source="hero_cta" ctaLabel="Get a Free Quote" />

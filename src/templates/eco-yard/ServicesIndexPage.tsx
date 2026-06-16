@@ -34,23 +34,23 @@ export function ServicesIndexPage({
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--sf-text)] leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--tribe-text)] leading-tight mb-4">
               Our Services
             </h1>
             <p className="text-lg text-gray-300 mb-6 max-w-xl">
               We offer services designed to improve outdoor spaces with practical and reliable solutions.
             </p>
             <div className="flex items-center text-sm font-medium text-gray-400">
-              <Link href="/" className="hover:text-[var(--sf-brand)] transition-colors">Home</Link>
+              <Link href="/" className="hover:text-[var(--tribe-brand)] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-[var(--sf-brand)]">Service</span>
+              <span className="text-[var(--tribe-brand)]">Service</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* 2. Services Grid */}
-      <section className="py-20 bg-[var(--sf-surface)]">
+      <section className="py-20 bg-[var(--tribe-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div className="max-w-2xl">
@@ -62,9 +62,9 @@ export function ServicesIndexPage({
               <p className="text-gray-600 mb-6">
                 We offer a range of outdoor services designed to improve function, appearance, and long-term maintenance of your space.
               </p>
-              <Link href="/contact" className="inline-flex items-center bg-gray-900 hover:bg-gray-800 text-[var(--sf-text)] rounded-full pl-6 pr-2 py-2 transition-all">
+              <Link href="/contact" className="inline-flex items-center bg-gray-900 hover:bg-gray-800 text-[var(--tribe-text)] rounded-full pl-6 pr-2 py-2 transition-all">
                 <span className="text-sm font-medium mr-3">Get a Quote</span>
-                <div className="w-8 h-8 rounded-full bg-[var(--sf-brand)] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-[var(--tribe-brand)] flex items-center justify-center">
                   <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -84,11 +84,11 @@ export function ServicesIndexPage({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="text-2xl font-bold text-[var(--sf-text)] mb-2">{service.name}</h3>
+                  <h3 className="text-2xl font-bold text-[var(--tribe-text)] mb-2">{service.name}</h3>
                   <p className="text-gray-300 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
                     {service.short_description}
                   </p>
-                  <Link href={`/services/${service.slug}`} className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--sf-brand)] text-gray-900 hover:bg-[var(--sf-surface)] transition-colors">
+                  <Link href={`/services/${service.slug}`} className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--tribe-brand)] text-gray-900 hover:bg-[var(--tribe-surface)] transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </Link>
                 </div>
@@ -110,7 +110,7 @@ export function ServicesIndexPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center space-x-2 text-[#0C1810] font-bold mb-4">
-              <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+              <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
               <span className="uppercase tracking-wider text-sm">Our Pricing</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 leading-tight mb-4 max-w-2xl mx-auto">
@@ -123,7 +123,7 @@ export function ServicesIndexPage({
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Basic */}
-            <div className="bg-[var(--sf-surface)] rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col h-full">
+            <div className="bg-[var(--tribe-surface)] rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col h-full">
               <h3 className="font-bold text-gray-900 mb-2">Basic Care</h3>
               <div className="flex items-baseline mb-4">
                 <span className="text-4xl font-heading font-bold text-gray-900">$120</span>
@@ -146,15 +146,15 @@ export function ServicesIndexPage({
                   </li>
                 ))}
               </ul>
-              <Link href="/contact" className="bg-gray-900 text-[var(--sf-text)] hover:bg-gray-800 text-center py-3 rounded-full font-medium transition-colors w-full">Book Service</Link>
+              <Link href="/contact" className="bg-gray-900 text-[var(--tribe-text)] hover:bg-gray-800 text-center py-3 rounded-full font-medium transition-colors w-full">Book Service</Link>
             </div>
             
             {/* Standard (Featured) */}
             <div className="bg-[#0A1A12] rounded-3xl p-8 shadow-xl flex flex-col h-full transform md:-translate-y-4 border border-gray-800 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--sf-brand)] rounded-full filter blur-[80px] opacity-20"></div>
-              <div className="inline-block bg-[var(--sf-brand)] text-gray-900 text-xs font-bold px-3 py-1 rounded-full w-max mb-4">Most Popular</div>
-              <h3 className="font-bold text-[var(--sf-text)] mb-2">Standard Service</h3>
-              <div className="flex items-baseline mb-4 text-[var(--sf-text)]">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--tribe-brand)] rounded-full filter blur-[80px] opacity-20"></div>
+              <div className="inline-block bg-[var(--tribe-brand)] text-gray-900 text-xs font-bold px-3 py-1 rounded-full w-max mb-4">Most Popular</div>
+              <h3 className="font-bold text-[var(--tribe-text)] mb-2">Standard Service</h3>
+              <div className="flex items-baseline mb-4 text-[var(--tribe-text)]">
                 <span className="text-4xl font-heading font-bold">$320</span>
                 <span className="text-gray-400 ml-2">/ project</span>
               </div>
@@ -171,16 +171,16 @@ export function ServicesIndexPage({
                   "Ongoing maintenance support"
                 ].map((item, idx) => (
                   <li key={idx} className="flex text-sm text-gray-300">
-                    <svg className="w-5 h-5 text-[var(--sf-brand)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <svg className="w-5 h-5 text-[var(--tribe-brand)] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     {item}
                   </li>
                 ))}
               </ul>
-              <Link href="/contact" className="bg-[var(--sf-brand)] text-gray-900 hover:bg-[var(--sf-surface)] text-center py-3 rounded-full font-bold transition-colors w-full">Get Started</Link>
+              <Link href="/contact" className="bg-[var(--tribe-brand)] text-gray-900 hover:bg-[var(--tribe-surface)] text-center py-3 rounded-full font-bold transition-colors w-full">Get Started</Link>
             </div>
             
             {/* Full Project */}
-            <div className="bg-[var(--sf-surface)] rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col h-full">
+            <div className="bg-[var(--tribe-surface)] rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col h-full">
               <h3 className="font-bold text-gray-900 mb-2">Full Project</h3>
               <div className="flex items-baseline mb-4">
                 <span className="text-4xl font-heading font-bold text-gray-900">Custom</span>
@@ -203,19 +203,19 @@ export function ServicesIndexPage({
                   </li>
                 ))}
               </ul>
-              <Link href="/contact" className="bg-gray-900 text-[var(--sf-text)] hover:bg-gray-800 text-center py-3 rounded-full font-medium transition-colors w-full">Book Service</Link>
+              <Link href="/contact" className="bg-gray-900 text-[var(--tribe-text)] hover:bg-gray-800 text-center py-3 rounded-full font-medium transition-colors w-full">Book Service</Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* 4. Why Choose Us Section */}
-      <section className="py-20 bg-[var(--sf-surface)]">
+      <section className="py-20 bg-[var(--tribe-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">Why Choose Us</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6 leading-tight">
@@ -232,7 +232,7 @@ export function ServicesIndexPage({
                   { title: "Support After Completion", desc: "We remain available for maintenance and follow-up support when needed." }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--sf-brand)] flex items-center justify-center font-bold text-gray-900 text-sm mt-1">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--tribe-brand)] flex items-center justify-center font-bold text-gray-900 text-sm mt-1">
                       {idx + 1}
                     </div>
                     <div className="ml-4">
@@ -270,7 +270,7 @@ export function ServicesIndexPage({
             
             <div>
               <div className="flex items-center space-x-2 text-[#0C1810] font-bold mb-4">
-                <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
                 <span className="uppercase tracking-wider text-sm">Get In Touch</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6 leading-tight">
@@ -280,7 +280,7 @@ export function ServicesIndexPage({
                 Tell us about your space and what you need. We'll get back with clear guidance and the next steps.
               </p>
               
-              <div className="bg-[var(--sf-surface)] rounded-3xl p-8 shadow-sm">
+              <div className="bg-[var(--tribe-surface)] rounded-3xl p-8 shadow-sm">
                 <ContactForm source="services_index" ctaLabel="Send Request" />
               </div>
             </div>

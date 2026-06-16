@@ -32,23 +32,23 @@ export function ContactPage({
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--sf-text)] leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-[var(--tribe-text)] leading-tight mb-4">
               Contact Us
             </h1>
             <p className="text-lg text-gray-300 mb-6 max-w-xl">
               Tell us about your space and what you need. We'll get back with clear guidance as soon as possible.
             </p>
             <div className="flex items-center text-sm font-medium text-gray-400">
-              <Link href="/" className="hover:text-[var(--sf-brand)] transition-colors">Home</Link>
+              <Link href="/" className="hover:text-[var(--tribe-brand)] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-[var(--sf-brand)]">Contact Us</span>
+              <span className="text-[var(--tribe-brand)]">Contact Us</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* 2. Contact Form Section */}
-      <section className="py-24 bg-[var(--sf-surface)]">
+      <section className="py-24 bg-[var(--tribe-surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative h-[700px] rounded-3xl overflow-hidden shadow-xl w-full">
@@ -80,7 +80,7 @@ export function ContactPage({
       <section className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
           <div className="inline-flex items-center justify-center space-x-2 text-[#0C1810] font-bold mb-4">
-            <span className="w-2 h-2 rounded-full bg-[var(--sf-brand)]"></span>
+            <span className="w-2 h-2 rounded-full bg-[var(--tribe-brand)]"></span>
             <span className="uppercase tracking-wider text-sm">Contact Us</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 leading-tight max-w-2xl mx-auto">
@@ -95,7 +95,7 @@ export function ContactPage({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-4">
               {/* Primary Office */}
-              <div className="bg-[var(--sf-brand)] rounded-2xl p-6 shadow-sm">
+              <div className="bg-[var(--tribe-brand)] rounded-2xl p-6 shadow-sm">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-bold text-gray-900 text-lg">Headquarters</h3>
                   <svg className="w-5 h-5 text-gray-900 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -118,10 +118,10 @@ export function ContactPage({
               
               {/* Service Areas */}
               {serviceAreas.slice(0, 3).map((area, idx) => (
-                <div key={idx} className="bg-[var(--sf-surface)] border border-gray-200 rounded-2xl p-6 shadow-sm hover:border-[var(--sf-brand)] transition-colors cursor-pointer group">
+                <div key={idx} className="bg-[var(--tribe-surface)] border border-gray-200 rounded-2xl p-6 shadow-sm hover:border-[var(--tribe-brand)] transition-colors cursor-pointer group">
                   <div className="flex justify-between items-center">
                     <h3 className="font-bold text-gray-900 text-lg">{area.name} Office</h3>
-                    <svg className="w-5 h-5 text-gray-400 group-hover:text-[var(--sf-brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    <svg className="w-5 h-5 text-gray-400 group-hover:text-[var(--tribe-brand)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
               ))}
@@ -150,7 +150,7 @@ export function ContactPage({
           allowFullScreen 
           src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyPlaceholderKeyForDemoOnly&q=${encodeURIComponent(businessInfo.city + ', ' + businessInfo.state)}`}
         ></iframe>
-        {/* We use a placeholder embed since we don't have a real API key, but in production SuccessForce maps might provide a real component. */}
+        {/* We use a placeholder embed since we don't have a real API key, but in production Tribe CMS maps might provide a real component. */}
         <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-500 font-medium">
           Map Embed: {businessInfo.city}, {businessInfo.state}
         </div>

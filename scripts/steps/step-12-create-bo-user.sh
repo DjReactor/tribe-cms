@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "12_create_bo_user"
 
 STATE=$(read_state "$SLUG")
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 BO_EMAIL=$(echo "$STATE" | jq -r '.input.bo_email')
@@ -17,7 +17,7 @@ PB_PID=$!
 trap "kill $PB_PID 2>/dev/null; wait $PB_PID 2>/dev/null" EXIT
 wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 15 2 || exit_fail "PocketBase won't start"
 
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@tribecms.local}" "$PB_ADMIN_PW")
 [ -z "$TOKEN" ] && exit_fail "PB auth failed"
 
 EXISTING_USER=$(pb_api "$TOKEN" GET "http://127.0.0.1:${PB_PORT}/api/collections/users/records?filter=(email='$(echo "$BO_EMAIL" | jq -R -r @uri)')")

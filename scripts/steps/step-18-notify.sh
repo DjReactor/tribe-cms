@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "18_notify"
 
@@ -13,14 +13,14 @@ VERSION=$(echo "$STATE" | jq -r '.runtime.template_version')
 TEMPLATE=$(echo "$STATE" | jq -r '.input.template')
 SSL=$(echo "$STATE" | jq -r '.runtime.ssl_issued')
 
-if [ -z "$SF_N8N_DEPLOY_WEBHOOK" ]; then
+if [ -z "$TRIBE_N8N_DEPLOY_WEBHOOK" ]; then
   mark_step_ok "$SLUG" "18_notify"
   ok "n8n webhook not configured — skipping notification (deploy complete)"
-  info "Set SF_N8N_DEPLOY_WEBHOOK in /etc/environment to enable welcome emails"
+  info "Set TRIBE_N8N_DEPLOY_WEBHOOK in /etc/environment to enable welcome emails"
   exit 0
 fi
 
-RESP=$(curl -sf -w "\n%{http_code}" -X POST "$SF_N8N_DEPLOY_WEBHOOK" \
+RESP=$(curl -sf -w "\n%{http_code}" -X POST "$TRIBE_N8N_DEPLOY_WEBHOOK" \
   -H "Content-Type: application/json" \
   -d "{
     \"event\": \"instance.deployed\",

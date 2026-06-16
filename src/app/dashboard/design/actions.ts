@@ -4,9 +4,9 @@ import { getTemplateManifests } from '@/lib/template-registry';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
-import type { TemplateManifest } from '@/lib/template-registry';
+import type { TemplateRegistryManifest } from '@/lib/template-registry';
 
-export async function getTemplates(): Promise<TemplateManifest[]> {
+export async function getTemplates(): Promise<TemplateRegistryManifest[]> {
   return getTemplateManifests();
 }
 

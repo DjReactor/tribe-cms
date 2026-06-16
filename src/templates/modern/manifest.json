@@ -11,6 +11,5 @@
       "label": "Hero Background Image",
       "defaultFallback": ""
     }
-  },
-  "config_schema": []
+  }
 }

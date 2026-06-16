@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -27,14 +27,14 @@ if [ "$WWW_DNS_IP" = "$VPS_IP" ]; then
   certbot --nginx \
     -d "$DOMAIN" -d "www.${DOMAIN}" \
     --non-interactive --agree-tos \
-    -m "${SF_SSL_EMAIL:-ssl@successforce.com}" \
+    -m "${TRIBE_SSL_EMAIL:-ssl@tribecms.io}" \
     --redirect 2>&1
 else
   info "DNS for www.$DOMAIN missing or mismatch. Requesting SSL for $DOMAIN only."
   certbot --nginx \
     -d "$DOMAIN" \
     --non-interactive --agree-tos \
-    -m "${SF_SSL_EMAIL:-ssl@successforce.com}" \
+    -m "${TRIBE_SSL_EMAIL:-ssl@tribecms.io}" \
     --redirect 2>&1
 fi
 

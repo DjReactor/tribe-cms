@@ -6,7 +6,7 @@ import { useCreateBlockNote } from '@blocknote/react';
 import { PartialBlock } from '@blocknote/core';
 
 interface BlockNoteRendererProps {
-  content: Record<string, unknown>;
+  content: unknown[];
   className?: string;
 }
 

@@ -7,7 +7,7 @@ import { PaletteClient } from './palettes/PaletteClient';
 import { loadTemplate } from '@/lib/template-loader';
 
 export const metadata = {
-  title: 'Design | Dashboard',
+  title: 'Design',
 };
 
 export default async function DesignPage() {

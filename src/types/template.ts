@@ -10,6 +10,8 @@ import {
   TemplateManifest
 } from './index';
 
+export type { TemplateManifest, TemplateCopyKey, TemplateImageSlot } from './index'
+
 export type TemplateConfig = Record<string, string | boolean>
 
 export type ResolvedCopy = Record<string, string>
@@ -18,6 +20,7 @@ export interface LayoutProps {
   children: React.ReactNode
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
+  services: Service[]
   settings: TemplateSettings
   config: TemplateConfig
 }
@@ -123,7 +126,7 @@ export interface TestimonialsPageProps {
 }
 
 export interface TemplatePack {
-  manifest?: TemplateManifest
+  manifest: TemplateManifest
   Layout: React.FC<LayoutProps>
   Header: React.FC<HeaderProps>
   Footer: React.FC<FooterProps>

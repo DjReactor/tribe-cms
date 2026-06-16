@@ -49,8 +49,8 @@ function renderHighlightedText(text: string): React.ReactNode[] {
       <span
         key={`token-${match.index}`}
         style={{
-          background: 'var(--sf-brand, #2563eb)',
-          color: 'var(--sf-brand-text, #ffffff)',
+          background: 'var(--tribe-brand, #2563eb)',
+          color: 'var(--tribe-brand-text, #ffffff)',
           borderRadius: '4px',
           padding: '0 4px',
           fontSize: 'inherit',
@@ -182,7 +182,7 @@ function TokenDropdown({ query, tokens, onSelect, onClose, anchorRef }: TokenDro
           onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
-          <span style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--sf-brand, #2563eb)', fontWeight: 600 }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--tribe-brand, #2563eb)', fontWeight: 600 }}>
             {`{{${token.name}}}`}
           </span>
           <span style={{ fontSize: '11px', color: '#64748b' }}>{token.description}</span>
@@ -355,7 +355,7 @@ export function TokenInput({
               resize: 'vertical',
               display: 'block',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf-brand, #2563eb)'; }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--tribe-brand, #2563eb)'; }}
             onBlur={e => { e.currentTarget.style.borderColor = '#cbd5e1'; }}
           />
         ) : (
@@ -383,7 +383,7 @@ export function TokenInput({
               display: 'block',
               height: '38px',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf-brand, #2563eb)'; }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--tribe-brand, #2563eb)'; }}
             onBlur={e => { e.currentTarget.style.borderColor = '#cbd5e1'; }}
           />
         )}

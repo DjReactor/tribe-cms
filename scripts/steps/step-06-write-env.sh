@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "06_write_env"
 
 STATE=$(read_state "$SLUG")
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 ENV_FILE="$BASE/.env"
 
 # Extract all values from state
@@ -27,13 +27,13 @@ for VAR in DOMAIN NEXTJS_PORT PB_PORT PB_ADMIN_PW NEXTAUTH_SECRET INTERNAL_SECRE
 done
 
 cat > "$ENV_FILE" << ENVEOF
-# SuccessForce CMS — Instance: ${SLUG}
+# Tribe CMS — Instance: ${SLUG}
 # Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 # DO NOT EDIT MANUALLY WITHOUT CARE
 
 PB_URL=http://127.0.0.1:${PB_PORT}
 PB_PORT=${PB_PORT}
-PB_ADMIN_EMAIL=${PB_ADMIN_EMAIL:-admin@successforce.com}
+PB_ADMIN_EMAIL=${PB_ADMIN_EMAIL:-admin@tribecms.local}
 PB_ADMIN_PASSWORD=${PB_ADMIN_PW}
 
 PORT=${NEXTJS_PORT}
@@ -46,7 +46,7 @@ TEMPLATE_NAME=${TEMPLATE}
 NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
 INTERNAL_SECRET=${INTERNAL_SECRET}
 
-AGENCY_TOKEN=${SF_AGENCY_TOKEN:-change-me}
+AGENCY_TOKEN=${AGENCY_TOKEN:-change-me}
 
 BLOG_WEBHOOK_SECRET=${BLOG_SECRET}
 RETELL_WEBHOOK_SECRET=${RETELL_SECRET}

@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "13_start_pm2"
 
 STATE=$(read_state "$SLUG")
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 
@@ -14,7 +14,7 @@ sleep 1
 
 info "Starting PocketBase under PM2..."
 pm2 start "$BASE/pocketbase" \
-  --name "sf-pb-${SLUG}" \
+  --name "tribe-pb-${SLUG}" \
   --log "$BASE/logs/pocketbase.log" \
   --time \
   --restart-delay 3000 \
@@ -33,7 +33,7 @@ set -a
 set +a
 
 pm2 start pnpm \
-  --name "sf-${SLUG}-next" \
+  --name "tribe-${SLUG}-next" \
   --cwd "$BASE" \
   --log "$BASE/logs/nextjs.log" \
   --time \
@@ -46,5 +46,5 @@ sleep 8  # Give Next.js time to boot
 pm2 save
 mark_step_ok "$SLUG" "13_start_pm2"
 ok "Both PM2 processes started"
-info "sf-pb-${SLUG}    → PocketBase :${PB_PORT}"
-info "sf-${SLUG}-next  → Next.js :${NEXTJS_PORT}"
+info "tribe-pb-${SLUG}    → PocketBase :${PB_PORT}"
+info "tribe-${SLUG}-next  → Next.js :${NEXTJS_PORT}"

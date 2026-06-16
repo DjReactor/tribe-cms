@@ -6,11 +6,11 @@ import { Calendar, User } from 'lucide-react';
 
 export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogPostProps) {
   return (
-    <article className="bg-[var(--sf-surface)]">
+    <article className="bg-[var(--tribe-surface)]">
       {/* Hero */}
-      <div className="pt-16 pb-12 bg-[var(--sf-surface)] border-b border-[var(--sf-border)]">
+      <div className="pt-16 pb-12 bg-[var(--tribe-surface)] border-b border-[var(--tribe-border)]">
         <div className={`${styles.container} max-w-4xl text-center`}>
-          <div className="flex items-center justify-center gap-6 text-sm text-[var(--sf-text-muted)] mb-6 font-medium">
+          <div className="flex items-center justify-center gap-6 text-sm text-[var(--tribe-text-muted)] mb-6 font-medium">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <time dateTime={post.published_at}>
@@ -25,7 +25,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
             </div>
           </div>
           
-          <h1 className={`${styles.headingBase} text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-[var(--sf-heading)] leading-tight`}>
+          <h1 className={`${styles.headingBase} text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-[var(--tribe-heading)] leading-tight`}>
             {post.title}
           </h1>
         </div>
@@ -44,9 +44,9 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
       </div>
 
       {/* CTA Footer */}
-      <div className="bg-[var(--sf-bg)] text-center py-20 text-[var(--sf-text)] mt-12">
+      <div className="bg-[var(--tribe-bg)] text-center py-20 text-[var(--tribe-text)] mt-12">
         <div className={`${styles.container} max-w-3xl`}>
-          <h2 className={`${styles.headingBase} text-3xl md:text-4xl font-bold mb-6 text-[var(--sf-text)]`}>
+          <h2 className={`${styles.headingBase} text-3xl md:text-4xl font-bold mb-6 text-[var(--tribe-text)]`}>
             Need Professional Assistance?
           </h2>
           <p className="text-slate-300 text-lg mb-8">
@@ -57,7 +57,7 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
               Contact Us Now
             </Link>
             {businessInfo.phone && (
-              <a href={`tel:${businessInfo.phone}`} className={`${styles.buttonSecondary} bg-transparent text-[var(--sf-text)] border-white hover:bg-[var(--sf-surface)]/10`}>
+              <a href={`tel:${businessInfo.phone}`} className={`${styles.buttonSecondary} bg-transparent text-[var(--tribe-text)] border-white hover:bg-[var(--tribe-surface)]/10`}>
                 Call {businessInfo.phone}
               </a>
             )}
@@ -67,24 +67,24 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
 
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <div className="bg-[var(--sf-surface)] py-20 border-t border-[var(--sf-border)]">
+        <div className="bg-[var(--tribe-surface)] py-20 border-t border-[var(--tribe-border)]">
           <div className={styles.container}>
             <h3 className={`${styles.headingBase} text-3xl font-bold text-center mb-12`}>
               More from {businessInfo.business_name}
             </h3>
             <div className="grid md:grid-cols-3 gap-8">
               {relatedPosts.map(related => (
-                <Link key={related.id} href={`/blog/${related.slug}`} className="group block bg-[var(--sf-surface)] rounded-2xl overflow-hidden border border-[var(--sf-border)] hover:shadow-lg transition-all">
+                <Link key={related.id} href={`/blog/${related.slug}`} className="group block bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:shadow-lg transition-all">
                   {related.cover_image_url && (
                     <div className="aspect-[3/2] overflow-hidden">
                       <img src={related.cover_image_url} alt={related.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   )}
                   <div className="p-6">
-                    <h4 className="font-bold text-lg mb-2 text-[var(--sf-heading)] group-hover:text-[var(--sf-brand)] transition-colors line-clamp-2">
+                    <h4 className="font-bold text-lg mb-2 text-[var(--tribe-heading)] group-hover:text-[var(--tribe-brand)] transition-colors line-clamp-2">
                       {related.title}
                     </h4>
-                    <p className="text-[var(--sf-text-muted)] text-sm">
+                    <p className="text-[var(--tribe-text-muted)] text-sm">
                       {new Date(related.published_at).toLocaleDateString()}
                     </p>
                   </div>

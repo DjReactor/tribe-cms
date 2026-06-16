@@ -31,14 +31,18 @@ interface AddressData {
 }
 
 interface ContactFormProps {
-  source?:   string;  // 'contact_page' | 'hero_cta' | 'service_cta'
-  ctaLabel?: string;  // Button label override
+  source?:          string;  // 'contact_page' | 'hero_cta' | 'service_cta'
+  ctaLabel?:        string;  // Button label override
+  successHeading?:  string;  // Success state heading (default: "Message Sent!")
+  successMessage?:  string;  // Success state paragraph (default: "Thank you for reaching out...")
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function ContactForm({
-  source   = 'website',
-  ctaLabel = 'Send Message',
+  source          = 'website',
+  ctaLabel        = 'Send Message',
+  successHeading  = 'Message Sent!',
+  successMessage  = 'Thank you for reaching out. We will get back to you shortly.',
 }: ContactFormProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -145,7 +149,7 @@ export function ContactForm({
     };
 
     try {
-      const res = await fetch('/api/lead', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -166,9 +170,9 @@ export function ContactForm({
   // ── Success state ─────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
-      <div className="bg-green-50 border border-green-200 text-green-800 p-6 rounded-xl text-center">
-        <h3 className="font-semibold text-lg mb-2">Message Sent!</h3>
-        <p>Thank you for reaching out. We will get back to you shortly.</p>
+      <div className="bg-[color-mix(in_srgb,var(--tribe-success)_10%,transparent)] border border-[color-mix(in_srgb,var(--tribe-success)_30%,transparent)] text-[var(--tribe-text)] p-6 rounded-xl text-center">
+        <h3 className="font-semibold text-lg mb-2">{successHeading}</h3>
+        <p>{successMessage}</p>
         <Button variant="outline" className="mt-4" onClick={() => setStatus('idle')}>
           Send Another Message
         </Button>
@@ -192,7 +196,7 @@ export function ContactForm({
       <div className="space-y-2">
         {/* Label row + mode toggle */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-700">Address</span>
+          <span className="text-sm font-medium text-[var(--tribe-text)]">Address</span>
           {hasGoogleKey && (
             <div className="flex items-center gap-1 text-xs">
               <button
@@ -200,8 +204,8 @@ export function ContactForm({
                 onClick={() => setAddressMode('google')}
                 className={`px-2.5 py-1 rounded-full border transition-colors ${
                   addressMode === 'google'
-                    ? 'bg-slate-800 text-white border-slate-800'
-                    : 'border-slate-300 text-slate-500 hover:border-slate-400'
+                    ? 'bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)] border-[var(--tribe-brand)]'
+                    : 'border-[var(--tribe-border)] text-[var(--tribe-text-muted)] hover:border-[var(--tribe-accent)]'
                 }`}
               >
                 Search
@@ -211,8 +215,8 @@ export function ContactForm({
                 onClick={() => setAddressMode('manual')}
                 className={`px-2.5 py-1 rounded-full border transition-colors ${
                   addressMode === 'manual'
-                    ? 'bg-slate-800 text-white border-slate-800'
-                    : 'border-slate-300 text-slate-500 hover:border-slate-400'
+                    ? 'bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)] border-[var(--tribe-brand)]'
+                    : 'border-[var(--tribe-border)] text-[var(--tribe-text-muted)] hover:border-[var(--tribe-accent)]'
                 }`}
               >
                 Enter manually
@@ -228,10 +232,10 @@ export function ContactForm({
               ref={googleInputRef}
               type="text"
               placeholder="Start typing your address..."
-              className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-colors"
+              className="w-full rounded-lg border border-[var(--tribe-input-border)] bg-[var(--tribe-input-bg)] text-[var(--tribe-text)] px-4 py-2.5 text-sm placeholder:text-[var(--tribe-text-muted)] outline-none focus:border-[var(--tribe-border-focus)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--tribe-border-focus)_30%,transparent)] transition-colors"
             />
             {googleAddress.full && (
-              <p className="mt-1.5 text-xs text-green-600 font-medium">
+              <p className="mt-1.5 text-xs text-[var(--tribe-success)] font-medium">
                 ✓ {googleAddress.full}
               </p>
             )}
@@ -245,18 +249,18 @@ export function ContactForm({
               name="address_street"
               type="text"
               placeholder="Street address"
-              className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-colors"
+              className="w-full rounded-lg border border-[var(--tribe-input-border)] bg-[var(--tribe-input-bg)] text-[var(--tribe-text)] px-4 py-2.5 text-sm placeholder:text-[var(--tribe-text-muted)] outline-none focus:border-[var(--tribe-border-focus)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--tribe-border-focus)_30%,transparent)] transition-colors"
             />
             <div className="grid grid-cols-5 gap-3">
               <input
                 name="address_city"
                 type="text"
                 placeholder="City"
-                className="col-span-2 w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-colors"
+                className="col-span-2 w-full rounded-lg border border-[var(--tribe-input-border)] bg-[var(--tribe-input-bg)] text-[var(--tribe-text)] px-4 py-2.5 text-sm placeholder:text-[var(--tribe-text-muted)] outline-none focus:border-[var(--tribe-border-focus)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--tribe-border-focus)_30%,transparent)] transition-colors"
               />
               <select
                 name="address_state"
-                className="col-span-2 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 bg-white transition-colors"
+                className="col-span-2 w-full rounded-lg border border-[var(--tribe-input-border)] bg-[var(--tribe-input-bg)] px-3 py-2.5 text-sm text-[var(--tribe-text)] outline-none focus:border-[var(--tribe-border-focus)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--tribe-border-focus)_30%,transparent)] transition-colors"
               >
                 <option value="">State</option>
                 {US_STATES.map(([code, name]) => (
@@ -268,7 +272,7 @@ export function ContactForm({
                 type="text"
                 placeholder="ZIP"
                 maxLength={5}
-                className="col-span-1 w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-colors"
+                className="col-span-1 w-full rounded-lg border border-[var(--tribe-input-border)] bg-[var(--tribe-input-bg)] text-[var(--tribe-text)] px-4 py-2.5 text-sm placeholder:text-[var(--tribe-text-muted)] outline-none focus:border-[var(--tribe-border-focus)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--tribe-border-focus)_30%,transparent)] transition-colors"
               />
             </div>
           </div>
@@ -277,7 +281,7 @@ export function ContactForm({
 
       {/* Error message */}
       {status === 'error' && (
-        <div className="text-red-600 text-sm font-medium p-3 bg-red-50 rounded-lg">
+        <div className="text-[var(--tribe-error)] text-sm font-medium p-3 bg-[color-mix(in_srgb,var(--tribe-error)_10%,transparent)] rounded-lg">
           {errorMessage}
         </div>
       )}

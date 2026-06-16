@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "15_health_check"
 
@@ -8,12 +8,12 @@ NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 INTERNAL_SECRET=$(echo "$STATE" | jq -r '.secrets.internal_secret')
 EXPECTED_VERSION=$(echo "$STATE" | jq -r '.runtime.template_version')
 
-info "Polling /api/internal/health (up to 60 seconds)..."
+info "Polling /api/tribe/health (up to 60 seconds)..."
 for i in $(seq 1 12); do
   RESP=$(curl -sf \
     -H "Authorization: Bearer $INTERNAL_SECRET" \
     --connect-timeout 5 --max-time 10 \
-    "http://127.0.0.1:${NEXTJS_PORT}/api/internal/health" 2>/dev/null)
+    "http://127.0.0.1:${NEXTJS_PORT}/api/tribe/health" 2>/dev/null)
 
     if [ -n "$RESP" ]; then
       STATUS=$(echo "$RESP" | jq -r '.status // ""')
@@ -35,4 +35,4 @@ for i in $(seq 1 12); do
 done
 
 mark_step_failed "$SLUG" "15_health_check" "Health check failed after 60 seconds"
-exit_fail "Health check failed — see pm2 logs sf-${SLUG}-next for errors"
+exit_fail "Health check failed — see pm2 logs tribe-${SLUG}-next for errors"

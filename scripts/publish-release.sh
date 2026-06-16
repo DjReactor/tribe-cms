@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# SuccessForce Template Publisher
+# Tribe CMS Template Publisher
 # Usage: ./publish-release.sh <VERSION>
 
 VERSION=$1
@@ -23,9 +23,9 @@ if [ "$PACKAGE_VERSION" != "$VERSION" ]; then
   exit 1
 fi
 
-SF_VERSION=$(cat .sf-version)
-if [ "$SF_VERSION" != "$VERSION" ]; then
-  echo "Error: .sf-version ($SF_VERSION) does not match requested version ($VERSION)."
+TRIBE_VERSION=$(cat .tribe-version)
+if [ "$TRIBE_VERSION" != "$VERSION" ]; then
+  echo "Error: .tribe-version ($TRIBE_VERSION) does not match requested version ($VERSION)."
   exit 1
 fi
 
@@ -41,21 +41,21 @@ NODE_ENV=production npx pnpm@8 build
 
 # Step 3: Artifact Generation
 echo "[2/4] Generating release tarballs..."
-tar -czf sf-template-v${VERSION}-source.tar.gz \
+tar -czf tribe-cms-v${VERSION}-source.tar.gz \
   src/ public/ scripts/ pb_migrations/ \
   package.json pnpm-lock.yaml postcss.config.mjs tsconfig.json next.config.ts \
-  .sf-version README.md
-tar -czf sf-template-v${VERSION}-build.tar.gz .next/
+  .tribe-version README.md
+tar -czf tribe-cms-v${VERSION}-build.tar.gz .next/
 
 # Step 4: Cryptographic Checksums
 echo "[3/4] Generating cryptographic checksums..."
-mv sf-template-v${VERSION}-source.tar.gz source.tar.gz
-mv sf-template-v${VERSION}-build.tar.gz build.tar.gz
+mv tribe-cms-v${VERSION}-source.tar.gz source.tar.gz
+mv tribe-cms-v${VERSION}-build.tar.gz build.tar.gz
 sha256sum source.tar.gz build.tar.gz > checksums.sha256
 
 # Step 5: Registry Update
 echo "[4/4] Copying artifacts to local registry..."
-REGISTRY_DIR="/opt/sf-registry"
+REGISTRY_DIR="/opt/tribe-registry"
 RELEASE_DIR="${REGISTRY_DIR}/releases/v${VERSION}"
 
 mkdir -p "$RELEASE_DIR"

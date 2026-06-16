@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "11_seed_data"
 
 STATE=$(read_state "$SLUG")
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 BUSINESS_NAME=$(echo "$STATE" | jq -r '.input.business_name')
@@ -18,7 +18,7 @@ if [ -z "$NICHE_ID" ]; then
   NICHE_ID=$(echo "$BUSINESS_TYPE" | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
 fi
 
-NICHE_CONFIG_FILE="/opt/sf-template/scripts/steps/niche-configs/${NICHE_ID}.json"
+NICHE_CONFIG_FILE="/opt/tribe-instances/scripts/steps/niche-configs/${NICHE_ID}.json"
 if [ ! -f "$NICHE_CONFIG_FILE" ]; then
   NICHE_SCHEMA_JSON='{"niche_id":"default","niche_name":"Local Business","custom_attributes":[]}'
 else
@@ -32,7 +32,7 @@ CHANNEL=$(echo "$STATE" | jq -r '.input.channel')
 BLOG_SECRET=$(echo "$STATE" | jq -r '.secrets.blog_webhook_secret')
 RETELL_SECRET=$(echo "$STATE" | jq -r '.secrets.retell_webhook_secret')
 REVIEWS_SECRET=$(echo "$STATE" | jq -r '.secrets.reviews_webhook_secret')
-VERSION=$(cat "$BASE/.sf-version")
+VERSION=$(cat "$BASE/.tribe-version")
 
 fuser -k "${PB_PORT}/tcp" 2>/dev/null || true; sleep 1
 "$BASE/pocketbase" serve --http "127.0.0.1:${PB_PORT}" --dir "$BASE/pb_data" &
@@ -40,7 +40,7 @@ PB_PID=$!
 trap "kill $PB_PID 2>/dev/null; wait $PB_PID 2>/dev/null" EXIT
 wait_for_http "http://127.0.0.1:${PB_PORT}/api/health" 15 2 || { kill $PB_PID 2>/dev/null; exit_fail "PocketBase won't start"; }
 
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@tribecms.local}" "$PB_ADMIN_PW")
 [ -z "$TOKEN" ] && { kill $PB_PID 2>/dev/null; exit_fail "PB auth failed"; }
 
 DEFAULT_HOURS='[

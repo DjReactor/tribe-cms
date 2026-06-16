@@ -4,7 +4,7 @@
 #                       --bo-email EMAIL [--niche NICHE] [--city CITY]
 #                       [--state STATE] [--phone PHONE] [--template TEMPLATE]
 #                       [--channel CHANNEL] [--www WWW_MODE] [--skip-ssl]
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -32,7 +32,7 @@ done
 [ -z "$BO_EMAIL" ]      && exit_fail "--bo-email is required"
 
 # Resolve niche to business_type and schema_type
-NICHE_MAP=$(cat /opt/sf-template/scripts/steps/niche-map.json)
+NICHE_MAP=$(cat /opt/tribe-instances/scripts/steps/niche-map.json)
 BUSINESS_TYPE=$(echo "$NICHE_MAP" | jq -r --arg n "${NICHE:-other}" '.[$n].business_type // ""')
 SCHEMA_TYPE=$(echo "$NICHE_MAP" | jq -r --arg n "${NICHE:-other}" '.[$n].schema_type // "LocalBusiness"')
 

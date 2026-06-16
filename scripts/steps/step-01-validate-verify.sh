@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -14,12 +14,12 @@ DOMAIN=$(echo "$STATE" | jq -r '.input.domain')
 TEMPLATE=$(echo "$STATE" | jq -r '.input.template')
 
 # Re-check conditions independently
-[ -d "/opt/sf-instances/${SLUG_VAL}" ] && \
-  ERRORS+=("Instance directory appeared since run: /opt/sf-instances/${SLUG_VAL}")
-[ ! -d "/opt/sf-template/src/templates/${TEMPLATE}" ] && \
+[ -d "/opt/tribe-sites/${SLUG_VAL}" ] && \
+  ERRORS+=("Instance directory appeared since run: /opt/tribe-sites/${SLUG_VAL}")
+[ ! -d "/opt/tribe-instances/src/templates/${TEMPLATE}" ] && \
   ERRORS+=("Template directory missing: ${TEMPLATE}")
-[ ! -f "/opt/sf-template/.sf-version" ] && \
-  ERRORS+=("Master template .sf-version missing")
+[ ! -f "/opt/tribe-instances/.tribe-version" ] && \
+  ERRORS+=("Master template .tribe-version missing")
 
 # Confirm niche was resolved
 BTYPE=$(echo "$STATE" | jq -r '.resolved.business_type')

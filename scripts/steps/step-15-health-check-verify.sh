@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -13,7 +13,7 @@ ERRORS=()
 
 RESP=$(curl -sf -H "Authorization: Bearer $INTERNAL_SECRET" \
   --connect-timeout 5 --max-time 10 \
-  "http://127.0.0.1:${NEXTJS_PORT}/api/internal/health" 2>/dev/null)
+  "http://127.0.0.1:${NEXTJS_PORT}/api/tribe/health" 2>/dev/null)
 
 [ -z "$RESP" ] && { mark_step_verify_failed "$SLUG" "15_health_check" "No response from health endpoint"; exit_fail "Health endpoint unreachable"; }
 

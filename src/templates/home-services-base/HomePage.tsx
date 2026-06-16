@@ -11,7 +11,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
   return (
     <div>
       {/* Hero */}
-      <section className="relative py-28 md:py-40 bg-gray-900 text-[var(--sf-text)] overflow-hidden">
+      <section className="relative py-28 md:py-40 bg-gray-900 text-[var(--tribe-text)] overflow-hidden">
         {heroImage && (
           <>
             <div className="absolute inset-0 z-0">
@@ -32,11 +32,11 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
             {resolvedCopy.hero_subtitle}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/contact" className="px-8 py-3.5 bg-[var(--sf-brand)] text-[var(--sf-brand-text)] font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <Link href="/contact" className="px-8 py-3.5 bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)] font-semibold rounded-lg hover:opacity-90 transition-opacity">
               {resolvedCopy.cta_primary}
             </Link>
             {businessInfo.phone && (
-              <a href={`tel:${businessInfo.phone}`} className="px-8 py-3.5 border-2 border-white text-[var(--sf-text)] font-semibold rounded-lg hover:bg-[var(--sf-surface)]/10 transition-colors">
+              <a href={`tel:${businessInfo.phone}`} className="px-8 py-3.5 border-2 border-white text-[var(--tribe-text)] font-semibold rounded-lg hover:bg-[var(--tribe-surface)]/10 transition-colors">
                 {resolvedCopy.cta_secondary}
               </a>
             )}
@@ -46,7 +46,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
 
       {/* Services Grid */}
       {services?.length > 0 && (
-        <section className="py-24 px-6 bg-[var(--sf-surface)]">
+        <section className="py-24 px-6 bg-[var(--tribe-surface)]">
           <div className="max-w-6xl mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900">Our Services</h2>
@@ -54,15 +54,15 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services?.map(s => (
-                <Link key={s.id} href={`/services/${s.slug}`} className="group flex flex-col h-full bg-[var(--sf-surface)] border border-gray-100 rounded-2xl p-8 hover:shadow-xl hover:border-gray-200 transition-all duration-300">
+                <Link key={s.id} href={`/services/${s.slug}`} className="group flex flex-col h-full bg-[var(--tribe-surface)] border border-gray-100 rounded-2xl p-8 hover:shadow-xl hover:border-gray-200 transition-all duration-300">
                   {s.icon && (
-                    <div className="w-14 h-14 rounded-xl bg-gray-50 flex items-center justify-center text-2xl mb-6 text-[var(--sf-brand)]">
+                    <div className="w-14 h-14 rounded-xl bg-gray-50 flex items-center justify-center text-2xl mb-6 text-[var(--tribe-brand)]">
                       {s.icon}
                     </div>
                   )}
                   <h3 className="font-heading font-bold text-xl text-gray-900 mb-3">{s.name}</h3>
                   {s.short_description && <p className="text-gray-600 mb-6 flex-1">{s.short_description}</p>}
-                  <div className="mt-auto font-semibold text-[var(--sf-brand)] group-hover:underline">
+                  <div className="mt-auto font-semibold text-[var(--tribe-brand)] group-hover:underline">
                     Learn more &rarr;
                   </div>
                 </Link>
@@ -78,7 +78,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-6">{resolvedCopy.about_heading}</h2>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">{businessInfo.short_description}</p>
           {businessInfo.year_established > 0 && (
-            <p className="inline-block px-4 py-2 bg-[var(--sf-surface)] rounded-full text-sm font-semibold text-gray-800 shadow-sm border border-gray-100">
+            <p className="inline-block px-4 py-2 bg-[var(--tribe-surface)] rounded-full text-sm font-semibold text-gray-800 shadow-sm border border-gray-100">
               Proudly serving since {businessInfo.year_established}
             </p>
           )}
@@ -87,7 +87,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
 
       {/* Niche Details */}
       {businessInfo.niche_attributes && Object.keys(businessInfo.niche_attributes).length > 0 && (
-        <section className="py-16 px-6 bg-[var(--sf-surface)] border-y border-gray-100">
+        <section className="py-16 px-6 bg-[var(--tribe-surface)] border-y border-gray-100">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Object.entries(businessInfo.niche_attributes).map(([key, value]) => {
@@ -107,7 +107,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
 
       {/* Testimonials */}
       {testimonials?.length > 0 && (
-        <section className="py-24 px-6 bg-[var(--sf-surface)]">
+        <section className="py-24 px-6 bg-[var(--tribe-surface)]">
           <div className="max-w-6xl mx-auto">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16">What Our Customers Say</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -133,7 +133,7 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-12">Areas We Serve</h2>
             <div className="flex flex-wrap justify-center gap-4">
               {serviceAreas?.map(a => (
-                <Link key={a.id} href={`/${a.slug}`} className="px-6 py-3 bg-[var(--sf-surface)] border border-gray-200 rounded-full font-medium text-gray-700 hover:text-[var(--sf-brand)] hover:border-[var(--sf-brand)] hover:shadow-md transition-all duration-200">
+                <Link key={a.id} href={`/${a.slug}`} className="px-6 py-3 bg-[var(--tribe-surface)] border border-gray-200 rounded-full font-medium text-gray-700 hover:text-[var(--tribe-brand)] hover:border-[var(--tribe-brand)] hover:shadow-md transition-all duration-200">
                   {a.name}
                 </Link>
               ))}
@@ -143,13 +143,13 @@ export function HomePage({ businessInfo, resolvedCopy, services, serviceAreas, t
       )}
 
       {/* Contact Form CTA */}
-      <section className="py-24 px-6 bg-[var(--sf-surface)]">
+      <section className="py-24 px-6 bg-[var(--tribe-surface)]">
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4">Get in Touch</h2>
             <p className="text-gray-600">Contact us today for a free estimate or to schedule service.</p>
           </div>
-          <div className="bg-[var(--sf-surface)] rounded-2xl shadow-xl border border-gray-100 p-8">
+          <div className="bg-[var(--tribe-surface)] rounded-2xl shadow-xl border border-gray-100 p-8">
             <ContactForm source="hero_cta" ctaLabel="Get a Free Quote" />
           </div>
         </div>

@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -10,8 +10,8 @@ DOMAIN=$(echo "$STATE" | jq -r '.input.domain')
 NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 ERRORS=()
 
-[ ! -f "/etc/nginx/sites-available/sf-${SLUG}" ] && ERRORS+=("Nginx config file missing")
-[ ! -L "/etc/nginx/sites-enabled/sf-${SLUG}" ] && ERRORS+=("Nginx site not enabled (symlink missing)")
+[ ! -f "/etc/nginx/sites-available/tribe-${SLUG}" ] && ERRORS+=("Nginx config file missing")
+[ ! -L "/etc/nginx/sites-enabled/tribe-${SLUG}" ] && ERRORS+=("Nginx site not enabled (symlink missing)")
 
 nginx -t 2>/dev/null || ERRORS+=("Nginx config validation fails")
 

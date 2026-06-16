@@ -3,12 +3,12 @@ import type { ServicesIndexProps } from '@/types/template'
 
 export function ServicesIndexPage({ services, businessInfo, resolvedCopy, config }: ServicesIndexProps) {
   return (
-    <div className="bg-[var(--sf-surface)] pb-24">
+    <div className="bg-[var(--tribe-surface)] pb-24">
       {/* Header */}
       <div className="bg-gray-50 py-16 px-6 border-b border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {resolvedCopy.heading}
+            {resolvedCopy.services_heading}
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             {resolvedCopy.intro}
@@ -28,10 +28,10 @@ export function ServicesIndexPage({ services, businessInfo, resolvedCopy, config
               <Link 
                 key={service.id} 
                 href={`/services/${service.slug}`} 
-                className="group flex flex-col h-full bg-[var(--sf-surface)] border border-gray-200 rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                className="group flex flex-col h-full bg-[var(--tribe-surface)] border border-gray-200 rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
                 {service.icon && (
-                  <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center text-3xl mb-8 text-[var(--sf-brand)] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center text-3xl mb-8 text-[var(--tribe-brand)] group-hover:scale-110 transition-transform duration-300">
                     {service.icon}
                   </div>
                 )}
@@ -41,7 +41,7 @@ export function ServicesIndexPage({ services, businessInfo, resolvedCopy, config
                     {service.short_description}
                   </p>
                 )}
-                <div className="mt-auto flex items-center gap-2 font-semibold text-[var(--sf-brand)] group-hover:gap-3 transition-all duration-300">
+                <div className="mt-auto flex items-center gap-2 font-semibold text-[var(--tribe-brand)] group-hover:gap-3 transition-all duration-300">
                   View Service Details
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </div>
@@ -53,17 +53,17 @@ export function ServicesIndexPage({ services, businessInfo, resolvedCopy, config
 
       {/* CTA Section */}
       <section className="max-w-4xl mx-auto px-6">
-        <div className="bg-[var(--sf-brand)] rounded-3xl p-10 md:p-16 text-center text-[var(--sf-text)] shadow-2xl">
+        <div className="bg-[var(--tribe-brand)] rounded-3xl p-10 md:p-16 text-center text-[var(--tribe-text)] shadow-2xl">
           <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">Need a custom solution?</h2>
-          <p className="text-lg md:text-xl text-[var(--sf-text)]/90 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-[var(--tribe-text)]/90 mb-10 max-w-2xl mx-auto">
             Contact us today to discuss your specific needs and receive a free, no-obligation estimate.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="px-8 py-4 bg-[var(--sf-surface)] text-[var(--sf-brand)] font-bold rounded-lg hover:bg-gray-50 transition-colors">
+            <Link href="/contact" className="px-8 py-4 bg-[var(--tribe-surface)] text-[var(--tribe-brand)] font-bold rounded-lg hover:bg-gray-50 transition-colors">
               Get a Free Estimate
             </Link>
             {businessInfo.phone && (
-              <a href={`tel:${businessInfo.phone}`} className="px-8 py-4 border-2 border-white/30 font-bold rounded-lg hover:bg-[var(--sf-surface)]/10 transition-colors">
+              <a href={`tel:${businessInfo.phone}`} className="px-8 py-4 border-2 border-white/30 font-bold rounded-lg hover:bg-[var(--tribe-surface)]/10 transition-colors">
                 Call {businessInfo.phone}
               </a>
             )}

@@ -21,8 +21,8 @@ export function StarRating({ rating, size = 'md' }: StarRatingProps) {
           key={star}
           className={`${currentSize} ${
             star <= rating
-              ? 'fill-amber-400 text-amber-400'
-              : 'fill-slate-200 text-slate-200'
+              ? 'fill-[var(--tribe-star)] text-[var(--tribe-star)]'
+              : 'fill-[var(--tribe-border)] text-[var(--tribe-border)]'
           }`}
         />
       ))}

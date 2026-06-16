@@ -1,38 +1,38 @@
 export const COLOR_SLOTS = {
   // ── Backgrounds & Surfaces ─────────────────────────────────────────────────
-  bg:            { label: 'Page Background',    cssVar: '--sf-bg',            description: 'Outermost site background canvas' },
-  surface:       { label: 'Surface',            cssVar: '--sf-surface',       description: 'Cards, panels, form backgrounds' },
-  surface_alt:   { label: 'Alternate Surface',  cssVar: '--sf-surface-alt',   description: 'Dark/alt sections, split panels, banners' },
-  surface_hover: { label: 'Surface Hover',      cssVar: '--sf-surface-hover', description: 'Background of interactive cards/list items on hover' },
-  input_bg:      { label: 'Input Background',   cssVar: '--sf-input-bg',      description: 'Form input and textarea background color' },
+  bg:            { label: 'Page Background',    cssVar: '--tribe-bg',            description: 'Outermost site background canvas' },
+  surface:       { label: 'Surface',            cssVar: '--tribe-surface',       description: 'Cards, panels, form backgrounds' },
+  surface_alt:   { label: 'Alternate Surface',  cssVar: '--tribe-surface-alt',   description: 'Dark/alt sections, split panels, banners' },
+  surface_hover: { label: 'Surface Hover',      cssVar: '--tribe-surface-hover', description: 'Background of interactive cards/list items on hover' },
+  input_bg:      { label: 'Input Background',   cssVar: '--tribe-input-bg',      description: 'Form input and textarea background color' },
 
   // ── Text ───────────────────────────────────────────────────────────────────
-  text:          { label: 'Body Text',          cssVar: '--sf-text',          description: 'Primary readable body text' },
-  text_muted:    { label: 'Muted Text',         cssVar: '--sf-text-muted',    description: 'Captions, subtitles, helper text' },
-  heading:       { label: 'Heading Text',       cssVar: '--sf-heading',       description: 'H1–H4 heading color' },
-  text_on_alt:   { label: 'Text on Alt Surface',cssVar: '--sf-text-on-alt',   description: 'Readable text color when placed on --sf-surface-alt' },
+  text:          { label: 'Body Text',          cssVar: '--tribe-text',          description: 'Primary readable body text' },
+  text_muted:    { label: 'Muted Text',         cssVar: '--tribe-text-muted',    description: 'Captions, subtitles, helper text' },
+  heading:       { label: 'Heading Text',       cssVar: '--tribe-heading',       description: 'H1–H4 heading color' },
+  text_on_alt:   { label: 'Text on Alt Surface',cssVar: '--tribe-text-on-alt',   description: 'Readable text color when placed on --tribe-surface-alt' },
 
   // ── Borders ────────────────────────────────────────────────────────────────
-  border:        { label: 'Border',             cssVar: '--sf-border',        description: 'Section dividers, general lines' },
-  input_border:  { label: 'Input Border',       cssVar: '--sf-input-border',  description: 'Input field border, distinct from section dividers' },
-  border_focus:  { label: 'Focus Ring',         cssVar: '--sf-border-focus',  description: 'Focus ring color for inputs and interactive elements' },
+  border:        { label: 'Border',             cssVar: '--tribe-border',        description: 'Section dividers, general lines' },
+  input_border:  { label: 'Input Border',       cssVar: '--tribe-input-border',  description: 'Input field border, distinct from section dividers' },
+  border_focus:  { label: 'Focus Ring',         cssVar: '--tribe-border-focus',  description: 'Focus ring color for inputs and interactive elements' },
 
   // ── Brand & Interactive ────────────────────────────────────────────────────
-  brand:         { label: 'Brand / Accent',     cssVar: '--sf-brand',         description: 'CTAs, active links, buttons, badges' },
-  brand_hover:   { label: 'Brand Hover',        cssVar: '--sf-brand-hover',   description: 'Darker CTA/button hover and pressed state' },
-  brand_text:    { label: 'Brand Text',         cssVar: '--sf-brand-text',    description: 'Text/icons on brand-colored surfaces' },
-  accent:        { label: 'Secondary Accent',   cssVar: '--sf-accent',        description: 'Hover states, focus rings, secondary highlights' },
-  link:          { label: 'Link Color',         cssVar: '--sf-link',          description: 'Inline text link color, may differ from brand' },
+  brand:         { label: 'Brand / Accent',     cssVar: '--tribe-brand',         description: 'CTAs, active links, buttons, badges' },
+  brand_hover:   { label: 'Brand Hover',        cssVar: '--tribe-brand-hover',   description: 'Darker CTA/button hover and pressed state' },
+  brand_text:    { label: 'Brand Text',         cssVar: '--tribe-brand-text',    description: 'Text/icons on brand-colored surfaces' },
+  accent:        { label: 'Secondary Accent',   cssVar: '--tribe-accent',        description: 'Hover states, focus rings, secondary highlights' },
+  link:          { label: 'Link Color',         cssVar: '--tribe-link',          description: 'Inline text link color, may differ from brand' },
 
   // ── Semantic States ────────────────────────────────────────────────────────
-  success:       { label: 'Success',            cssVar: '--sf-success',       description: 'Form submission confirmations, success banners' },
-  error:         { label: 'Error',              cssVar: '--sf-error',         description: 'Form validation errors, destructive action alerts' },
-  warning:       { label: 'Warning',            cssVar: '--sf-warning',       description: 'Warning banners and notice states' },
-  star:          { label: 'Star Rating',        cssVar: '--sf-star',          description: 'Star rating color — yellow/amber, review components' },
+  success:       { label: 'Success',            cssVar: '--tribe-success',       description: 'Form submission confirmations, success banners' },
+  error:         { label: 'Error',              cssVar: '--tribe-error',         description: 'Form validation errors, destructive action alerts' },
+  warning:       { label: 'Warning',            cssVar: '--tribe-warning',       description: 'Warning banners and notice states' },
+  star:          { label: 'Star Rating',        cssVar: '--tribe-star',          description: 'Star rating color — yellow/amber, review components' },
 
   // ── Overlays & Shadows ─────────────────────────────────────────────────────
-  shadow:        { label: 'Shadow',             cssVar: '--sf-shadow',        description: 'Card, panel, and modal elevation shadows — use 8-digit hex for opacity' },
-  overlay:       { label: 'Overlay',            cssVar: '--sf-overlay',       description: 'Hero image overlays and modal backdrops — use 8-digit hex for opacity' },
+  shadow:        { label: 'Shadow',             cssVar: '--tribe-shadow',        description: 'Card, panel, and modal elevation shadows — use 8-digit hex for opacity' },
+  overlay:       { label: 'Overlay',            cssVar: '--tribe-overlay',       description: 'Hero image overlays and modal backdrops — use 8-digit hex for opacity' },
 } as const
 
 export type ColorSlotKey = keyof typeof COLOR_SLOTS

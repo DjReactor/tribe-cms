@@ -7,7 +7,11 @@
  * @param config The template configuration object containing potential user overrides
  * @returns A string URL pointing to either the dynamic PocketBase file or the static fallback
  */
-export function resolveImage(key: string, defaultUrl: string, config?: any): string {
+export function resolveImage(
+  key: string,
+  defaultUrl: string,
+  config?: { imageOverrides?: Record<string, string>; [key: string]: unknown }
+): string {
   // Defensive check: Ensure config and overrides object exists
   if (config && config.imageOverrides && typeof config.imageOverrides === 'object') {
     const overrideUrl = config.imageOverrides[key];

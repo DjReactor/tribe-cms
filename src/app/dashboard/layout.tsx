@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { requireAuth } from '@/lib/auth';
 import { getSettings } from '@/lib/settings';
 import { Sidebar } from '@/components/dashboard/Sidebar';
@@ -6,6 +7,14 @@ import { ToastProvider } from '@/components/ui/Toast';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Dashboard',
+    template: '%s | Dashboard',
+  },
+  robots: { index: false, follow: false },
+};
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Auth Guard

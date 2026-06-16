@@ -90,6 +90,21 @@ export const manifest: TemplateManifest = {
       default: "Professional and reliable solutions for your needs.",
       type: "textarea",
       page: "Services Page"
+    },
+    // ── Service Area Pages ────────────────────────────────────────────────
+    "service_area_h1": {
+      label: "Service Area Page Headline",
+      default: "{{business_type}} in {{city}}",
+      type: "text",
+      page: "Service Area Pages",
+      hint: "Shown as the H1 on each service area page. {{business_type}} and {{city}} are replaced automatically."
+    },
+    "service_area_intro": {
+      label: "Service Area Page Intro",
+      default: "Professional {{business_type}} services serving {{city}} and surrounding areas.",
+      type: "textarea",
+      page: "Service Area Pages",
+      hint: "Introductory paragraph under the H1 on service area pages."
     }
   }
 }

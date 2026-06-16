@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "17_register"
 
@@ -10,7 +10,7 @@ NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 NICHE=$(echo "$STATE" | jq -r '.input.niche // ""')
 
-SA_DB="/opt/sf-superadmin/sf-superadmin/data/instances.db"
+SA_DB="/opt/tribe-superadmin/data/instances.db"
 
 if [ ! -f "$SA_DB" ]; then
   mark_step_failed "$SLUG" "17_register" "SuperAdmin instances.db not found at $SA_DB"

@@ -5,6 +5,5 @@
   "version": "1.0.0",
   "preview_image": "/template-previews/eco-yard.jpg",
   "tags": ["modern", "clean", "light", "bold"],
-  "supports": ["gallery", "before_after"],
-  "config_schema": []
+  "supports": ["gallery", "before_after"]
 }

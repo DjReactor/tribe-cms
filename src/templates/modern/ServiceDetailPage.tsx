@@ -7,12 +7,12 @@ import { Phone, CheckCircle2 } from 'lucide-react';
 
 export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeAfterPairs, config }: ServiceDetailProps) {
   return (
-    <article className="bg-[var(--sf-surface)]">
+    <article className="bg-[var(--tribe-surface)]">
       {/* Hero */}
-      <div className="bg-[var(--sf-bg)] text-[var(--sf-text)] py-20 lg:py-28">
+      <div className="bg-[var(--tribe-bg)] text-[var(--tribe-text)] py-20 lg:py-28">
         <div className={styles.container}>
           <div className="max-w-4xl">
-            <h1 className={`${styles.headingBase} text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[var(--sf-text)]`}>
+            <h1 className={`${styles.headingBase} text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[var(--tribe-text)]`}>
               {service.name}
             </h1>
             {service.short_description && (
@@ -44,18 +44,18 @@ export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeA
             </div>
 
             {beforeAfterPairs && beforeAfterPairs.length > 0 && (
-              <div className="mt-16 border-t border-[var(--sf-border)] pt-16">
-                <h2 className={`${styles.headingBase} text-3xl font-bold mb-8 text-[var(--sf-heading)]`}>See Our Work</h2>
+              <div className="mt-16 border-t border-[var(--tribe-border)] pt-16">
+                <h2 className={`${styles.headingBase} text-3xl font-bold mb-8 text-[var(--tribe-heading)]`}>See Our Work</h2>
                 <div className="grid gap-8">
                   {beforeAfterPairs.map(pair => (
-                    <div key={pair.id} className="bg-[var(--sf-surface)] p-6 rounded-2xl border border-[var(--sf-border)] shadow-sm">
+                    <div key={pair.id} className="bg-[var(--tribe-surface)] p-6 rounded-2xl border border-[var(--tribe-border)] shadow-sm">
                       <BeforeAfterSlider 
                         beforeImage={pair.before_image_url} 
                         afterImage={pair.after_image_url} 
                       />
                       <div className="mt-6 text-center">
-                        <h3 className="text-xl font-bold mb-2 text-[var(--sf-heading)]">{pair.title}</h3>
-                        {pair.description && <p className="text-[var(--sf-text)]">{pair.description}</p>}
+                        <h3 className="text-xl font-bold mb-2 text-[var(--tribe-heading)]">{pair.title}</h3>
+                        {pair.description && <p className="text-[var(--tribe-text)]">{pair.description}</p>}
                       </div>
                     </div>
                   ))}
@@ -69,9 +69,9 @@ export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeA
             <div className="sticky top-28 space-y-8">
               
               {/* CTA Box */}
-              <div className="bg-[var(--sf-surface)] p-8 rounded-3xl border border-[var(--sf-border)] text-center">
-                <h3 className="font-bold text-2xl text-[var(--sf-heading)] mb-4">Need this service?</h3>
-                <p className="text-[var(--sf-text)] mb-8">Contact us today for a free estimate and expert advice.</p>
+              <div className="bg-[var(--tribe-surface)] p-8 rounded-3xl border border-[var(--tribe-border)] text-center">
+                <h3 className="font-bold text-2xl text-[var(--tribe-heading)] mb-4">Need this service?</h3>
+                <p className="text-[var(--tribe-text)] mb-8">Contact us today for a free estimate and expert advice.</p>
                 
                 {businessInfo.phone && (
                   <a href={`tel:${businessInfo.phone}`} className={`${styles.buttonPrimary} w-full mb-4 shadow-md`}>
@@ -80,20 +80,20 @@ export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeA
                   </a>
                 )}
                 
-                <Link href="/contact" className={`${styles.buttonSecondary} w-full bg-[var(--sf-surface)]`}>
+                <Link href="/contact" className={`${styles.buttonSecondary} w-full bg-[var(--tribe-surface)]`}>
                   Request a Quote
                 </Link>
               </div>
 
               {/* Service Areas */}
               {serviceAreas.length > 0 && (
-                <div className="bg-[var(--sf-surface)] p-8 rounded-3xl border border-[var(--sf-border)]">
-                  <h3 className="font-bold text-xl text-[var(--sf-heading)] mb-6">Areas We Serve</h3>
+                <div className="bg-[var(--tribe-surface)] p-8 rounded-3xl border border-[var(--tribe-border)]">
+                  <h3 className="font-bold text-xl text-[var(--tribe-heading)] mb-6">Areas We Serve</h3>
                   <ul className="space-y-4">
                     {serviceAreas.map(area => (
                       <li key={area.id}>
-                        <Link href={`/${area.slug}`} className="flex items-center text-[var(--sf-text)] hover:text-[var(--sf-brand)] transition-colors">
-                          <CheckCircle2 className="w-5 h-5 mr-3 text-[var(--sf-brand)] shrink-0" />
+                        <Link href={`/${area.slug}`} className="flex items-center text-[var(--tribe-text)] hover:text-[var(--tribe-brand)] transition-colors">
+                          <CheckCircle2 className="w-5 h-5 mr-3 text-[var(--tribe-brand)] shrink-0" />
                           <span className="font-medium">{area.name}</span>
                         </Link>
                       </li>

@@ -1,10 +1,10 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 mark_step_running "$SLUG" "05_copy_source"
 
-SRC="/opt/sf-template"
-DEST="/opt/sf-instances/${SLUG}"
+SRC="/opt/tribe-instances"
+DEST="/opt/tribe-sites/${SLUG}"
 
 [ ! -d "$SRC/src" ] && { mark_step_failed "$SLUG" "05_copy_source" "Master template src/ missing"; exit_fail "Master template src/ not found"; }
 
@@ -18,7 +18,7 @@ rsync -a --delete \
   --exclude='*.log' \
   --exclude='backups' \
   --exclude='.deploy-state.json' \
-  --exclude='.sf-update-lock' \
+  --exclude='.tribe-update-lock' \
   "$SRC/" "$DEST/" 2>&1 | tail -5
 
 [ ${PIPESTATUS[0]} -ne 0 ] && { mark_step_failed "$SLUG" "05_copy_source" "rsync failed"; exit_fail "rsync failed"; }
@@ -28,8 +28,8 @@ cp /usr/local/bin/pocketbase "$DEST/pocketbase"
 chmod +x "$DEST/pocketbase"
 
 # Write current template version
-cp "$SRC/.sf-version" "$DEST/.sf-version"
-VERSION=$(cat "$DEST/.sf-version")
+cp "$SRC/.tribe-version" "$DEST/.tribe-version"
+VERSION=$(cat "$DEST/.tribe-version")
 set_state "$SLUG" ".runtime.template_version = \"$VERSION\""
 
 mark_step_ok "$SLUG" "05_copy_source"

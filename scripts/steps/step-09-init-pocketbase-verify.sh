@@ -1,12 +1,12 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
 STATUS=$(echo "$STATE" | jq -r '.steps."09_init_pocketbase".status')
 [ "$STATUS" = "pending" ] && exit_fail "Step not run yet"
 
-BASE="/opt/sf-instances/${SLUG}"
+BASE="/opt/tribe-sites/${SLUG}"
 PB_PORT=$(echo "$STATE" | jq -r '.ports.pb_port')
 PB_ADMIN_PW=$(echo "$STATE" | jq -r '.secrets.pb_admin_password')
 ERRORS=()
@@ -27,7 +27,7 @@ else
 fi
 
 # Get fresh token
-TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@successforce.com}" "$PB_ADMIN_PW")
+TOKEN=$(pb_authenticate "http://127.0.0.1:${PB_PORT}" "${PB_ADMIN_EMAIL:-admin@tribecms.local}" "$PB_ADMIN_PW")
 [ -z "$TOKEN" ] && ERRORS+=("Could not authenticate as PocketBase admin")
 
 if [ -n "$TOKEN" ]; then

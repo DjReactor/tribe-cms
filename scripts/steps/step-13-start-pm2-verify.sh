@@ -1,5 +1,5 @@
 #!/bin/bash
-. /opt/sf-template/scripts/steps/shared.sh
+. /opt/tribe-instances/scripts/steps/shared.sh
 SLUG=$1; [ -z "$SLUG" ] && exit_fail "Usage: $0 SLUG"
 
 STATE=$(read_state "$SLUG")
@@ -11,11 +11,11 @@ NEXTJS_PORT=$(echo "$STATE" | jq -r '.ports.nextjs_port')
 ERRORS=()
 
 # Check PM2 process statuses
-PB_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "sf-pb-${SLUG}" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
-NX_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "sf-${SLUG}-next" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
+PB_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-pb-${SLUG}" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
+NX_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-${SLUG}-next" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
 
-[ "$PB_STATUS" != "online" ] && ERRORS+=("sf-pb-${SLUG} PM2 status: $PB_STATUS (expected: online)")
-[ "$NX_STATUS" != "online" ] && ERRORS+=("sf-${SLUG}-next PM2 status: $NX_STATUS (expected: online)")
+[ "$PB_STATUS" != "online" ] && ERRORS+=("tribe-pb-${SLUG} PM2 status: $PB_STATUS (expected: online)")
+[ "$NX_STATUS" != "online" ] && ERRORS+=("tribe-${SLUG}-next PM2 status: $NX_STATUS (expected: online)")
 
 # Check ports are bound
 ss -tlnp 2>/dev/null | grep -q ":${PB_PORT} " || ERRORS+=("PocketBase port $PB_PORT is not bound")
@@ -30,9 +30,9 @@ if [ ${#ERRORS[@]} -gt 0 ]; then
   fail "PM2 verification failed:"; printf '  %s\n' "${ERRORS[@]}" >&2; exit 1
 fi
 
-PB_RESTARTS=$(pm2 jlist 2>/dev/null | jq -r --arg n "sf-pb-${SLUG}" '.[] | select(.name==$n) | .pm2_env.restart_time // 0')
-NX_RESTARTS=$(pm2 jlist 2>/dev/null | jq -r --arg n "sf-${SLUG}-next" '.[] | select(.name==$n) | .pm2_env.restart_time // 0')
+PB_RESTARTS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-pb-${SLUG}" '.[] | select(.name==$n) | .pm2_env.restart_time // 0')
+NX_RESTARTS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-${SLUG}-next" '.[] | select(.name==$n) | .pm2_env.restart_time // 0')
 mark_step_verified "$SLUG" "13_start_pm2"
 ok "Both processes online"
-info "sf-pb-${SLUG}: online (restarts: $PB_RESTARTS)"
-info "sf-${SLUG}-next: online (restarts: $NX_RESTARTS)"
+info "tribe-pb-${SLUG}: online (restarts: $PB_RESTARTS)"
+info "tribe-${SLUG}-next: online (restarts: $NX_RESTARTS)"

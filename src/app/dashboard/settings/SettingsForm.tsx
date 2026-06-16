@@ -113,7 +113,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
             <div>
-              <p className="font-medium text-slate-900">Show "Powered by SuccessForce"</p>
+              <p className="font-medium text-slate-900">Show "Powered by Tribe CMS"</p>
               <p className="text-sm text-slate-500">Display a small badge in the footer of your website.</p>
             </div>
             <Toggle 
