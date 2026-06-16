@@ -66,9 +66,9 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
           <Link href="/terms-of-service" className="hover:text-[var(--tribe-text)]">Terms of Service</Link>
         </div>
         {settings.show_powered_by && (
-          <a href="https://tribecms.io" target="_blank" rel="noopener noreferrer" className="text-[var(--tribe-text-muted)] hover:text-[var(--tribe-text)] transition-colors flex items-center gap-1">
+          <span className="text-[var(--tribe-text-muted)] flex items-center gap-1">
             Powered by Tribe CMS
-          </a>
+          </span>
         )}
       </div>
     </footer>
