@@ -125,6 +125,19 @@ export interface TestimonialsPageProps {
   config: TemplateConfig
 }
 
+export interface ServiceAreasIndexPageProps {
+  serviceAreas: ServiceArea[]
+  businessInfo: BusinessInfo
+  resolvedCopy: ResolvedCopy
+  media: MediaItem[]
+  config: TemplateConfig
+}
+
+export interface Custom404PageProps {
+  businessInfo: BusinessInfo
+  config: TemplateConfig
+}
+
 export interface TemplatePack {
   manifest: TemplateManifest
   Layout: React.FC<LayoutProps>
@@ -141,4 +154,6 @@ export interface TemplatePack {
   PrivacyPage: React.FC<StaticPageProps>
   TermsPage: React.FC<StaticPageProps>
   TestimonialsPage?: React.FC<TestimonialsPageProps>
+  ServiceAreasIndexPage?: React.FC<ServiceAreasIndexPageProps>
+  Custom404Page?: React.FC<Custom404PageProps>
 }

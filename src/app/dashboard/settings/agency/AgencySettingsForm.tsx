@@ -19,6 +19,7 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
       retell_agent_url: initialData?.retell_agent_url || '',
       reviews_enabled: initialData?.reviews_enabled ?? false,
       blog_enabled: initialData?.blog_enabled ?? false,
+      service_areas_index_enabled: initialData?.service_areas_index_enabled ?? false,
       blog_auto_publish: initialData?.blog_auto_publish ?? true,
       analytics_enabled: initialData?.analytics_enabled ?? false,
       ga4_measurement_id: initialData?.ga4_measurement_id || '',
@@ -96,10 +97,16 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
               </div>
             )}
             
-            <Toggle 
-              checked={watch('reviews_enabled')} 
-              onChange={(e) => setValue('reviews_enabled', e.target.checked)} 
-              label="Enable Reviews Integration (Google Sync)" 
+            <Toggle
+              checked={watch('service_areas_index_enabled')}
+              onChange={(e) => setValue('service_areas_index_enabled', e.target.checked)}
+              label="Enable Service Areas Index Page (/service-areas)"
+            />
+
+            <Toggle
+              checked={watch('reviews_enabled')}
+              onChange={(e) => setValue('reviews_enabled', e.target.checked)}
+              label="Enable Reviews Integration (Google Sync)"
             />
           </div>
 
