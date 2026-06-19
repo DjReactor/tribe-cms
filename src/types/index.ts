@@ -88,6 +88,46 @@ export interface BeforeAfterPair {
   sort_order: number
 }
 
+export type ProjectStatus = 'planned' | 'in_progress' | 'completed'
+
+export interface Project {
+  id: string
+  title: string
+  slug: string
+  summary: string
+  services: Service[]
+  location?: {
+    city: string
+    state?: string
+  }
+  status: ProjectStatus
+  completed_at?: string
+  cover_image_url: string
+  gallery_image_urls?: string[]
+  content?: {
+    problem?: string
+    solution?: string
+    process?: string
+    outcome?: string
+  }
+  testimonial?: {
+    quote: string
+    client: string
+    client_info?: string
+    client_image_url?: string
+    rating?: number
+  }
+  featured?: boolean
+  is_active: boolean
+  sort_order: number
+  seo_title: string
+  seo_description: string
+  canonical_url?: string
+  og_image_url?: string
+  noindex?: boolean
+  updated?: string
+}
+
 export interface BlogPost {
   id: string
   title: string
@@ -157,6 +197,7 @@ export interface SeoSettings {
 
 export interface TemplateSettings {
   blog_enabled: boolean
+  projects_enabled?: boolean
   service_areas_index_enabled?: boolean
   show_powered_by: boolean
   active_template: string

@@ -44,6 +44,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     const settings = await pb.collection('settings').getFirstListItem('');
+
+    if (settings.projects_enabled) {
+      const activeProjects = await pb.collection('projects').getFullList({
+        filter: 'is_active = true',
+        fields: 'slug,noindex,updated',
+      }).catch(() => []);
+
+      if (activeProjects.length > 0) {
+        routes.push({
+          url: `${baseUrl}/projects`,
+          changeFrequency: 'weekly',
+          priority: 0.8,
+        });
+        activeProjects.forEach((project: any) => {
+          if (!project.noindex) {
+            routes.push({
+              url: `${baseUrl}/projects/${project.slug}`,
+              lastModified: new Date(project.updated),
+              changeFrequency: 'monthly',
+              priority: 0.75,
+            });
+          }
+        });
+      }
+    }
+
     if (settings.blog_enabled && !seoSettings?.noindex_blog) {
       routes.push({
         url: `${baseUrl}/blog`,

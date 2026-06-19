@@ -2,10 +2,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { 
-  LayoutDashboard, Building2, Wrench, MapPin, 
+import {
+  LayoutDashboard, Building2, Wrench, MapPin,
   FileText, LineChart, Settings as SettingsIcon,
-  MessageSquare, Phone, Star, ShieldAlert, Palette, Key
+  MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,6 +22,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
     { name: 'Services', href: '/dashboard/services', icon: Wrench },
     { name: 'Service Areas', href: '/dashboard/service-areas', icon: MapPin },
     { name: 'Site Content', href: '/dashboard/content', icon: FileText },
+    { name: 'Media Library', href: '/dashboard/media', icon: Images },
     { name: 'Design', href: '/dashboard/design', icon: Palette },
     { name: 'SEO & Visibility', href: '/dashboard/seo', icon: LineChart },
   ];
@@ -29,6 +30,9 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   const modules = [];
   if (settings?.blog_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'Blog', href: '/dashboard/blog', icon: FileText });
+  }
+  if (settings?.projects_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Projects', href: '/dashboard/projects', icon: Briefcase });
   }
   if (settings?.crm_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'CRM Contacts', href: '/dashboard/crm', icon: MessageSquare });

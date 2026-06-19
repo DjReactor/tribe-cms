@@ -1,13 +1,14 @@
-import { 
-  BusinessInfo, 
-  Service, 
-  ServiceArea, 
-  Testimonial, 
-  BlogPost, 
-  MediaItem, 
+import {
+  BusinessInfo,
+  Service,
+  ServiceArea,
+  Testimonial,
+  BlogPost,
+  MediaItem,
   TemplateSettings,
   BeforeAfterPair,
-  TemplateManifest
+  TemplateManifest,
+  Project,
 } from './index';
 
 export type { TemplateManifest, TemplateCopyKey, TemplateImageSlot } from './index'
@@ -138,6 +139,21 @@ export interface Custom404PageProps {
   config: TemplateConfig
 }
 
+export interface ProjectsIndexPageProps {
+  projects: Project[]
+  businessInfo: BusinessInfo
+  resolvedCopy: ResolvedCopy
+  services: Service[]
+  config: TemplateConfig
+}
+
+export interface ProjectDetailPageProps {
+  project: Project
+  businessInfo: BusinessInfo
+  relatedProjects: Project[]
+  config: TemplateConfig
+}
+
 export interface TemplatePack {
   manifest: TemplateManifest
   Layout: React.FC<LayoutProps>
@@ -156,4 +172,6 @@ export interface TemplatePack {
   TestimonialsPage?: React.FC<TestimonialsPageProps>
   ServiceAreasIndexPage?: React.FC<ServiceAreasIndexPageProps>
   Custom404Page?: React.FC<Custom404PageProps>
+  ProjectsIndexPage?: React.FC<ProjectsIndexPageProps>
+  ProjectDetailPage?: React.FC<ProjectDetailPageProps>
 }

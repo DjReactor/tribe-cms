@@ -10,6 +10,7 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
       return {
         id: record.id,
         blog_enabled: record.blog_enabled ?? false,
+        projects_enabled: record.projects_enabled ?? false,
         crm_enabled: record.crm_enabled ?? false,
         retell_enabled: record.retell_enabled ?? false,
         reviews_enabled: record.reviews_enabled ?? false,

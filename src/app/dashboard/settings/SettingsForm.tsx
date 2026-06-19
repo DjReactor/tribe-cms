@@ -20,6 +20,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
       notify_new_blog_post:   initialData?.notify_new_blog_post   ?? false,
       lead_webhook_url:       initialData?.lead_webhook_url       ?? '',
       lead_webhook_secret:    initialData?.lead_webhook_secret    ?? '',
+      projects_enabled:       initialData?.projects_enabled       ?? false,
     }
   });
 
@@ -119,6 +120,25 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             <Toggle 
               checked={watch('show_powered_by')} 
               onChange={(e) => setValue('show_powered_by', e.target.checked)} 
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Feature Modules</CardTitle>
+          <CardDescription>Enable optional sections on your website.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Projects Showcase</p>
+              <p className="text-sm text-slate-500">Display a portfolio of completed work on your site.</p>
+            </div>
+            <Toggle
+              checked={watch('projects_enabled')}
+              onChange={(e) => setValue('projects_enabled', e.target.checked)}
             />
           </div>
         </CardContent>
