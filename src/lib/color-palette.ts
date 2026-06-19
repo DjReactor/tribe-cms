@@ -8,23 +8,33 @@ export function generatePaletteCss(colors: ColorPaletteColors): string {
   return `:root {\n${vars}\n}`
 }
 
-export async function getActivePalette(): Promise<{ colors: ColorPaletteColors }> {
+/**
+ * Priority:
+ *   palette_source === 'cms'      → settings.cms_palette
+ *   palette_source === 'template' → templateDefaultPalette + settings.template_palette_overrides
+ *   Fallback (no PocketBase)      → templateDefaultPalette (or global DEFAULT_PALETTE_COLORS)
+ */
+export async function getActivePalette(
+  templateDefaultPalette?: ColorPaletteColors
+): Promise<{ colors: ColorPaletteColors }> {
+  const base = templateDefaultPalette ?? DEFAULT_PALETTE_COLORS
+
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPocketBaseClient()
     const settingsList = await pb.collection('settings').getList(1, 1)
     if (settingsList.items.length > 0) {
       const settings = settingsList.items[0]
-      if (settings.active_palette_id) {
-        const palette = await pb.collection('color_palettes').getOne(settings.active_palette_id)
-        if (palette && palette.colors) {
-          // Assuming structure is correct, type casting for simplicity
-          return { colors: palette.colors as unknown as ColorPaletteColors }
-        }
+
+      if (settings.palette_source === 'cms' && settings.cms_palette) {
+        return { colors: settings.cms_palette as ColorPaletteColors }
       }
+
+      const overrides = (settings.template_palette_overrides ?? {}) as Partial<ColorPaletteColors>
+      return { colors: { ...base, ...overrides } }
     }
-  } catch (error) {
-    console.error('Error fetching active palette:', error)
+  } catch {
+    // PocketBase unavailable — use template default
   }
-  
-  return { colors: DEFAULT_PALETTE_COLORS }
+
+  return { colors: base }
 }

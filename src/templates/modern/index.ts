@@ -17,10 +17,38 @@ import { ProjectsIndexPage }   from './ProjectsIndexPage'
 import { ProjectDetailPage }   from './ProjectDetailPage'
 
 import { TemplateManifest } from '@/types'
+import type { ColorPaletteColors } from '@/types/color-palette'
+
+const MODERN_PALETTE: ColorPaletteColors = {
+  bg:            '#F8FAFC',
+  surface:       '#FFFFFF',
+  surface_alt:   '#0F172A',
+  surface_hover: '#F1F5F9',
+  input_bg:      '#FFFFFF',
+  text:          '#475569',
+  text_muted:    '#94A3B8',
+  heading:       '#0F172A',
+  text_on_alt:   '#F8FAFC',
+  border:        '#E2E8F0',
+  input_border:  '#CBD5E1',
+  border_focus:  '#6366F1',
+  brand:         '#6366F1',
+  brand_hover:   '#4F46E5',
+  brand_text:    '#FFFFFF',
+  accent:        '#8B5CF6',
+  link:          '#6366F1',
+  success:       '#22C55E',
+  error:         '#EF4444',
+  warning:       '#F59E0B',
+  star:          '#FBBF24',
+  shadow:        '#0F172A20',
+  overlay:       '#0F172A66',
+}
 
 export const manifest: TemplateManifest = {
   name: "Modern",
   slug: "modern",
+  defaultPalette: MODERN_PALETTE,
   supportedImageKeys: {
     "hero_bg": { 
       label: "Main Hero Background", 

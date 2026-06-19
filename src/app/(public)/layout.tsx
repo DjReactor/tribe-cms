@@ -55,7 +55,6 @@ export default async function PublicLayout({
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
   const seoSettings = await getSeoSettings();
-  const palette = await getActivePalette();
   const siteUrl = process.env.SITE_URL || '';
 
   const pb = await getPocketBaseClient();
@@ -75,6 +74,7 @@ export default async function PublicLayout({
   }
 
   const template = await loadTemplate(settings.active_template);
+  const palette = await getActivePalette(template.manifest?.defaultPalette);
   const LayoutComponent = template.Layout;
   const jsonLd = buildLocalBusinessSchema(businessInfo, seoSettings, testimonials, services, serviceAreas, siteUrl);
   const paletteCss = generatePaletteCss(palette.colors);

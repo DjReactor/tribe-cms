@@ -35,9 +35,15 @@ export async function activateTemplate(
     if (settingId) {
       await pb.collection('settings').update(settingId, {
         active_template: templateId,
+        palette_source: 'template',
+        template_palette_overrides: {},
       });
     } else {
-      await pb.collection('settings').create({ active_template: templateId });
+      await pb.collection('settings').create({
+        active_template: templateId,
+        palette_source: 'template',
+        template_palette_overrides: {},
+      });
     }
 
     revalidatePath('/', 'layout');

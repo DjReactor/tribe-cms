@@ -1,95 +1,103 @@
 'use server'
 
 import { getPocketBaseClient } from '@/lib/pocketbase'
-import { ColorPalette, ColorPaletteColors } from '@/types/color-palette'
+import type { ColorPaletteColors } from '@/types/color-palette'
 import { revalidatePath } from 'next/cache'
 
-export async function getPalettes(): Promise<ColorPalette[]> {
+export interface PaletteState {
+  source: 'template' | 'cms'
+  templateOverrides: Partial<ColorPaletteColors>
+  cmsPalette: ColorPaletteColors | null
+}
+
+async function getSettingsRecord() {
+  const pb = await getPocketBaseClient()
+  const list = await pb.collection('settings').getList(1, 1)
+  if (list.items.length === 0) throw new Error('Settings record not found')
+  return { pb, record: list.items[0] }
+}
+
+export async function getPaletteState(): Promise<PaletteState> {
   try {
-    const pb = await getPocketBaseClient()
-    const records = await pb.collection('color_palettes').getFullList({
-      sort: 'sort_order,created'
-    })
-    return records as unknown as ColorPalette[]
-  } catch (err) {
-    console.error('Error fetching palettes', err)
-    return []
+    const { record } = await getSettingsRecord()
+    return {
+      source: (record.palette_source as 'template' | 'cms') || 'template',
+      templateOverrides: (record.template_palette_overrides ?? {}) as Partial<ColorPaletteColors>,
+      cmsPalette: (record.cms_palette ?? null) as ColorPaletteColors | null,
+    }
+  } catch {
+    return { source: 'template', templateOverrides: {}, cmsPalette: null }
   }
 }
 
-export async function getActivePaletteId(): Promise<string | null> {
+export async function setPaletteSource(
+  source: 'template' | 'cms'
+): Promise<{ success: boolean; error?: string }> {
   try {
-    const pb = await getPocketBaseClient()
-    const settingsList = await pb.collection('settings').getList(1, 1)
-    if (settingsList.items.length > 0) {
-      return settingsList.items[0].active_palette_id || null
-    }
-  } catch (err) {
-    console.error('Error fetching active palette id', err)
-  }
-  return null
-}
-
-export async function activatePalette(id: string): Promise<{ success: boolean; error?: string }> {
-  try {
-    const pb = await getPocketBaseClient()
-    const settingsList = await pb.collection('settings').getList(1, 1)
-    if (settingsList.items.length > 0) {
-      const settings = settingsList.items[0]
-      await pb.collection('settings').update(settings.id, {
-        active_palette_id: id
-      })
-      revalidatePath('/', 'layout')
-      return { success: true }
-    }
-    return { success: false, error: 'Settings not found' }
+    const { pb, record } = await getSettingsRecord()
+    await pb.collection('settings').update(record.id, { palette_source: source })
+    revalidatePath('/', 'layout')
+    return { success: true }
   } catch (err: any) {
-    console.error('Error activating palette', err)
     return { success: false, error: err.message }
   }
 }
 
-export async function createPalette(name: string, colors: ColorPaletteColors): Promise<{ success: boolean; id?: string; error?: string }> {
+export async function saveTemplateOverrides(
+  overrides: Partial<ColorPaletteColors>
+): Promise<{ success: boolean; error?: string }> {
   try {
-    const pb = await getPocketBaseClient()
-    const record = await pb.collection('color_palettes').create({
-      name,
-      colors,
-      sort_order: 10
-    })
-    return { success: true, id: record.id }
-  } catch (err: any) {
-    console.error('Error creating palette', err)
-    return { success: false, error: err.message }
-  }
-}
-
-export async function updatePalette(id: string, name: string, colors: ColorPaletteColors): Promise<{ success: boolean; error?: string }> {
-  try {
-    const pb = await getPocketBaseClient()
-    await pb.collection('color_palettes').update(id, {
-      name,
-      colors
+    const { pb, record } = await getSettingsRecord()
+    await pb.collection('settings').update(record.id, {
+      template_palette_overrides: overrides,
+      palette_source: 'template',
     })
     revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: any) {
-    console.error('Error updating palette', err)
     return { success: false, error: err.message }
   }
 }
 
-export async function deletePalette(id: string): Promise<{ success: boolean; error?: string }> {
+export async function resetTemplateOverrides(): Promise<{ success: boolean; error?: string }> {
   try {
-    const activeId = await getActivePaletteId()
-    if (activeId === id) {
-      return { success: false, error: 'Cannot delete the active palette' }
-    }
-    const pb = await getPocketBaseClient()
-    await pb.collection('color_palettes').delete(id)
+    const { pb, record } = await getSettingsRecord()
+    await pb.collection('settings').update(record.id, {
+      template_palette_overrides: {},
+      palette_source: 'template',
+    })
+    revalidatePath('/', 'layout')
     return { success: true }
   } catch (err: any) {
-    console.error('Error deleting palette', err)
+    return { success: false, error: err.message }
+  }
+}
+
+export async function saveCmsPalette(
+  colors: ColorPaletteColors
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { pb, record } = await getSettingsRecord()
+    await pb.collection('settings').update(record.id, { cms_palette: colors })
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message }
+  }
+}
+
+export async function activateCmsPalette(
+  colors: ColorPaletteColors
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { pb, record } = await getSettingsRecord()
+    await pb.collection('settings').update(record.id, {
+      cms_palette: colors,
+      palette_source: 'cms',
+    })
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (err: any) {
     return { success: false, error: err.message }
   }
 }

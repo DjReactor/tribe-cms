@@ -176,6 +176,7 @@ export interface TemplateManifest {
   slug: string
   supportedImageKeys: Record<string, TemplateImageSlot>
   supportedCopyKeys: Record<string, TemplateCopyKey>
+  defaultPalette?: import('./color-palette').ColorPaletteColors
 }
 
 export interface SeoSettings {
@@ -201,7 +202,11 @@ export interface TemplateSettings {
   service_areas_index_enabled?: boolean
   show_powered_by: boolean
   active_template: string
+  /** @deprecated Use palette_source / template_palette_overrides / cms_palette instead */
   active_palette_id?: string
+  palette_source?: 'template' | 'cms'
+  template_palette_overrides?: Partial<import('./color-palette').ColorPaletteColors>
+  cms_palette?: import('./color-palette').ColorPaletteColors | null
   crm_enabled?: boolean
   retell_enabled?: boolean
   reviews_enabled?: boolean
