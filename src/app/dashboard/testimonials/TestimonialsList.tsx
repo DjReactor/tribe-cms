@@ -28,7 +28,7 @@ export default function TestimonialsList({ initialTestimonials }: { initialTesti
   const { addToast } = useToast();
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<z.input<typeof schema>, any, FormData>({
     resolver: zodResolver(schema),
     defaultValues: { rating: 5 }
   });

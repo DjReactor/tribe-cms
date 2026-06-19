@@ -27,7 +27,7 @@ const schema = z.object({
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_google: z.string().url('Invalid URL').optional().or(z.literal('')),
-  niche_attributes: z.record(z.string()).optional(),
+  niche_attributes: z.record(z.string(), z.string()).optional(),
 });
 
 type FormData = z.infer<typeof schema>;

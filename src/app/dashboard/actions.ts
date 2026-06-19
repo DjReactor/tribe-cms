@@ -19,7 +19,7 @@ const businessInfoSchema = z.object({
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_google: z.string().url('Invalid URL').optional().or(z.literal('')),
-  niche_attributes: z.record(z.string()).optional(),
+  niche_attributes: z.record(z.string(), z.string()).optional(),
 });
 
 export async function updateBusinessInfo(data: any) {
@@ -49,7 +49,7 @@ export async function updateBusinessInfo(data: any) {
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return { success: false, error: error.errors[0].message };
+      return { success: false, error: error.issues[0].message };
     }
     return { success: false, error: error.message || 'An unexpected error occurred' };
   }

@@ -4,7 +4,6 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import type { Project } from '@/types';
 
 const projectSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -35,57 +34,16 @@ const projectSchema = z.object({
   canonical_url: z.string().url().optional().or(z.literal('')),
   og_image_url: z.string().optional().or(z.literal('')),
   noindex: z.boolean().default(false),
+}).superRefine((data, ctx) => {
+  if (data.testimonial_enabled) {
+    if (!data.testimonial_quote?.trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['testimonial_quote'], message: 'Quote is required when a testimonial is enabled' });
+    }
+    if (!data.testimonial_client?.trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['testimonial_client'], message: 'Client name is required when a testimonial is enabled' });
+    }
+  }
 });
-
-const pbUrl = process.env.NEXT_PUBLIC_POCKETBASE_URL || '';
-
-function mapProject(raw: any): Project {
-  const galleryMedia = raw.expand?.gallery_media ?? [];
-  return {
-    id: raw.id,
-    title: raw.title,
-    slug: raw.slug,
-    summary: raw.summary,
-    status: raw.status,
-    featured: raw.featured,
-    is_active: raw.is_active,
-    sort_order: raw.sort_order,
-    services: raw.expand?.services ?? [],
-    location: raw.location_city
-      ? { city: raw.location_city, state: raw.location_state || undefined }
-      : undefined,
-    completed_at: raw.completed_at || undefined,
-    cover_image_url: raw.cover_image_url || '',
-    gallery_image_urls: galleryMedia.map(
-      (m: any) => `${pbUrl}/api/files/media/${m.id}/${m.file}`
-    ),
-    content: {
-      problem: raw.content_problem || undefined,
-      solution: raw.content_solution || undefined,
-      process: raw.content_process || undefined,
-      outcome: raw.content_outcome || undefined,
-    },
-    testimonial: raw.testimonial_quote
-      ? {
-          quote: raw.testimonial_quote,
-          client: raw.testimonial_client,
-          client_info: raw.testimonial_client_info || undefined,
-          client_image_url: raw.testimonial_client_image_url
-            ? raw.testimonial_client_image_url
-            : raw.testimonial_client_image
-              ? `${pbUrl}/api/files/projects/${raw.id}/${raw.testimonial_client_image}`
-              : undefined,
-          rating: raw.testimonial_rating || undefined,
-        }
-      : undefined,
-    seo_title: raw.seo_title || '',
-    seo_description: raw.seo_description || '',
-    canonical_url: raw.canonical_url || undefined,
-    og_image_url: raw.og_image_url || undefined,
-    noindex: raw.noindex ?? false,
-    updated: raw.updated,
-  };
-}
 
 export async function getProjects() {
   try {
@@ -154,6 +112,13 @@ export async function createProject(data: any) {
       ...rest,
       services: service_ids,
       gallery_media: gallery_media_ids,
+      // When the testimonial is disabled, clear stale text so it can't render as an empty/orphaned blockquote.
+      ...(testimonial_enabled ? {} : {
+        testimonial_quote: '',
+        testimonial_client: '',
+        testimonial_client_info: '',
+        testimonial_client_image_url: '',
+      }),
     };
     const pb = await getPocketBaseClient();
     const record = await pb.collection('projects').create(flatData);
@@ -163,7 +128,7 @@ export async function createProject(data: any) {
     return { success: true, id: record.id };
   } catch (error: any) {
     if (error?.constructor?.name === 'ZodError') {
-      return { success: false, error: error.errors[0].message };
+      return { success: false, error: error.issues[0].message };
     }
     return { success: false, error: error.message || 'An unexpected error occurred' };
   }
@@ -178,6 +143,13 @@ export async function updateProject(id: string, data: any) {
       ...rest,
       services: service_ids,
       gallery_media: gallery_media_ids,
+      // When the testimonial is disabled, clear stale text so it can't render as an empty/orphaned blockquote.
+      ...(testimonial_enabled ? {} : {
+        testimonial_quote: '',
+        testimonial_client: '',
+        testimonial_client_info: '',
+        testimonial_client_image_url: '',
+      }),
     };
     const pb = await getPocketBaseClient();
     await pb.collection('projects').update(id, flatData);
@@ -188,7 +160,7 @@ export async function updateProject(id: string, data: any) {
     return { success: true };
   } catch (error: any) {
     if (error?.constructor?.name === 'ZodError') {
-      return { success: false, error: error.errors[0].message };
+      return { success: false, error: error.issues[0].message };
     }
     return { success: false, error: error.message || 'An unexpected error occurred' };
   }

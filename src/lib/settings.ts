@@ -30,6 +30,7 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
   return {
     id: 'mock',
     blog_enabled: true,
+    projects_enabled: true,
     crm_enabled: true,
     retell_enabled: true,
     reviews_enabled: true,

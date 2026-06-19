@@ -45,6 +45,15 @@ const schema = z.object({
   canonical_url: z.string().url().optional().or(z.literal('')),
   og_image_url: z.string().optional().or(z.literal('')),
   noindex: z.boolean(),
+}).superRefine((data, ctx) => {
+  if (data.testimonial_enabled) {
+    if (!data.testimonial_quote?.trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['testimonial_quote'], message: 'Quote is required when a testimonial is enabled' });
+    }
+    if (!data.testimonial_client?.trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['testimonial_client'], message: 'Client name is required when a testimonial is enabled' });
+    }
+  }
 });
 
 type FormData = z.infer<typeof schema>;
@@ -71,7 +80,12 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
   const [isPending, startTransition] = useTransition();
   const isNew = initialData?.id === 'new';
 
-  const [galleryPreviews, setGalleryPreviews] = useState<GalleryPreview[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<GalleryPreview[]>(
+    (initialData?.expand?.gallery_media ?? []).map((m: any) => ({
+      id: m.id,
+      url: `${process.env.NEXT_PUBLIC_POCKETBASE_URL || ''}/api/files/media/${m.id}/${m.file}`,
+    }))
+  );
   const [clientPhotoPreview, setClientPhotoPreview] = useState<string>(
     initialData?.testimonial_client_image_url || initialData?.testimonial?.client_image_url || ''
   );
@@ -97,12 +111,12 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
       featured: initialData?.featured ?? false,
       is_active: initialData?.is_active ?? true,
       sort_order: initialData?.sort_order ?? 0,
-      service_ids: initialData?.services?.map((s: any) => s.id) ?? initialData?.service_ids ?? [],
+      service_ids: initialData?.service_ids ?? initialData?.services ?? [],
       location_city: initialData?.location_city || initialData?.location?.city || '',
       location_state: initialData?.location_state || initialData?.location?.state || '',
       completed_at: initialData?.completed_at || '',
       cover_image_url: initialData?.cover_image_url || '',
-      gallery_media_ids: initialData?.gallery_media_ids ?? [],
+      gallery_media_ids: initialData?.gallery_media_ids ?? initialData?.gallery_media ?? [],
       content_problem: initialData?.content_problem || initialData?.content?.problem || '',
       content_solution: initialData?.content_solution || initialData?.content?.solution || '',
       content_process: initialData?.content_process || initialData?.content?.process || '',

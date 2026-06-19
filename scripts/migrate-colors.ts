@@ -36,10 +36,10 @@ const fileReplacements = [
   { regex: /bg-\[var\(--tribe-brand\)\] text-\[var\(--tribe-text\)\]/g, replacement: 'bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)]' },
 ]
 
-function walk(dir) {
-  let results = []
+function walk(dir: string): string[] {
+  let results: string[] = []
   const list = fs.readdirSync(dir)
-  list.forEach(file => {
+  list.forEach((file: string) => {
     file = path.join(dir, file)
     const stat = fs.statSync(file)
     if (stat && stat.isDirectory()) {

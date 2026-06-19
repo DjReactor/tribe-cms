@@ -63,7 +63,7 @@ export async function updateServiceArea(id: string, data: any) {
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return { success: false, error: error.errors[0].message };
+      return { success: false, error: error.issues[0].message };
     }
     return { success: false, error: error.message || 'An unexpected error occurred' };
   }

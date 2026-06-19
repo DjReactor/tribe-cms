@@ -22,7 +22,7 @@ export function SortableList({ items, onReorder, renderItem }: SortableListProps
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
     dragNodeRef.current = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.currentTarget.parentNode?.innerHTML || '');
+    e.dataTransfer.setData('text/html', e.currentTarget.parentElement?.innerHTML || '');
     setTimeout(() => {
       setDraggedIdx(idx);
     }, 0);

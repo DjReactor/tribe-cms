@@ -59,7 +59,7 @@ export default async function DashboardHome() {
       name: 'Complete Business Profile',
       description: 'Add your contact details, hours, and address.',
       href: '/dashboard/business-info',
-      isComplete: !!(businessInfo?.name && businessInfo?.phone && businessInfo?.address),
+      isComplete: !!(businessInfo?.business_name && businessInfo?.phone && businessInfo?.address),
     },
     {
       name: 'Add Your First Service',

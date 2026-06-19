@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
     --city)          CITY="${2:-}"; shift 2 ;;
     --state)         STATE="${2:-}"; shift 2 ;;
     --phone)         PHONE="${2:-}"; shift 2 ;;
-    --template)      TEMPLATE="${2:-modern}"; shift 2 ;;
+    --template)      TEMPLATE="$2"; shift 2 ;;
     --channel)       CHANNEL="${2:-stable}"; shift 2 ;;
     --www)           WWW_MODE="${2:-redirect}"; shift 2 ;;
     --skip-ssl)      SKIP_SSL=true; shift ;;
@@ -30,6 +30,23 @@ done
 [ -z "$DOMAIN" ]        && exit_fail "--domain is required"
 [ -z "$BUSINESS_NAME" ] && exit_fail "--business-name is required"
 [ -z "$BO_EMAIL" ]      && exit_fail "--bo-email is required"
+
+# Resolve template selection.
+# An explicit --template (or TEMPLATE env var) always wins. Otherwise auto-discover
+# the first available template — the first dir (alphabetical) that ships a manifest.json,
+# matching how src/lib/template-registry.ts decides what is a real template. This avoids
+# depending on a hardcoded template name that could be renamed or removed.
+# To pin a specific default later, add a "default": true flag to a manifest.json and
+# prefer it here.
+TEMPLATES_DIR="/opt/tribe-instances/src/templates"
+if [ -z "${TEMPLATE:-}" ]; then
+  for d in "$TEMPLATES_DIR"/*/; do
+    [ -f "${d}manifest.json" ] || continue
+    TEMPLATE=$(basename "$d")
+    break
+  done
+fi
+[ -z "${TEMPLATE:-}" ] && exit_fail "No usable template (with manifest.json) found in $TEMPLATES_DIR"
 
 # Resolve niche to business_type and schema_type
 NICHE_MAP=$(cat /opt/tribe-instances/scripts/steps/niche-map.json)
@@ -55,7 +72,7 @@ cat > "$FILE" << STATEOF
     "city": "${CITY:-}",
     "state": "${STATE:-}",
     "phone": "${PHONE:-}",
-    "template": "${TEMPLATE:-modern}",
+    "template": "$TEMPLATE",
     "channel": "${CHANNEL:-stable}",
     "www_mode": "${WWW_MODE:-redirect}",
     "skip_ssl": ${SKIP_SSL:-false}
@@ -100,4 +117,4 @@ info "Slug:     $SLUG"
 info "Domain:   $DOMAIN"
 info "Business: $BUSINESS_NAME"
 info "Niche:    ${NICHE:-none} → type: ${BUSINESS_TYPE:-unset}, schema: $SCHEMA_TYPE"
-info "Template: ${TEMPLATE:-modern}"
+info "Template: $TEMPLATE"
