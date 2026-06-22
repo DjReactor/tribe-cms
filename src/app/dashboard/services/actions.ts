@@ -10,11 +10,11 @@ const serviceSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
   short_description: z.string().max(160, 'Max 160 characters').optional().or(z.literal('')),
   icon: z.string().optional(),
+  cover_image_url: z.string().optional().or(z.literal('')),
   is_active: z.boolean().default(true),
   page_content: z.any().optional(), 
   seo_title: z.string().max(70).optional().or(z.literal('')),
   seo_description: z.string().max(160).optional().or(z.literal('')),
-  focus_keyword: z.string().optional().or(z.literal('')),
   noindex: z.boolean().default(false),
 });
 

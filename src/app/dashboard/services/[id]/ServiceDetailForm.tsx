@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { updateService } from '../actions';
@@ -12,16 +12,18 @@ import { Toggle } from '@/components/ui/Toggle';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
 import { BlockNoteEditor } from '@/components/dashboard/BlockNoteEditor';
+import { MediaLibraryModal } from '@/components/dashboard/MediaLibraryModal';
 import { useRouter } from 'next/navigation';
+import { Image as ImageIcon } from 'lucide-react';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
   short_description: z.string().max(160, 'Max 160 characters').optional().or(z.literal('')),
+  cover_image_url: z.string().optional().or(z.literal('')),
   is_active: z.boolean(),
   seo_title: z.string().max(70).optional().or(z.literal('')),
   seo_description: z.string().max(160).optional().or(z.literal('')),
-  focus_keyword: z.string().optional().or(z.literal('')),
   noindex: z.boolean(),
   page_content: z.any().optional(),
 });
@@ -37,16 +39,18 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
       name: initialData?.name || '',
       slug: initialData?.slug || '',
       short_description: initialData?.short_description || '',
+      cover_image_url: initialData?.cover_image_url || '',
       is_active: initialData?.is_active ?? true,
       seo_title: initialData?.seo_title || '',
       seo_description: initialData?.seo_description || '',
-      focus_keyword: initialData?.focus_keyword || '',
       noindex: initialData?.noindex ?? false,
       page_content: initialData?.page_content || undefined,
     }
   });
 
   const [isPending, startTransition] = useTransition();
+  const [coverPickerOpen, setCoverPickerOpen] = useState(false);
+  const coverImageUrl = watch('cover_image_url');
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
@@ -89,6 +93,27 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
 
       <Card>
         <CardHeader>
+          <CardTitle>Cover Image</CardTitle>
+          <CardDescription>The main image shown on the services list and the service page hero.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-3 items-end">
+            <div className="flex-1">
+              <Input label="Cover Image URL" placeholder="https://..." {...register('cover_image_url')} />
+            </div>
+            <Button type="button" variant="outline" onClick={() => setCoverPickerOpen(true)}>
+              <ImageIcon className="h-4 w-4 mr-2" />
+              Select from Media Library
+            </Button>
+          </div>
+          {coverImageUrl && (
+            <img src={coverImageUrl} alt="Cover preview" className="h-40 w-full object-cover rounded-xl" />
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Page Content</CardTitle>
           <CardDescription>Write the detailed description using the rich text editor.</CardDescription>
         </CardHeader>
@@ -106,7 +131,6 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
           <CardDescription>Optimize how this page appears on Google.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <Input label="Focus Keyword" error={errors.focus_keyword?.message} {...register('focus_keyword')} />
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
           
@@ -128,6 +152,15 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
           Save Service
         </Button>
       </div>
+
+      <MediaLibraryModal
+        isOpen={coverPickerOpen}
+        onClose={() => setCoverPickerOpen(false)}
+        mode="single"
+        onSelect={(sel: any) => {
+          setValue('cover_image_url', (sel as { id: string; url: string }).url, { shouldDirty: true });
+        }}
+      />
     </form>
   );
 }
