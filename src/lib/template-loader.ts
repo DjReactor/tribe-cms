@@ -10,8 +10,12 @@ export async function loadTemplate(id: string): Promise<TemplatePack> {
 
   try {
     // Dynamic import of the requested template.
-    // Next.js static analysis will bundle everything in src/templates/*/index.ts
-    const module = await import(`@/templates/${id}`);
+    // The trailing `/index` constrains the bundler's dynamic-import context to
+    // `src/templates/*/index.ts` (real template entry points). Without it, the
+    // context globs every file directly under src/templates/ — including
+    // non-code files like AGENTS.md — which Turbopack can't compile ("Unknown
+    // module type"), breaking the entire module graph.
+    const module = await import(`@/templates/${id}/index`);
     const pack = module.default as TemplatePack;
     
     if (!pack) {
