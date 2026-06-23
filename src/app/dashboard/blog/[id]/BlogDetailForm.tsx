@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { useTransition, useEffect } from 'react';
+import { useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { updateBlogPost, createBlogPost } from '../actions';
@@ -49,26 +49,22 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
     }
   });
 
-  const titleValue = watch('title');
-  useEffect(() => {
-    if (!dirtyFields.slug && titleValue) {
-      const slug = titleValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      setValue('slug', slug, { shouldValidate: true, shouldDirty: false });
-    }
-  }, [titleValue, dirtyFields.slug, setValue]);
+  const isNew = initialData?.id === 'new';
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
       let res;
-      if (initialData.id === 'new') {
+      if (isNew) {
         res = await createBlogPost(data);
       } else {
         res = await updateBlogPost(initialData.id, data);
       }
       if (res.success) {
-        addToast({ title: initialData.id === 'new' ? 'Post created' : 'Post updated', type: 'success' });
+        addToast({ title: isNew ? 'Post created' : 'Post updated', type: 'success' });
         router.push('/dashboard/blog');
       } else {
         addToast({ title: 'Error saving', description: res.error, type: 'error' });
@@ -86,7 +82,17 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
         <CardContent className="space-y-6">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input label="Post Title" error={errors.title?.message} {...register('title')} />
+            <Input
+              label="Post Title"
+              error={errors.title?.message}
+              {...register('title', {
+                onChange: (e) => {
+                  if (isNew && !dirtyFields.slug) {
+                    setValue('slug', slugify(e.target.value), { shouldValidate: true });
+                  }
+                },
+              })}
+            />
             <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
             <Textarea label="Excerpt (Max 200 chars)" error={errors.excerpt?.message} {...register('excerpt')} className="md:col-span-2" />
           </div>

@@ -135,14 +135,8 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
     },
   });
 
-  // Auto-slug from title while slug is untouched
-  const titleValue = watch('title');
-  useEffect(() => {
-    if (!dirtyFields.slug && titleValue) {
-      const slug = titleValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      setValue('slug', slug, { shouldValidate: true, shouldDirty: false });
-    }
-  }, [titleValue, dirtyFields.slug, setValue]);
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
   // Clear completed_at when status changes away from 'completed'
   const statusValue = watch('status');
@@ -226,7 +220,17 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input label="Project Title" error={errors.title?.message} {...register('title')} />
+            <Input
+              label="Project Title"
+              error={errors.title?.message}
+              {...register('title', {
+                onChange: (e) => {
+                  if (isNew && !dirtyFields.slug) {
+                    setValue('slug', slugify(e.target.value), { shouldValidate: true });
+                  }
+                },
+              })}
+            />
             <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
           </div>
 
