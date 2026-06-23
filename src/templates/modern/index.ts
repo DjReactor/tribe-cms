@@ -124,14 +124,14 @@ export const manifest: TemplateManifest = {
     // ── Service Area Pages ────────────────────────────────────────────────
     "service_area_h1": {
       label: "Service Area Page Headline",
-      default: "{{business_type}} in {{city}}",
+      default: "{{business_type}} in {{area_name}}",
       type: "text",
       page: "Service Area Pages",
-      hint: "Shown as the H1 on each service area page. {{business_type}} and {{city}} are replaced automatically."
+      hint: "Shown as the H1 on each service area page. {{business_type}} and {{area_name}} are replaced automatically."
     },
     "service_area_intro": {
       label: "Service Area Page Intro",
-      default: "Professional {{business_type}} services serving {{city}} and surrounding areas.",
+      default: "Professional {{business_type}} services serving {{area_name}} and surrounding areas.",
       type: "textarea",
       page: "Service Area Pages",
       hint: "Introductory paragraph under the H1 on service area pages."

@@ -59,29 +59,32 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   // Build template-wide resolvedCopy from manifest + user overrides
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 
+  // {{area_name}} is an area-only token. buildResolvedCopy / resolveTemplateTokens
+  // only handle the four business tokens, so {{area_name}} survives untouched and is
+  // resolved here — scoped to this Service Area route, so other pages are unaffected.
+  // Every copy slot on this page (headings, intro, CTA, etc.) gets the live area name.
+  for (const key of Object.keys(resolvedCopy)) {
+    resolvedCopy[key] = resolvedCopy[key].replace(/\{\{area_name\}\}/g, area.name);
+  }
+
   // Area-specific h1/intro:
   // Priority 1 — per-area DB override (custom_h1 / custom_intro)
   // Priority 2 — template manifest default for service_area_h1 / service_area_intro
-  //              (already resolved by buildResolvedCopy above)
-  // Priority 3 — last-resort CMS fallback (should never be seen if the template
-  //              declares the keys, but guards against misconfigured templates)
-  const fallbackH1    = `{{business_type}} in ${area.name}`;
-  const fallbackIntro = `Professional {{business_type}} services serving ${area.name} and surrounding areas.`;
+  // Priority 3 — last-resort CMS fallback (guards against templates that omit the keys)
+  // Business tokens are resolved by resolveTemplateTokens; {{area_name}} by the
+  // trailing replace, so whichever branch wins gets both kinds of token resolved.
+  const fallbackH1    = `{{business_type}} in {{area_name}}`;
+  const fallbackIntro = `Professional {{business_type}} services serving {{area_name}} and surrounding areas.`;
 
   resolvedCopy.h1 = resolveTemplateTokens(
-    area.custom_h1 ||
-      (resolvedCopy.service_area_h1
-        ? resolvedCopy.service_area_h1.replace(/\{\{city\}\}/g, area.name)
-        : fallbackH1),
+    area.custom_h1 || resolvedCopy.service_area_h1 || fallbackH1,
     businessInfo
-  );
+  ).replace(/\{\{area_name\}\}/g, area.name);
+
   resolvedCopy.intro = resolveTemplateTokens(
-    area.custom_intro ||
-      (resolvedCopy.service_area_intro
-        ? resolvedCopy.service_area_intro.replace(/\{\{city\}\}/g, area.name)
-        : fallbackIntro),
+    area.custom_intro || resolvedCopy.service_area_intro || fallbackIntro,
     businessInfo
-  );
+  ).replace(/\{\{area_name\}\}/g, area.name);
 
   const ServiceAreaPageComponent = template.ServiceAreaPage;
 
