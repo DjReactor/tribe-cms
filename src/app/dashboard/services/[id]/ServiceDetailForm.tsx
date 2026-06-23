@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { updateService } from '../actions';
+import { createService, updateService } from '../actions';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
@@ -33,7 +33,10 @@ type FormData = z.infer<typeof schema>;
 export default function ServiceDetailForm({ initialData }: { initialData: any }) {
   const { addToast } = useToast();
   const router = useRouter();
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
+  const isNew = initialData?.id === 'new';
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const { register, handleSubmit, setValue, watch, formState: { errors, dirtyFields } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: initialData?.name || '',
@@ -54,9 +57,11 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
-      const res = await updateService(initialData.id, data);
+      const res = isNew
+        ? await createService(data)
+        : await updateService(initialData.id, data);
       if (res.success) {
-        addToast({ title: 'Service updated', type: 'success' });
+        addToast({ title: isNew ? 'Service created' : 'Service updated', type: 'success' });
         router.push('/dashboard/services');
       } else {
         addToast({ title: 'Error saving', description: res.error, type: 'error' });
@@ -84,7 +89,17 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input label="Service Name" error={errors.name?.message} {...register('name')} />
+            <Input
+              label="Service Name"
+              error={errors.name?.message}
+              {...register('name', {
+                onChange: (e) => {
+                  if (isNew && !dirtyFields.slug) {
+                    setValue('slug', slugify(e.target.value), { shouldValidate: true });
+                  }
+                },
+              })}
+            />
             <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
             <Textarea label="Short Description (Max 160 chars)" error={errors.short_description?.message} {...register('short_description')} className="md:col-span-2" />
           </div>
@@ -149,7 +164,7 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
 
       <div className="flex justify-end pt-4 pb-12">
         <Button type="submit" isLoading={isPending} size="lg">
-          Save Service
+          {isNew ? 'Create Service' : 'Save Service'}
         </Button>
       </div>
 

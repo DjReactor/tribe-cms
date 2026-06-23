@@ -1,19 +1,17 @@
 'use client';
 import { useState, useTransition } from 'react';
 import { SortableList } from '@/components/dashboard/SortableList';
-import { updateServiceAreasOrder, toggleServiceAreaActive, deleteServiceArea, createServiceArea } from './actions';
+import { updateServiceAreasOrder, toggleServiceAreaActive, deleteServiceArea } from './actions';
 import { Toggle } from '@/components/ui/Toggle';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { Trash2, Edit2, Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function ServiceAreasList({ initialAreas }: { initialAreas: any[] }) {
   const [areas, setAreas] = useState(initialAreas);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const { addToast } = useToast();
-  const router = useRouter();
 
   const handleReorder = (newItems: any[]) => {
     setAreas(newItems);
@@ -46,24 +44,15 @@ export default function ServiceAreasList({ initialAreas }: { initialAreas: any[]
     }
   };
 
-  const handleCreate = async () => {
-    startTransition(async () => {
-      try {
-        const id = await createServiceArea();
-        router.push(`/dashboard/service-areas/${id}`);
-      } catch (e: any) {
-        addToast({ title: 'Error creating area', description: e.message, type: 'error' });
-      }
-    });
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button onClick={handleCreate} isLoading={isPending}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Service Area
-        </Button>
+        <Link href="/dashboard/service-areas/new">
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Service Area
+          </Button>
+        </Link>
       </div>
       
       <SortableList

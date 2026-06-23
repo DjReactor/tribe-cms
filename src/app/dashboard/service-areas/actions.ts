@@ -32,19 +32,25 @@ export async function getServiceArea(id: string) {
   return pb.collection('service_areas').getOne(id).catch(() => null);
 }
 
-export async function createServiceArea() {
-  await requireAuth();
-  const pb = await getPocketBaseClient();
-  
-  const record = await pb.collection('service_areas').create({
-    name: 'New Service Area',
-    slug: `new-area-${Date.now()}`,
-    is_active: false,
-    sort_order: 999
-  });
-  
-  revalidatePath('/dashboard/service-areas');
-  return record.id;
+export async function createServiceArea(data: any) {
+  try {
+    await requireAuth();
+    const parsedData = serviceAreaSchema.parse(data);
+    const pb = await getPocketBaseClient();
+
+    const record = await pb.collection('service_areas').create({ ...parsedData, sort_order: 999 });
+
+    revalidatePath('/dashboard/service-areas');
+    revalidatePath('/');
+    revalidatePath('/sitemap.xml');
+
+    return { success: true, id: record.id };
+  } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return { success: false, error: error.issues[0].message };
+    }
+    return { success: false, error: error.message || 'An unexpected error occurred' };
+  }
 }
 
 export async function updateServiceArea(id: string, data: any) {

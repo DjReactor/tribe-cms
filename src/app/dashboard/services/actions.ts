@@ -30,19 +30,25 @@ export async function getService(id: string) {
   return pb.collection('services').getOne(id).catch(() => null);
 }
 
-export async function createService() {
-  await requireAuth();
-  const pb = await getPocketBaseClient();
-  
-  const record = await pb.collection('services').create({
-    name: 'New Service',
-    slug: `new-service-${Date.now()}`,
-    is_active: false,
-    sort_order: 999
-  });
-  
-  revalidatePath('/dashboard/services');
-  return record.id;
+export async function createService(data: any) {
+  try {
+    await requireAuth();
+    const parsedData = serviceSchema.parse(data);
+    const pb = await getPocketBaseClient();
+
+    const record = await pb.collection('services').create({ ...parsedData, sort_order: 999 });
+
+    revalidatePath('/dashboard/services');
+    revalidatePath('/services');
+    revalidatePath('/sitemap.xml');
+
+    return { success: true, id: record.id };
+  } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return { success: false, error: error.issues[0].message };
+    }
+    return { success: false, error: error.message || 'An unexpected error occurred' };
+  }
 }
 
 export async function updateService(id: string, data: any) {

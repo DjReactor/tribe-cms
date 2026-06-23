@@ -1,19 +1,17 @@
 'use client';
 import { useState, useTransition } from 'react';
 import { SortableList } from '@/components/dashboard/SortableList';
-import { updateServicesOrder, toggleServiceActive, deleteService, createService } from './actions';
+import { updateServicesOrder, toggleServiceActive, deleteService } from './actions';
 import { Toggle } from '@/components/ui/Toggle';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { Trash2, Edit2, Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function ServicesList({ initialServices }: { initialServices: any[] }) {
   const [services, setServices] = useState(initialServices);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const { addToast } = useToast();
-  const router = useRouter();
 
   const handleReorder = (newItems: any[]) => {
     setServices(newItems);
@@ -46,24 +44,15 @@ export default function ServicesList({ initialServices }: { initialServices: any
     }
   };
 
-  const handleCreate = async () => {
-    startTransition(async () => {
-      try {
-        const id = await createService();
-        router.push(`/dashboard/services/${id}`);
-      } catch (e: any) {
-        addToast({ title: 'Error creating service', description: e.message, type: 'error' });
-      }
-    });
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button onClick={handleCreate} isLoading={isPending}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Service
-        </Button>
+        <Link href="/dashboard/services/new">
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Service
+          </Button>
+        </Link>
       </div>
       
       <SortableList

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { updateServiceArea } from '../actions';
+import { createServiceArea, updateServiceArea } from '../actions';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
@@ -34,7 +34,10 @@ type FormData = z.infer<typeof schema>;
 export default function ServiceAreaDetailForm({ initialData }: { initialData: any }) {
   const { addToast } = useToast();
   const router = useRouter();
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
+  const isNew = initialData?.id === 'new';
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const { register, handleSubmit, setValue, watch, formState: { errors, dirtyFields } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: initialData?.name || '',
@@ -56,9 +59,11 @@ export default function ServiceAreaDetailForm({ initialData }: { initialData: an
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
-      const res = await updateServiceArea(initialData.id, data);
+      const res = isNew
+        ? await createServiceArea(data)
+        : await updateServiceArea(initialData.id, data);
       if (res.success) {
-        addToast({ title: 'Service Area updated', type: 'success' });
+        addToast({ title: isNew ? 'Service Area created' : 'Service Area updated', type: 'success' });
         router.push('/dashboard/service-areas');
       } else {
         addToast({ title: 'Error saving', description: res.error, type: 'error' });
@@ -86,7 +91,17 @@ export default function ServiceAreaDetailForm({ initialData }: { initialData: an
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input label="Area Name (e.g. Austin)" error={errors.name?.message} {...register('name')} />
+            <Input
+              label="Area Name (e.g. Austin)"
+              error={errors.name?.message}
+              {...register('name', {
+                onChange: (e) => {
+                  if (isNew && !dirtyFields.slug) {
+                    setValue('slug', slugify(e.target.value), { shouldValidate: true });
+                  }
+                },
+              })}
+            />
             <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
             <Input label="Custom H1 Headline" placeholder="Leaves blank for default" error={errors.custom_h1?.message} {...register('custom_h1')} className="md:col-span-2" />
             <Textarea label="Custom Intro Paragraph" placeholder="Leaves blank for default" error={errors.custom_intro?.message} {...register('custom_intro')} className="md:col-span-2" />
@@ -137,7 +152,7 @@ export default function ServiceAreaDetailForm({ initialData }: { initialData: an
 
       <div className="flex justify-end pt-4 pb-12">
         <Button type="submit" isLoading={isPending} size="lg">
-          Save Service Area
+          {isNew ? 'Create Service Area' : 'Save Service Area'}
         </Button>
       </div>
     </form>
