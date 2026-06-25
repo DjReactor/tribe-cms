@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -45,6 +46,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
   } catch(e) {}
 
   const locations = await getLocations();
+  const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
   const BlogIndexPageComponent = template.BlogIndexPage;
@@ -54,6 +56,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
       posts={posts}
       businessInfo={businessInfo}
       locations={locations}
+      projects={projects}
       currentPage={page}
       totalPages={totalPages}
       media={media}

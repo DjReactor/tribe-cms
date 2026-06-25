@@ -24,6 +24,7 @@ export interface LayoutProps {
   serviceAreas: ServiceArea[]
   services: Service[]
   locations: Location[]
+  projects: Project[]
   settings: TemplateSettings
   config: TemplateConfig
 }
@@ -32,6 +33,7 @@ export interface HeaderProps {
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   blogEnabled: boolean
   config: TemplateConfig
 }
@@ -41,6 +43,7 @@ export interface FooterProps {
   services: Service[]
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   settings: TemplateSettings
   config: TemplateConfig
 }
@@ -51,6 +54,7 @@ export interface HomePageProps {
   services: Service[]
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   testimonials: Testimonial[]
   media: MediaItem[]
   beforeAfterPairs: BeforeAfterPair[]
@@ -61,6 +65,7 @@ export interface AboutPageProps {
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   resolvedCopy: ResolvedCopy
   services: Service[]
   testimonials: Testimonial[]
@@ -72,6 +77,7 @@ export interface ContactPageProps {
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   resolvedCopy: ResolvedCopy
   media: MediaItem[]
   config: TemplateConfig
@@ -81,6 +87,7 @@ export interface ServicesIndexProps {
   services: Service[]
   businessInfo: BusinessInfo
   locations: Location[]
+  projects: Project[]
   resolvedCopy: ResolvedCopy
   media: MediaItem[]
   config: TemplateConfig
@@ -91,6 +98,7 @@ export interface ServiceDetailProps {
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
   locations: Location[]
+  projects: Project[]
   beforeAfterPairs: BeforeAfterPair[]
   media: MediaItem[]
   config: TemplateConfig
@@ -102,6 +110,7 @@ export interface ServiceAreaProps {
   resolvedCopy: ResolvedCopy
   services: Service[]
   locations: Location[]
+  projects: Project[]
   media: MediaItem[]
   config: TemplateConfig
 }
@@ -110,6 +119,7 @@ export interface BlogIndexProps {
   posts: BlogPost[]
   businessInfo: BusinessInfo
   locations: Location[]
+  projects: Project[]
   currentPage: number
   totalPages: number
   media: MediaItem[]
@@ -120,6 +130,7 @@ export interface BlogPostProps {
   post: BlogPost
   businessInfo: BusinessInfo
   locations: Location[]
+  projects: Project[]
   relatedPosts: BlogPost[]
   media: MediaItem[]
   config: TemplateConfig
@@ -128,6 +139,7 @@ export interface BlogPostProps {
 export interface StaticPageProps {
   businessInfo: BusinessInfo
   locations: Location[]
+  projects: Project[]
   pageContent: string
   config: TemplateConfig
 }
@@ -136,6 +148,7 @@ export interface TestimonialsPageProps {
   businessInfo: BusinessInfo
   testimonials: Testimonial[]
   locations: Location[]
+  projects: Project[]
   media: MediaItem[]
   config: TemplateConfig
 }
@@ -144,6 +157,7 @@ export interface ServiceAreasIndexPageProps {
   serviceAreas: ServiceArea[]
   businessInfo: BusinessInfo
   locations: Location[]
+  projects: Project[]
   resolvedCopy: ResolvedCopy
   media: MediaItem[]
   config: TemplateConfig
@@ -174,12 +188,14 @@ export interface ProjectDetailPageProps {
 export interface LocationsIndexPageProps {
   locations: Location[]
   businessInfo: BusinessInfo
+  projects: Project[]
   config: TemplateConfig
 }
 
 export interface LocationDetailPageProps {
   location: Location
   businessInfo: BusinessInfo
+  projects: Project[]
   relatedLocations: Location[]
   config: TemplateConfig
 }

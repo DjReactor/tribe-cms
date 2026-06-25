@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 import type { ServiceArea, Testimonial, Service } from "@/types";
 import { buildLocalBusinessSchema } from "@/lib/seo";
 import { getActivePalette, generatePaletteCss } from "@/lib/color-palette";
@@ -75,6 +76,7 @@ export default async function PublicLayout({
   }
 
   const locations = await getLocations();
+  const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
   const palette = await getActivePalette(template.manifest?.defaultPalette);
@@ -94,6 +96,7 @@ export default async function PublicLayout({
         serviceAreas={serviceAreas}
         services={services}
         locations={locations}
+        projects={projects}
         settings={settings}
         config={settings.template_config || {}}
       >

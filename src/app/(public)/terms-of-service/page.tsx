@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -47,6 +48,7 @@ export default async function TermsOfServicePageWrapper() {
   }
 
   const locations = await getLocations();
+  const projects = await getProjects();
   const template          = await loadTemplate(settings.active_template);
   const TermsPageComponent = template.TermsPage;
 
@@ -54,6 +56,7 @@ export default async function TermsOfServicePageWrapper() {
     <TermsPageComponent
       businessInfo={businessInfo}
       locations={locations}
+      projects={projects}
       pageContent={content}
       config={settings.template_config || {}}
     />

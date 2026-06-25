@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -41,6 +42,7 @@ export default async function ServiceAreasIndexPageWrapper() {
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 
   const locations = await getLocations();
+  const projects = await getProjects();
 
   const ServiceAreasIndexPageComponent = template.ServiceAreasIndexPage;
 
@@ -49,6 +51,7 @@ export default async function ServiceAreasIndexPageWrapper() {
       serviceAreas={serviceAreas}
       businessInfo={businessInfo}
       locations={locations}
+      projects={projects}
       resolvedCopy={resolvedCopy}
       media={media}
       config={settings.template_config || {}}

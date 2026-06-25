@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 import { buildResolvedCopy } from "@/lib/template";
 import type { Service, MediaItem } from "@/types";
 
@@ -30,6 +31,7 @@ export default async function ServicesIndexPageWrapper() {
   } catch(e) {}
 
   const locations = await getLocations();
+  const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
   const copyOverrides = settings.template_config?.copyOverrides || {};
@@ -42,6 +44,7 @@ export default async function ServicesIndexPageWrapper() {
       services={services}
       businessInfo={businessInfo}
       locations={locations}
+      projects={projects}
       media={media}
       resolvedCopy={resolvedCopy}
       config={settings.template_config || {}}

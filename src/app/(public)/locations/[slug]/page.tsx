@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getProjects } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import type { Location } from '@/types';
 
@@ -62,12 +63,15 @@ export default async function LocationDetailPageWrapper({ params }: { params: Pr
     url: `${siteUrl}/locations/${location.slug}`,
   };
 
+  const projects = await getProjects();
+
   const template = await loadTemplate(settings.active_template);
 
   const content = template.LocationDetailPage ? (
     <template.LocationDetailPage
       location={location}
       businessInfo={businessInfo}
+      projects={projects}
       relatedLocations={relatedLocations}
       config={settings.template_config || {}}
     />

@@ -13,6 +13,7 @@ export function HomePage({
   services,
   serviceAreas,
   locations,
+  projects,
   testimonials,
   media,
   beforeAfterPairs,
@@ -20,6 +21,8 @@ export function HomePage({
 }: HomePageProps) {
   const heroMedia = media.find(m => m.category === 'hero');
   const heroImage = resolveImage('hero_bg', getMediaFileUrl(heroMedia), config);
+  const featuredProjects = projects.filter(p => p.featured);
+  const shownProjects = (featuredProjects.length ? featuredProjects : projects).slice(0, 3);
   return (
     <div>
       {/* Hero Section */}
@@ -222,6 +225,33 @@ export function HomePage({
                   <h3 className={`${styles.headingBase} text-xl font-bold mb-3 group-hover:text-[var(--tribe-brand)] transition-colors`}>{location.area_name}</h3>
                   {location.address && <p className="text-[var(--tribe-text)] mb-1">{location.address}</p>}
                   {location.phone && <p className="text-[var(--tribe-brand)] font-medium">{location.phone}</p>}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Projects */}
+      {projects.length > 0 && (
+        <section className="py-24 bg-[var(--tribe-surface)] border-t border-[var(--tribe-border)]">
+          <div className={styles.container}>
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className={`${styles.headingBase} text-3xl md:text-4xl font-bold mb-4`}>Featured Projects</h2>
+              <p className="text-lg text-[var(--tribe-text)]">A look at some of our recent work.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {shownProjects.map(project => (
+                <Link key={project.id} href={`/projects/${project.slug}`} className="group block rounded-2xl overflow-hidden bg-[var(--tribe-surface)] hover:shadow-xl border border-[var(--tribe-border)] transition-all">
+                  {project.cover_image_url && (
+                    <div className="aspect-[4/3] overflow-hidden bg-[var(--tribe-surface-alt)]">
+                      <img src={project.cover_image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    </div>
+                  )}
+                  <div className="p-8">
+                    <h3 className={`${styles.headingBase} text-xl font-bold mb-3 group-hover:text-[var(--tribe-brand)] transition-colors`}>{project.title}</h3>
+                    {project.summary && <p className="text-[var(--tribe-text)]">{project.summary}</p>}
+                  </div>
                 </Link>
               ))}
             </div>

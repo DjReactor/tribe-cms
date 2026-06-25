@@ -3,7 +3,7 @@ import { bodyFont, headingFont } from './theme';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function Layout({ children, businessInfo, serviceAreas, locations, settings, config }: LayoutProps) {
+export function Layout({ children, businessInfo, serviceAreas, locations, projects, settings, config }: LayoutProps) {
   return (
     <div
       className={`${bodyFont.variable} ${headingFont.variable} font-sans min-h-screen flex flex-col bg-[var(--tribe-surface)] text-[var(--tribe-text)]`}
@@ -12,6 +12,7 @@ export function Layout({ children, businessInfo, serviceAreas, locations, settin
         businessInfo={businessInfo}
         serviceAreas={serviceAreas}
         locations={locations}
+        projects={projects}
         blogEnabled={settings.blog_enabled}
         config={config}
       />
@@ -23,6 +24,7 @@ export function Layout({ children, businessInfo, serviceAreas, locations, settin
         services={[]} // Layout does not get services, passing empty array
         serviceAreas={serviceAreas}
         locations={locations}
+        projects={projects}
         settings={settings}
         config={config}
       />

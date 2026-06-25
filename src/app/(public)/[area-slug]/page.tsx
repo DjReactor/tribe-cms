@@ -3,6 +3,7 @@ import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
+import { getProjects } from "@/lib/projects";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
 import type { Service, ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -88,6 +89,7 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   ).replace(/\{\{area_name\}\}/g, area.name);
 
   const locations = await getLocations();
+  const projects = await getProjects();
 
   const ServiceAreaPageComponent = template.ServiceAreaPage;
 
@@ -96,6 +98,7 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
       area={area}
       businessInfo={businessInfo}
       locations={locations}
+      projects={projects}
       services={services}
       media={media}
       resolvedCopy={resolvedCopy}

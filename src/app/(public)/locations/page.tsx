@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getProjects } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import type { Location } from '@/types';
 
@@ -49,12 +50,15 @@ export default async function LocationsIndexPageWrapper() {
       }
     : null;
 
+  const projects = await getProjects();
+
   const template = await loadTemplate(settings.active_template);
 
   const content = template.LocationsIndexPage ? (
     <template.LocationsIndexPage
       locations={locations}
       businessInfo={businessInfo}
+      projects={projects}
       config={settings.template_config || {}}
     />
   ) : (
