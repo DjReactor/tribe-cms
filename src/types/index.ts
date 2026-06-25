@@ -128,6 +128,20 @@ export interface Project {
   updated?: string
 }
 
+export interface Location {
+  id: string
+  area_name: string
+  slug: string
+  address: string
+  phone: string
+  is_active: boolean
+  sort_order: number
+  seo_title: string
+  seo_description: string
+  noindex?: boolean
+  updated?: string
+}
+
 export interface BlogPost {
   id: string
   title: string
@@ -199,6 +213,7 @@ export interface SeoSettings {
 export interface TemplateSettings {
   blog_enabled: boolean
   projects_enabled?: boolean
+  locations_enabled?: boolean
   service_areas_index_enabled?: boolean
   show_powered_by: boolean
   active_template: string

@@ -15,6 +15,8 @@ import { PrivacyPage }         from './PrivacyPage'
 import { TermsPage }           from './TermsPage'
 import { ProjectsIndexPage }   from './ProjectsIndexPage'
 import { ProjectDetailPage }   from './ProjectDetailPage'
+import { LocationsIndexPage }  from './LocationsIndexPage'
+import { LocationDetailPage }  from './LocationDetailPage'
 
 import { TemplateManifest } from '@/types'
 import type { ColorPaletteColors } from '@/types/color-palette'
@@ -157,6 +159,8 @@ const templatePack: TemplatePack = {
   TermsPage,
   ProjectsIndexPage,
   ProjectDetailPage,
+  LocationsIndexPage,
+  LocationDetailPage,
 }
 
 export default templatePack

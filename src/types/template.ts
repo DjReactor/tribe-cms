@@ -9,6 +9,7 @@ import {
   BeforeAfterPair,
   TemplateManifest,
   Project,
+  Location,
 } from './index';
 
 export type { TemplateManifest, TemplateCopyKey, TemplateImageSlot } from './index'
@@ -154,6 +155,19 @@ export interface ProjectDetailPageProps {
   config: TemplateConfig
 }
 
+export interface LocationsIndexPageProps {
+  locations: Location[]
+  businessInfo: BusinessInfo
+  config: TemplateConfig
+}
+
+export interface LocationDetailPageProps {
+  location: Location
+  businessInfo: BusinessInfo
+  relatedLocations: Location[]
+  config: TemplateConfig
+}
+
 export interface TemplatePack {
   manifest: TemplateManifest
   Layout: React.FC<LayoutProps>
@@ -174,4 +188,6 @@ export interface TemplatePack {
   Custom404Page?: React.FC<Custom404PageProps>
   ProjectsIndexPage?: React.FC<ProjectsIndexPageProps>
   ProjectDetailPage?: React.FC<ProjectDetailPageProps>
+  LocationsIndexPage?: React.FC<LocationsIndexPageProps>
+  LocationDetailPage?: React.FC<LocationDetailPageProps>
 }

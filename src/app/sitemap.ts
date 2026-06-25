@@ -70,6 +70,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
+    if (settings.locations_enabled) {
+      const activeLocations = await pb.collection('locations').getFullList({
+        filter: 'is_active = true',
+        fields: 'slug,noindex,updated',
+      }).catch(() => []);
+
+      if (activeLocations.length > 0) {
+        routes.push({
+          url: `${baseUrl}/locations`,
+          changeFrequency: 'monthly',
+          priority: 0.7,
+        });
+        activeLocations.forEach((location: any) => {
+          if (!location.noindex) {
+            routes.push({
+              url: `${baseUrl}/locations/${location.slug}`,
+              lastModified: new Date(location.updated),
+              changeFrequency: 'monthly',
+              priority: 0.7,
+            });
+          }
+        });
+      }
+    }
+
     if (settings.blog_enabled && !seoSettings?.noindex_blog) {
       routes.push({
         url: `${baseUrl}/blog`,

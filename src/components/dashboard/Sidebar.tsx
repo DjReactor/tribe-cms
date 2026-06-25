@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Building2, Wrench, MapPin,
   FileText, LineChart, Settings as SettingsIcon,
-  MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images
+  MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images, MapPinned
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,6 +33,9 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   }
   if (settings?.projects_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'Projects', href: '/dashboard/projects', icon: Briefcase });
+  }
+  if (settings?.locations_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Locations', href: '/dashboard/locations', icon: MapPinned });
   }
   if (settings?.crm_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'CRM Contacts', href: '/dashboard/crm', icon: MessageSquare });

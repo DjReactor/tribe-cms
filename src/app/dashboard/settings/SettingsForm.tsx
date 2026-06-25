@@ -21,6 +21,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
       lead_webhook_url:       initialData?.lead_webhook_url       ?? '',
       lead_webhook_secret:    initialData?.lead_webhook_secret    ?? '',
       projects_enabled:       initialData?.projects_enabled       ?? false,
+      locations_enabled:      initialData?.locations_enabled      ?? false,
     }
   });
 
@@ -139,6 +140,17 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             <Toggle
               checked={watch('projects_enabled')}
               onChange={(e) => setValue('projects_enabled', e.target.checked)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Locations</p>
+              <p className="text-sm text-slate-500">Show your business locations (address &amp; phone) and per-location pages.</p>
+            </div>
+            <Toggle
+              checked={watch('locations_enabled')}
+              onChange={(e) => setValue('locations_enabled', e.target.checked)}
             />
           </div>
         </CardContent>

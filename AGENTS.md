@@ -13,8 +13,8 @@ Owns the public site, the BO dashboard, the PocketBase schema/migrations/seed, t
 ## Local Contracts
 
 - App Router under `src/app/`:
-  - `(public)/` — public site: home, about, services, service-areas, `[area-slug]`, projects, blog, testimonials, contact, privacy-policy, terms-of-service.
-  - `dashboard/` — BO admin: blog, business-info, call-logs, content, crm, design, media, projects, security, seo, service-areas, services, settings, testimonials (server logic in `dashboard/actions.ts`).
+  - `(public)/` — public site: home, about, services, service-areas, `[area-slug]`, projects, locations, `locations/[slug]`, blog, testimonials, contact, privacy-policy, terms-of-service.
+  - `dashboard/` — BO admin: blog, business-info, call-logs, content, crm, design, locations, media, projects, security, seo, service-areas, services, settings, testimonials (server logic in `dashboard/actions.ts`).
   - `api/` — `auth`, `contact`, `internal`, `tribe`, `webhooks`.
   - `login/`, plus `sitemap.ts`, `robots.ts`, `sitemap-images.xml/`.
 - `src/lib/` — data + infra access: PocketBase via `pocketbase.ts` (user) and `pocketbase-admin.ts` (admin); auth in `auth.ts` / `webhook-auth.ts`; `seo.ts`, `settings.ts`, `projects.ts`, `images.ts`; color system in `color-palette.ts` (+ `src/data/default-palettes.json`); template resolution in `template-registry.ts` / `template-loader.ts` / `template.ts`.
