@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildServiceSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { Service, ServiceArea, BeforeAfterPair, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -62,6 +63,8 @@ export default async function ServiceDetailPageWrapper({ params }: { params: Pro
     return notFound();
   }
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
   const ServiceDetailPageComponent = template.ServiceDetailPage;
 
@@ -89,6 +92,7 @@ export default async function ServiceDetailPageWrapper({ params }: { params: Pro
         service={service}
         businessInfo={businessInfo}
         serviceAreas={serviceAreas}
+        locations={locations}
         beforeAfterPairs={beforeAfterPairs}
         media={media}
         config={settings.template_config || {}}

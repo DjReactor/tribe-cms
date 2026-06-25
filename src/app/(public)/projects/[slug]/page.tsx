@@ -5,6 +5,7 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { notFound } from 'next/navigation';
 import type { Project } from '@/types';
 import { mapProject } from '@/lib/projects';
+import { getLocations } from '@/lib/locations';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const siteUrl = process.env.SITE_URL || '';
@@ -96,12 +97,15 @@ export default async function ProjectDetailPageWrapper({ params }: { params: Pro
       }
     : null;
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
 
   const content = template.ProjectDetailPage ? (
     <template.ProjectDetailPage
       project={project}
       businessInfo={businessInfo}
+      locations={locations}
       relatedProjects={relatedProjects}
       config={settings.template_config || {}}
     />

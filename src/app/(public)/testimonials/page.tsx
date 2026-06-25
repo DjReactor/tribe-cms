@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { notFound } from "next/navigation";
 import type { Testimonial, MediaItem } from "@/types";
 
@@ -33,6 +34,8 @@ export default async function TestimonialsPageWrapper() {
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {}
 
+  const locations = await getLocations();
+
   const TestimonialsPageComponent = template.TestimonialsPage;
   const config = settings.template_config || {};
 
@@ -40,6 +43,7 @@ export default async function TestimonialsPageWrapper() {
     <TestimonialsPageComponent
       testimonials={testimonials}
       businessInfo={businessInfo}
+      locations={locations}
       media={media}
       config={config}
     />

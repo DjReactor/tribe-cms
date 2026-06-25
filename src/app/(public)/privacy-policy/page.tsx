@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -45,12 +46,14 @@ export default async function PrivacyPolicyPageWrapper() {
     `;
   }
 
-  const template            = await loadTemplate(settings.active_template);
+  const locations            = await getLocations();
+  const template             = await loadTemplate(settings.active_template);
   const PrivacyPageComponent = template.PrivacyPage;
 
   return (
     <PrivacyPageComponent
       businessInfo={businessInfo}
+      locations={locations}
       pageContent={content}
       config={settings.template_config || {}}
     />

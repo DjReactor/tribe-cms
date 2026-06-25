@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildResolvedCopy } from "@/lib/template";
 import type { Service, ServiceArea, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
 
@@ -47,6 +48,8 @@ export default async function HomePageWrapper() {
     beforeAfterPairs = await pb.collection('before_after_pairs').getFullList<BeforeAfterPair>({ filter: 'is_active = true', sort: 'sort_order' });
   } catch(e) {}
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
@@ -59,6 +62,7 @@ export default async function HomePageWrapper() {
       resolvedCopy={resolvedCopy}
       services={services}
       serviceAreas={serviceAreas}
+      locations={locations}
       testimonials={testimonials}
       media={media}
       beforeAfterPairs={beforeAfterPairs}

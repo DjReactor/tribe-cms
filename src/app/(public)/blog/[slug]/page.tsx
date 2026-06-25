@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildBlogPostingSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -70,6 +71,8 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
     return notFound();
   }
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
   const BlogPostPageComponent = template.BlogPostPage;
 
@@ -96,6 +99,7 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
       <BlogPostPageComponent
         post={post}
         businessInfo={businessInfo}
+        locations={locations}
         relatedPosts={relatedPosts}
         media={media}
         config={settings.template_config || {}}

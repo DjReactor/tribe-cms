@@ -5,6 +5,7 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { notFound } from 'next/navigation';
 import type { Project, Service } from '@/types';
 import { mapProject } from '@/lib/projects';
+import { getLocations } from '@/lib/locations';
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -35,6 +36,8 @@ export default async function ProjectsIndexPageWrapper() {
     services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true', sort: 'sort_order' });
   } catch {}
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
 
   if (!template.ProjectsIndexPage) {
@@ -63,6 +66,7 @@ export default async function ProjectsIndexPageWrapper() {
     <template.ProjectsIndexPage
       projects={projects}
       businessInfo={businessInfo}
+      locations={locations}
       resolvedCopy={{}}
       services={services}
       config={settings.template_config || {}}

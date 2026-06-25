@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, Service, Testimonial, MediaItem } from "@/types";
 
@@ -32,6 +33,8 @@ export default async function AboutPageWrapper() {
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {}
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
@@ -42,6 +45,7 @@ export default async function AboutPageWrapper() {
     <AboutPageComponent
       businessInfo={businessInfo}
       serviceAreas={serviceAreas}
+      locations={locations}
       services={services}
       testimonials={testimonials}
       media={media}

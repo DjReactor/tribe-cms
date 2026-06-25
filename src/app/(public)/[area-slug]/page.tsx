@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
 import type { Service, ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -86,12 +87,15 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
     businessInfo
   ).replace(/\{\{area_name\}\}/g, area.name);
 
+  const locations = await getLocations();
+
   const ServiceAreaPageComponent = template.ServiceAreaPage;
 
   return (
     <ServiceAreaPageComponent
       area={area}
       businessInfo={businessInfo}
+      locations={locations}
       services={services}
       media={media}
       resolvedCopy={resolvedCopy}

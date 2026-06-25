@@ -12,6 +12,7 @@ export function HomePage({
   resolvedCopy,
   services,
   serviceAreas,
+  locations,
   testimonials,
   media,
   beforeAfterPairs,
@@ -200,6 +201,27 @@ export function HomePage({
               {serviceAreas.map(area => (
                 <Link key={area.id} href={`/${area.slug}`} className="px-6 py-3 rounded-full bg-[var(--tribe-surface-alt)] hover:bg-slate-700 border border-[var(--tribe-border)] transition-colors font-medium">
                   {area.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Locations */}
+      {locations.length > 0 && (
+        <section className="py-24 bg-[var(--tribe-surface)] border-t border-[var(--tribe-border)]">
+          <div className={styles.container}>
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className={`${styles.headingBase} text-3xl md:text-4xl font-bold mb-4`}>Our Locations</h2>
+              <p className="text-lg text-[var(--tribe-text)]">Visit us at a location near you.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {locations.map(location => (
+                <Link key={location.id} href={`/locations/${location.slug}`} className="group block p-8 rounded-2xl bg-[var(--tribe-surface)] hover:shadow-xl border border-[var(--tribe-border)] transition-all">
+                  <h3 className={`${styles.headingBase} text-xl font-bold mb-3 group-hover:text-[var(--tribe-brand)] transition-colors`}>{location.area_name}</h3>
+                  {location.address && <p className="text-[var(--tribe-text)] mb-1">{location.address}</p>}
+                  {location.phone && <p className="text-[var(--tribe-brand)] font-medium">{location.phone}</p>}
                 </Link>
               ))}
             </div>

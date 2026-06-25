@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -39,12 +40,15 @@ export default async function ServiceAreasIndexPageWrapper() {
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 
+  const locations = await getLocations();
+
   const ServiceAreasIndexPageComponent = template.ServiceAreasIndexPage;
 
   return (
     <ServiceAreasIndexPageComponent
       serviceAreas={serviceAreas}
       businessInfo={businessInfo}
+      locations={locations}
       resolvedCopy={resolvedCopy}
       media={media}
       config={settings.template_config || {}}

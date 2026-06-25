@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getLocations } from "@/lib/locations";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -43,6 +44,8 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {}
 
+  const locations = await getLocations();
+
   const template = await loadTemplate(settings.active_template);
   const BlogIndexPageComponent = template.BlogIndexPage;
 
@@ -50,6 +53,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
     <BlogIndexPageComponent
       posts={posts}
       businessInfo={businessInfo}
+      locations={locations}
       currentPage={page}
       totalPages={totalPages}
       media={media}
