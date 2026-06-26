@@ -62,6 +62,7 @@ export interface ServiceArea {
   noindex?: boolean
   geo_latitude?: string
   geo_longitude?: string
+  neighborhoods?: string[] | null
   updated?: string
 }
 
