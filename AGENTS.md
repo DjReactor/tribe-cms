@@ -4,7 +4,7 @@ Parent: `../AGENTS.md`
 
 ## Purpose
 
-The per-client product: a public marketing website plus a Business-Owner (BO) dashboard. This is the artifact deployed once per client instance. Next.js 16 (App Router, Turbopack) / React 19 / PocketBase backend / Tailwind 4, with BlockNote rich-text, Mantine, and react-hook-form + zod. Version 0.3.6.
+The per-client product: a public marketing website plus a Business-Owner (BO) dashboard. This is the artifact deployed once per client instance. Next.js 16 (App Router, Turbopack) / React 19 / PocketBase backend / Tailwind 4, with BlockNote rich-text, Mantine, framer-motion, and react-hook-form + zod. Version 0.3.7.
 
 ## Ownership
 
