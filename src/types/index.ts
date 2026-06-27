@@ -9,6 +9,7 @@ export interface BusinessInfo {
   id: string
   business_name: string
   tagline: string
+  logo_url: string
   phone: string
   email: string
   address: string

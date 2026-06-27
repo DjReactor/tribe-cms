@@ -15,6 +15,7 @@ const businessInfoSchema = z.object({
   zip: z.string().min(1, 'ZIP code is required'),
   business_type: z.string().min(1, 'Business type is required'),
   tagline: z.string().optional(),
+  logo_url: z.string().optional(),
   short_description: z.string().max(300, 'Description max 300 chars').optional(),
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),

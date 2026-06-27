@@ -120,7 +120,13 @@ export function buildBlogPostingSchema(post: BlogPost, businessInfo: BusinessInf
     },
     "publisher": {
       "@type": "Organization",
-      "name": businessInfo.business_name
+      "name": businessInfo.business_name,
+      ...(businessInfo.logo_url ? {
+        "logo": {
+          "@type": "ImageObject",
+          "url": businessInfo.logo_url
+        }
+      } : {})
     }
   };
 

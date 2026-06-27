@@ -23,6 +23,7 @@ const schema = z.object({
   zip: z.string().min(1, 'ZIP code is required'),
   business_type: z.string().min(1, 'Business type is required'),
   tagline: z.string().optional(),
+  logo_url: z.string().optional(),
   short_description: z.string().max(300, 'Max 300 characters').optional(),
   social_facebook: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
@@ -46,6 +47,7 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
       zip: initialData?.zip || '',
       business_type: initialData?.business_type || '',
       tagline: initialData?.tagline || '',
+      logo_url: initialData?.logo_url || '',
       short_description: initialData?.short_description || '',
       social_facebook: initialData?.social_facebook || '',
       social_instagram: initialData?.social_instagram || '',
@@ -58,6 +60,7 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
   const [currentMediaField, setCurrentMediaField] = useState<string | null>(null);
   const nicheAttributes = watch('niche_attributes') || {};
+  const logoUrl = watch('logo_url') || '';
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
@@ -89,6 +92,19 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
           <Input label="Business Name" error={errors.business_name?.message} {...register('business_name')} />
           <Input label="Business Type (e.g. Plumber, HVAC)" error={errors.business_type?.message} {...register('business_type')} />
           <Input label="Tagline (Optional)" error={errors.tagline?.message} {...register('tagline')} className="md:col-span-2" />
+          <div className="flex flex-col gap-2 md:col-span-2">
+            <label className="text-sm font-medium text-slate-900">Business Logo</label>
+            <div className="flex items-center gap-4">
+              {logoUrl && <img src={logoUrl} alt="Business logo" className="h-16 w-16 object-contain rounded border bg-white p-1" />}
+              <button type="button" onClick={() => {
+                setCurrentMediaField('logo_url');
+                setMediaPickerOpen(true);
+              }} className="px-3 py-2 bg-white border shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 rounded">
+                {logoUrl ? 'Change Logo' : 'Select Logo'}
+              </button>
+              {logoUrl && <button type="button" onClick={() => setValue('logo_url', '', { shouldDirty: true })} className="px-3 py-2 text-sm text-red-600 hover:text-red-700 font-medium">Clear</button>}
+            </div>
+          </div>
           <Textarea label="Short Description (Max 300 chars)" error={errors.short_description?.message} {...register('short_description')} className="md:col-span-2" />
         </CardContent>
       </Card>
@@ -177,7 +193,9 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
         isOpen={mediaPickerOpen}
         onClose={() => setMediaPickerOpen(false)}
         onSelect={(url) => {
-          if (currentMediaField) {
+          if (currentMediaField === 'logo_url') {
+            setValue('logo_url', url, { shouldDirty: true });
+          } else if (currentMediaField) {
             setValue(`niche_attributes.${currentMediaField}` as any, url, { shouldDirty: true });
           }
         }}

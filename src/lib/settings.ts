@@ -76,6 +76,7 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
     id: 'mock',
     business_name: 'Tribe CMS Preview',
     tagline: 'Your Trusted Local Partner',
+    logo_url: '',
     phone: '(555) 123-4567',
     email: 'contact@example.com',
     address: '123 Preview St, City, ST 12345',
