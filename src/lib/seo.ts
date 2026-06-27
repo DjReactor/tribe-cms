@@ -27,6 +27,11 @@ export function buildLocalBusinessSchema(
     schema["url"] = siteUrl;
   }
 
+  if (businessInfo.logo_url) {
+    schema["logo"] = businessInfo.logo_url;
+    schema["image"] = businessInfo.logo_url;
+  }
+
   if (businessInfo.email) {
     schema["email"] = businessInfo.email;
   }
