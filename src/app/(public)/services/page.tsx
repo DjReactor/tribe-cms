@@ -5,6 +5,7 @@ import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { buildResolvedCopy } from "@/lib/template";
+import { notFound } from "next/navigation";
 import type { Service, MediaItem } from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,6 +35,8 @@ export default async function ServicesIndexPageWrapper() {
   const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
+  if (!template.ServicesIndexPage) return notFound();
+
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 

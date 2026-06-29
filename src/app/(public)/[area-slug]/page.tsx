@@ -56,6 +56,8 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   }
 
   const template = await loadTemplate(settings.active_template);
+  if (!template.ServiceAreaPage) return notFound();
+
   const copyOverrides = settings.template_config?.copyOverrides || {};
 
   // Build template-wide resolvedCopy from manifest + user overrides

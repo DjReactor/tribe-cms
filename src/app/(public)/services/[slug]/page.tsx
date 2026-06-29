@@ -68,6 +68,8 @@ export default async function ServiceDetailPageWrapper({ params }: { params: Pro
   const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
+  if (!template.ServiceDetailPage) return notFound();
+
   const ServiceDetailPageComponent = template.ServiceDetailPage;
 
   const serviceSchema = buildServiceSchema(service, businessInfo, siteUrl);

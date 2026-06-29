@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -50,6 +51,8 @@ export default async function TermsOfServicePageWrapper() {
   const locations = await getLocations();
   const projects = await getProjects();
   const template          = await loadTemplate(settings.active_template);
+  if (!template.TermsPage) return notFound();
+  
   const TermsPageComponent = template.TermsPage;
 
   return (

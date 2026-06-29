@@ -76,6 +76,8 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
   const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
+  if (!template.BlogPostPage) return notFound();
+
   const BlogPostPageComponent = template.BlogPostPage;
 
   const blogSchema = buildBlogPostingSchema(post, businessInfo, siteUrl);

@@ -206,15 +206,15 @@ export interface TemplatePack {
   Header: React.FC<HeaderProps>
   Footer: React.FC<FooterProps>
   HomePage: React.FC<HomePageProps>
-  AboutPage: React.FC<AboutPageProps>
-  ContactPage: React.FC<ContactPageProps>
-  ServicesIndexPage: React.FC<ServicesIndexProps>
-  ServiceDetailPage: React.FC<ServiceDetailProps>
-  ServiceAreaPage: React.FC<ServiceAreaProps>
-  BlogIndexPage: React.FC<BlogIndexProps>
-  BlogPostPage: React.FC<BlogPostProps>
-  PrivacyPage: React.FC<StaticPageProps>
-  TermsPage: React.FC<StaticPageProps>
+  AboutPage?: React.FC<AboutPageProps>
+  ContactPage?: React.FC<ContactPageProps>
+  ServicesIndexPage?: React.FC<ServicesIndexProps>
+  ServiceDetailPage?: React.FC<ServiceDetailProps>
+  ServiceAreaPage?: React.FC<ServiceAreaProps>
+  BlogIndexPage?: React.FC<BlogIndexProps>
+  BlogPostPage?: React.FC<BlogPostProps>
+  PrivacyPage?: React.FC<StaticPageProps>
+  TermsPage?: React.FC<StaticPageProps>
   TestimonialsPage?: React.FC<TestimonialsPageProps>
   ServiceAreasIndexPage?: React.FC<ServiceAreasIndexPageProps>
   Custom404Page?: React.FC<Custom404PageProps>

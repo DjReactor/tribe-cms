@@ -49,6 +49,8 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
   const projects = await getProjects();
 
   const template = await loadTemplate(settings.active_template);
+  if (!template.BlogIndexPage) return notFound();
+
   const BlogIndexPageComponent = template.BlogIndexPage;
 
   return (
