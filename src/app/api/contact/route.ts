@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminPocketBase } from '@/lib/pocketbase-admin';
-import { getSettings } from '@/lib/settings';
+import { dispatchEvent } from '@/lib/automation';
+import { resolveLeadSourceId } from '@/lib/lead-sources';
 
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
@@ -65,92 +66,39 @@ export async function POST(request: Request) {
 
   const pb = await getAdminPocketBase();
 
+  // `source` is now a relation to the managed lead_sources picklist — resolve
+  // the incoming value (public form always sends "website") to a row id,
+  // auto-creating + flagging on a miss so a lead is never dropped (§4.4).
+  const sourceId = await resolveLeadSourceId(pb, source);
+
   // --- Save to PocketBase ---
   let lead: any;
   try {
     lead = await pb.collection('contacts').create({
-      name:           stripHtml(name.trim()),
-      email:          email.trim(),
-      phone:          phone.trim(),
-      message:        stripHtml(message?.trim()),
-      address_street: stripHtml(address_street?.trim()),
-      address_city:   stripHtml(address_city?.trim()),
-      address_state:  stripHtml(address_state?.trim()),
-      address_zip:    stripHtml(address_zip?.trim()),
-      address_full:   stripHtml(address_full?.trim()),
-      source:         stripHtml(source) || 'website',
-      status:         'new',
+      name:             stripHtml(name.trim()),
+      email:            email.trim(),
+      phone:            phone.trim(),
+      message:          stripHtml(message?.trim()),
+      address_street:   stripHtml(address_street?.trim()),
+      address_city:     stripHtml(address_city?.trim()),
+      address_state:    stripHtml(address_state?.trim()),
+      address_zip:      stripHtml(address_zip?.trim()),
+      address_full:     stripHtml(address_full?.trim()),
+      source:           sourceId,
+      lifecycle_status: 'lead',   // new CRM lifecycle (§4.4)
+      status:           'new',    // legacy free-text — kept for one release
     });
   } catch (err) {
     console.error('[/api/contact] Failed to save contact:', err);
     return NextResponse.json({ error: 'Failed to submit. Please try again.' }, { status: 500 });
   }
 
-  // --- Fire webhook (non-blocking — never fail the user request) ---
-  fireWebhook(lead).catch((err) =>
-    console.error('[/api/contact] Webhook dispatch failed:', err)
+  // --- Emit lead.created to the automation outbox (§5.1) — non-blocking ---
+  // dispatchEvent persists to event_outbox, signs the envelope, and applies the
+  // SSRF/allowed-host guard internally; the PM2 drain worker retries failures.
+  dispatchEvent('lead.created', lead).catch((err) =>
+    console.error('[/api/contact] Event dispatch failed:', err)
   );
 
   return NextResponse.json({ success: true });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Webhook dispatcher — fires and forgets
-// ─────────────────────────────────────────────────────────────────────────────
-async function fireWebhook(lead: any): Promise<void> {
-  const settings = await getSettings();
-  const webhookUrl = settings.lead_webhook_url;
-  if (!webhookUrl) return;
-
-  try {
-    const parsed = new URL(webhookUrl);
-    if (
-      parsed.protocol !== 'https:' ||
-      parsed.hostname === 'localhost' ||
-      parsed.hostname === '127.0.0.1' ||
-      parsed.hostname === '169.254.169.254'
-    ) {
-      console.warn('Webhook URL rejected due to security policy');
-      return;
-    }
-  } catch {
-    console.warn('Webhook URL rejected: invalid URL');
-    return;
-  }
-
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-
-  const secret = settings.lead_webhook_secret;
-  if (secret) {
-    headers['Authorization'] = `Bearer ${secret}`;
-  }
-
-  const res = await fetch(webhookUrl, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      event: 'lead.created',
-      lead: {
-        id:             lead.id,
-        name:           lead.name,
-        email:          lead.email,
-        phone:          lead.phone,
-        message:        lead.message,
-        address_street: lead.address_street,
-        address_city:   lead.address_city,
-        address_state:  lead.address_state,
-        address_zip:    lead.address_zip,
-        address_full:   lead.address_full,
-        source:         lead.source,
-        status:         lead.status,
-        created:        lead.created,
-      },
-    }),
-  });
-
-  if (!res.ok) {
-    console.warn(`[fireWebhook] Webhook returned ${res.status} from ${webhookUrl}`);
-  }
 }

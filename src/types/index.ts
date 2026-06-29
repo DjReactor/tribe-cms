@@ -229,6 +229,12 @@ export interface TemplateSettings {
   reviews_enabled?: boolean
   lead_webhook_url?: string
   lead_webhook_secret?: string  // Server-side only — do not use in templates
+  /** Marketing Automation (n8n) — outbound event delivery config (§4.7) */
+  automation_webhook_url?: string
+  automation_webhook_secret?: string  // Server-side only — HMAC signing key, do not use in templates
+  automation_enabled?: boolean
+  automation_events?: Record<string, boolean>  // per-event on/off toggles
+  automation_allowed_host?: string             // SSRF allowlist host for outbound events
   template_config?: {
     imageOverrides?: Record<string, string>
     copyOverrides?: Record<string, string>   // User-saved overrides for template copy slots

@@ -43,8 +43,20 @@ pm2 start pnpm \
 
 sleep 8  # Give Next.js time to boot
 
+info "Starting outbox drain worker under PM2..."
+# Polls /api/internal/outbox/drain to deliver queued automation events (CMS → n8n).
+# Reads PORT + INTERNAL_SECRET from the env sourced above (and falls back to $BASE/.env).
+pm2 start "$BASE/scripts/drain-worker.js" \
+  --name "tribe-${SLUG}-drain" \
+  --cwd "$BASE" \
+  --log "$BASE/logs/drain.log" \
+  --time \
+  --restart-delay 5000 \
+  --max-restarts 10
+
 pm2 save
 mark_step_ok "$SLUG" "13_start_pm2"
-ok "Both PM2 processes started"
+ok "All PM2 processes started"
 info "tribe-pb-${SLUG}    → PocketBase :${PB_PORT}"
 info "tribe-${SLUG}-next  → Next.js :${NEXTJS_PORT}"
+info "tribe-${SLUG}-drain → outbox drain worker"

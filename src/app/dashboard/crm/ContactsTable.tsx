@@ -1,5 +1,6 @@
 'use client';
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { updateContactStatus, updateContactNotes, deleteContact } from './actions';
 import { useToast } from '@/components/ui/Toast';
 import { Badge } from '@/components/ui/Badge';
@@ -80,15 +81,19 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
             <tbody className="divide-y divide-slate-100">
               {contacts.map((contact) => (
                 <tr key={contact.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-slate-900">{contact.name}</td>
+                  <td className="px-6 py-4 font-medium">
+                    <Link href={`/dashboard/crm/${contact.id}`} className="text-slate-900 hover:text-blue-600 hover:underline">
+                      {contact.name}
+                    </Link>
+                  </td>
                   <td className="px-6 py-4 text-slate-500">
                     <div>{contact.email}</div>
                     <div>{contact.phone}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <Badge variant="default" className="capitalize">
-                      {contact.source?.replace('_', ' ')}
-                    </Badge>
+                    {contact.expand?.source?.label && (
+                      <Badge variant="default">{contact.expand.source.label}</Badge>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-slate-500 text-xs max-w-[180px] truncate">
                     {contact.address_full

@@ -20,6 +20,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
       notify_new_blog_post:   initialData?.notify_new_blog_post   ?? false,
       lead_webhook_url:       initialData?.lead_webhook_url       ?? '',
       lead_webhook_secret:    initialData?.lead_webhook_secret    ?? '',
+      automation_enabled:        initialData?.automation_enabled        ?? false,
+      automation_webhook_url:    initialData?.automation_webhook_url    ?? '',
+      automation_webhook_secret: initialData?.automation_webhook_secret ?? '',
+      automation_allowed_host:   initialData?.automation_allowed_host   ?? '',
       projects_enabled:       initialData?.projects_enabled       ?? false,
       locations_enabled:      initialData?.locations_enabled      ?? false,
     }
@@ -103,6 +107,52 @@ export function SettingsForm({ initialData }: { initialData: any }) {
           />
           <p className="text-xs text-slate-400">
             Leave blank to disable webhook dispatch. The secret is sent as a Bearer token in the Authorization header.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Marketing Automation (n8n)</CardTitle>
+          <CardDescription>
+            Stream CRM events (new leads, deal stage changes, completed calls) to your n8n workflows.
+            Events are signed with the secret and delivered to the webhook URL below.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Enable Automation</p>
+              <p className="text-sm text-slate-500">Emit signed CRM events to n8n. Leave off to pause all outbound events.</p>
+            </div>
+            <Toggle
+              checked={watch('automation_enabled')}
+              onChange={(e) => setValue('automation_enabled', e.target.checked)}
+            />
+          </div>
+          <Input
+            label="n8n Webhook URL"
+            value={watch('automation_webhook_url')}
+            onChange={(e) => setValue('automation_webhook_url', e.target.value)}
+            placeholder="https://your-n8n-instance.com/webhook/..."
+            type="url"
+          />
+          <Input
+            label="Signing Secret"
+            value={watch('automation_webhook_secret')}
+            onChange={(e) => setValue('automation_webhook_secret', e.target.value)}
+            placeholder="Used to sign events (X-Tribe-Signature: sha256=...)"
+            type="password"
+          />
+          <Input
+            label="Allowed Host"
+            value={watch('automation_allowed_host')}
+            onChange={(e) => setValue('automation_allowed_host', e.target.value)}
+            placeholder="e.g. your-n8n-instance.com — permits this host past the SSRF guard"
+          />
+          <p className="text-xs text-slate-400">
+            The allowed host lets the webhook URL bypass the private-network SSRF block for self-hosted n8n.
+            Only set it to a host you control.
           </p>
         </CardContent>
       </Card>

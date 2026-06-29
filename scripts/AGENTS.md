@@ -14,6 +14,7 @@ Owns the per-instance deployment pipeline executed during install and update.
 
 - `steps/` — the ordered deploy pipeline. Each stage is a pair: `step-NN-<name>.sh` (action) + `step-NN-<name>-verify.sh` (post-check). Steps 01–18: validate → ports → secrets → directories → copy-source → write-env → install-deps → build-artifact → init-pocketbase → run-migrations → seed-data → create-bo-user → start-pm2 → nginx → health-check → ssl → register → notify.
 - `steps/shared.sh` — helpers sourced by every step. `steps/init-deploy.sh` — pipeline entry/orchestrator.
+- `drain-worker.js` — per-instance outbox drain worker (plain Node, no deps; self-loads `BASE/.env`). `step-13-start-pm2.sh` starts it under PM2 as `tribe-${SLUG}-drain`; it polls `/api/internal/outbox/drain` to deliver queued automation events (CMS → n8n). Shipped via `scripts/` in `publish-release.sh` (not the repo root, so updates carry it).
 - `steps/niche-map.json` + `steps/niche-configs/` — per-niche configuration injected at deploy time.
 - `publish-release.sh` — cuts/publishes a tribe-cms release consumed by the update mechanism.
 - `seed-palettes.ts` / `migrate-colors.ts` — color-palette data seeding and migration (run via node/tsx).

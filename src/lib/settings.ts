@@ -24,6 +24,12 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
         template_config: record.template_config || {},
         lead_webhook_url:    record.lead_webhook_url    || '',
         lead_webhook_secret: record.lead_webhook_secret || '',
+        // Marketing Automation (n8n) — fall back to the legacy lead_webhook_* for one release (§4.7).
+        automation_webhook_url:    record.automation_webhook_url    || record.lead_webhook_url    || '',
+        automation_webhook_secret: record.automation_webhook_secret || record.lead_webhook_secret || '',
+        automation_enabled:        record.automation_enabled        ?? false,
+        automation_events:         record.automation_events         || {},
+        automation_allowed_host:   record.automation_allowed_host   || '',
         niche_schema: record.niche_schema || undefined,
       };
     }
@@ -48,6 +54,11 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
     template_config: {},
     lead_webhook_url:    '',
     lead_webhook_secret: '',
+    automation_webhook_url:    '',
+    automation_webhook_secret: '',
+    automation_enabled:        false,
+    automation_events:         {},
+    automation_allowed_host:   '',
     niche_schema: undefined,
   };
 });

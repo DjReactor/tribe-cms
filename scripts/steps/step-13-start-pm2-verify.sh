@@ -13,9 +13,11 @@ ERRORS=()
 # Check PM2 process statuses
 PB_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-pb-${SLUG}" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
 NX_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-${SLUG}-next" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
+DR_STATUS=$(pm2 jlist 2>/dev/null | jq -r --arg n "tribe-${SLUG}-drain" '.[] | select(.name==$n) | .pm2_env.status // "missing"')
 
 [ "$PB_STATUS" != "online" ] && ERRORS+=("tribe-pb-${SLUG} PM2 status: $PB_STATUS (expected: online)")
 [ "$NX_STATUS" != "online" ] && ERRORS+=("tribe-${SLUG}-next PM2 status: $NX_STATUS (expected: online)")
+[ "$DR_STATUS" != "online" ] && ERRORS+=("tribe-${SLUG}-drain PM2 status: $DR_STATUS (expected: online)")
 
 # Check ports are bound
 ss -tlnp 2>/dev/null | grep -q ":${PB_PORT} " || ERRORS+=("PocketBase port $PB_PORT is not bound")

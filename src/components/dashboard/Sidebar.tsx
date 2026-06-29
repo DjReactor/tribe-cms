@@ -5,7 +5,8 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Building2, Wrench, MapPin,
   FileText, LineChart, Settings as SettingsIcon,
-  MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images, MapPinned
+  MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images, MapPinned,
+  Handshake, Tag, BarChart3, Inbox
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -39,6 +40,8 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   }
   if (settings?.crm_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'CRM Contacts', href: '/dashboard/crm', icon: MessageSquare });
+    modules.push({ name: 'Deals', href: '/dashboard/deals', icon: Handshake });
+    modules.push({ name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 });
   }
   if (settings?.retell_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'AI Call Logs', href: '/dashboard/call-logs', icon: Phone });
@@ -112,8 +115,10 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
               href="/dashboard/settings"
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
-                pathname.startsWith('/dashboard/settings') && !pathname.startsWith('/dashboard/settings/agency')
-                  ? 'bg-blue-600/10 text-blue-400' 
+                pathname.startsWith('/dashboard/settings')
+                  && !pathname.startsWith('/dashboard/settings/agency')
+                  && !pathname.startsWith('/dashboard/settings/lead-sources')
+                  ? 'bg-blue-600/10 text-blue-400'
                   : 'hover:bg-slate-800/50 hover:text-white'
               )}
             >
@@ -132,6 +137,34 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
               <Key className={cn('h-4 w-4 shrink-0', pathname.startsWith('/dashboard/security') ? 'text-blue-400' : 'text-slate-400')} />
               Security
             </Link>
+            {userRole === 'agency_admin' && (
+              <Link
+                href="/dashboard/settings/lead-sources"
+                className={cn(
+                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                  pathname.startsWith('/dashboard/settings/lead-sources')
+                    ? 'bg-blue-600/10 text-blue-400'
+                    : 'hover:bg-slate-800/50 hover:text-white'
+                )}
+              >
+                <Tag className={cn('h-4 w-4 shrink-0', pathname.startsWith('/dashboard/settings/lead-sources') ? 'text-blue-400' : 'text-slate-400')} />
+                Lead Sources
+              </Link>
+            )}
+            {userRole === 'agency_admin' && (
+              <Link
+                href="/dashboard/outbox"
+                className={cn(
+                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                  pathname.startsWith('/dashboard/outbox')
+                    ? 'bg-blue-600/10 text-blue-400'
+                    : 'hover:bg-slate-800/50 hover:text-white'
+                )}
+              >
+                <Inbox className={cn('h-4 w-4 shrink-0', pathname.startsWith('/dashboard/outbox') ? 'text-blue-400' : 'text-slate-400')} />
+                Event Outbox
+              </Link>
+            )}
             {userRole === 'agency_admin' && (
               <Link
                 href="/dashboard/settings/agency"
