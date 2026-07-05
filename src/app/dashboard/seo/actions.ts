@@ -1,6 +1,7 @@
 'use server';
 
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
@@ -9,14 +10,17 @@ export async function getSeoSettings() {
   // Assume singleton for SEO settings
   return pb.collection('seo_settings').getFirstListItem('').catch(async () => {
     // If not exists, create empty one (should be handled by seed, but safe fallback)
-    return pb.collection('seo_settings').create({});
+    const admin = await getAdminPocketBase();
+    return admin.collection('seo_settings').create({});
   });
 }
 
 export async function updateSeoSettings(id: string, data: any) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    // Write via the admin client: these collections have superuser-only write
+    // rules, and the BO dashboard session is a regular `users` record.
+    const pb = await getAdminPocketBase();
     await pb.collection('seo_settings').update(id, data);
     revalidatePath('/', 'layout');
     return { success: true };
@@ -33,7 +37,7 @@ export async function getRedirects() {
 export async function createRedirect(data: any) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('redirects').create({ ...data, hit_count: 0 });
     revalidatePath('/dashboard/seo/redirects');
     return { success: true };
@@ -45,7 +49,7 @@ export async function createRedirect(data: any) {
 export async function deleteRedirect(id: string) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('redirects').delete(id);
     revalidatePath('/dashboard/seo/redirects');
     return { success: true };
@@ -62,7 +66,7 @@ export async function get404Logs() {
 export async function resolve404Log(id: string) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('seo_404_log').update(id, { resolved: true });
     revalidatePath('/dashboard/seo/404s');
     return { success: true };
