@@ -6,7 +6,7 @@ export default async function SeoOverviewPage() {
   const redirects = await getRedirects();
   const logs = await get404Logs();
   
-  const activeRedirects = redirects.filter((r: any) => r.is_active).length;
+  const activeRedirects = redirects.length;
   const unresolved404s = logs.filter((l: any) => !l.resolved).length;
   
   // Basic health score logic

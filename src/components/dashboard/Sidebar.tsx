@@ -47,7 +47,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
     modules.push({ name: 'AI Call Logs', href: '/dashboard/call-logs', icon: Phone });
   }
   if (settings?.reviews_enabled || userRole === 'agency_admin') {
-    modules.push({ name: 'Reviews', href: '/dashboard/reviews', icon: Star });
+    modules.push({ name: 'Reviews', href: '/dashboard/testimonials', icon: Star });
   }
 
   return (

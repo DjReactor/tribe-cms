@@ -19,35 +19,32 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Public Route 301/302 Redirect Manager
-  // Note: To truly intercept DB redirects on edge, we should make a lightweight fetch to our own API
-  // or use Next.js next.config.js redirects. Since we can't reliably query SQLite PB from Edge Middleware,
-  // we let the layouts/pages handle 404s, OR we could fetch a fast KV store if available.
-  // We'll skip complex DB fetching in middleware to ensure fast response times.
-
-  // 3. Template Preview Mode
-  // If `tribe_preview_template` cookie is present, we could append it as a query param or header
-  // so the layout/template-loader can pick it up.
-  const previewTemplate = request.cookies.get('tribe_preview_template');
-  if (previewTemplate && !pathname.startsWith('/dashboard') && !pathname.startsWith('/api')) {
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set('x-preview-template', previewTemplate.value);
-    
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
-
-  // 4. PocketBase Image Proxy
+  // 2. PocketBase Image Proxy
   if (pathname.startsWith('/api/files/')) {
     const pbUrl = process.env.PB_URL || 'http://127.0.0.1:8090';
     const destinationUrl = `${pbUrl}${pathname}${url.search}`;
     return NextResponse.rewrite(new URL(destinationUrl));
   }
 
-  return NextResponse.next();
+  // Edge middleware can't query SQLite PocketBase, so DB-driven redirects and
+  // 404 logging happen in not-found.tsx (server runtime). It has no access to
+  // the request URL on its own, so we forward the pathname as a header.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-pathname', pathname);
+
+  // 3. Template Preview Mode
+  // If `tribe_preview_template` cookie is present, pass it as a header
+  // so the layout/template-loader can pick it up.
+  const previewTemplate = request.cookies.get('tribe_preview_template');
+  if (previewTemplate && !pathname.startsWith('/dashboard') && !pathname.startsWith('/api')) {
+    requestHeaders.set('x-preview-template', previewTemplate.value);
+  }
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {
