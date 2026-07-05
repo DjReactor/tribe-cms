@@ -2,6 +2,7 @@
 
 import { getTemplateManifests } from '@/lib/template-registry';
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import type { TemplateRegistryManifest } from '@/lib/template-registry';
@@ -39,7 +40,10 @@ export async function activateTemplate(
         template_palette_overrides: {},
       });
     } else {
-      await pb.collection('settings').create({
+      // settings createRule is superuser-only (updates are authed-user); the
+      // singleton normally comes from seed, so creation needs the admin client.
+      const admin = await getAdminPocketBase();
+      await admin.collection('settings').create({
         active_template: templateId,
         palette_source: 'template',
         template_palette_overrides: {},
@@ -77,7 +81,8 @@ export async function saveImageOverrides(overrides: Record<string, string>) {
         }
       });
     } else {
-      await pb.collection('settings').create({
+      const admin = await getAdminPocketBase();
+      await admin.collection('settings').create({
         active_template: 'modern',
         template_config: { imageOverrides: overrides }
       });

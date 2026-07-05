@@ -1,6 +1,7 @@
 'use server';
 
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { requireAuth } from '@/lib/auth';
 import { applyContactLifecycleChange } from '@/lib/crm-writes';
 import { dispatchEvent } from '@/lib/automation';
@@ -71,7 +72,9 @@ export async function getContactMessages(contactId: string) {
 export async function updateContactStatus(id: string, status: string) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    // contacts has superuser-only write rules, so mutations go through the
+    // admin client after the auth gate (same pattern as dashboard/seo).
+    const pb = await getAdminPocketBase();
     await pb.collection('contacts').update(id, { status });
     revalidatePath('/dashboard/crm');
     return { success: true };
@@ -83,7 +86,7 @@ export async function updateContactStatus(id: string, status: string) {
 export async function updateContactNotes(id: string, notes: string) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('contacts').update(id, { notes });
     revalidatePath('/dashboard/crm');
     return { success: true };
@@ -104,7 +107,7 @@ export async function setContactLifecycle(id: string, lifecycle_status: string) 
     if (!LIFECYCLE.includes(lifecycle_status)) {
       return { success: false, error: 'Invalid lifecycle status.' };
     }
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await applyContactLifecycleChange(pb, id, lifecycle_status, `user:${user.id}`);
 
     revalidatePath('/dashboard/crm');
@@ -118,7 +121,7 @@ export async function setContactLifecycle(id: string, lifecycle_status: string) 
 export async function updateContactTags(id: string, tags: string[]) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('contacts').update(id, { tags });
     revalidatePath(`/dashboard/crm/${id}`);
     return { success: true };
@@ -157,7 +160,7 @@ export async function requestMessageSend(input: {
 export async function deleteContact(id: string) {
   try {
     await requireAuth();
-    const pb = await getPocketBaseClient();
+    const pb = await getAdminPocketBase();
     await pb.collection('contacts').delete(id);
     revalidatePath('/dashboard/crm');
     return { success: true };

@@ -2,13 +2,16 @@ import type PocketBase from 'pocketbase';
 import { dispatchEvent } from '@/lib/automation';
 
 /**
- * Shared CRM mutation helpers used by BOTH the dashboard server actions
- * (`getPocketBaseClient`, BO-scoped) and the inbound n8n write-back API
- * (`getAdminPocketBase`). Centralizing the activity-logging + event-emission
- * side effects keeps the §5.2 contract — "a stage/lifecycle change writes a
- * transition activity and emits the matching event" — identical across entry
- * points. The CALLER owns auth, input validation, and revalidation; these own
- * the DB write plus its side effects. `actor` is "user:<id>" | "n8n" | "system".
+ * Shared CRM mutation helpers used by BOTH the dashboard server actions and
+ * the inbound n8n write-back API. Centralizing the activity-logging +
+ * event-emission side effects keeps the §5.2 contract — "a stage/lifecycle
+ * change writes a transition activity and emits the matching event" —
+ * identical across entry points. The CALLER owns auth, input validation, and
+ * revalidation; these own the DB write plus its side effects. Callers must
+ * pass a client privileged for the target collection: `contacts` has
+ * superuser-only write rules, so contact-touching helpers need
+ * `getAdminPocketBase`; `deals`/`activities` accept any authed client.
+ * `actor` is "user:<id>" | "n8n" | "system".
  */
 
 type Pb = PocketBase;
