@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { notFound } from "next/navigation";
 import type { ServiceArea, Service, Testimonial, MediaItem } from "@/types";
@@ -37,6 +38,7 @@ export default async function AboutPageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.AboutPage) return notFound();
@@ -52,6 +54,10 @@ export default async function AboutPageWrapper() {
       serviceAreas={serviceAreas}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       services={services}
       testimonials={testimonials}
       media={media}

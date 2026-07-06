@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,6 +51,7 @@ export default async function PrivacyPolicyPageWrapper() {
 
   const locations            = await getLocations();
   const projects             = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
   const template             = await loadTemplate(settings.active_template);
   if (!template.PrivacyPage) return notFound();
   
@@ -60,6 +62,10 @@ export default async function PrivacyPolicyPageWrapper() {
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       pageContent={content}
       config={settings.template_config || {}}
     />

@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { buildBlogPostingSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -74,6 +75,7 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.BlogPostPage) return notFound();
@@ -105,6 +107,10 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
         businessInfo={businessInfo}
         locations={locations}
         projects={projects}
+        types={types}
+        brands={brands}
+        certifications={certifications}
+        awards={awards}
         relatedPosts={relatedPosts}
         media={media}
         config={settings.template_config || {}}

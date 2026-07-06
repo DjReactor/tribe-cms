@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import type { Service, ServiceArea, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
 
@@ -51,6 +52,7 @@ export default async function HomePageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   const copyOverrides = settings.template_config?.copyOverrides || {};
@@ -66,6 +68,10 @@ export default async function HomePageWrapper() {
       serviceAreas={serviceAreas}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       testimonials={testimonials}
       media={media}
       beforeAfterPairs={beforeAfterPairs}

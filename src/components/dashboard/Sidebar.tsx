@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Building2, Wrench, MapPin,
   FileText, LineChart, Settings as SettingsIcon,
   MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images, MapPinned,
-  Handshake, Tag, BarChart3, Inbox
+  Handshake, Tag, BarChart3, Inbox, Shapes, BadgeCheck, ShieldCheck, Trophy
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -37,6 +37,18 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   }
   if (settings?.locations_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'Locations', href: '/dashboard/locations', icon: MapPinned });
+  }
+  if (settings?.types_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Types', href: '/dashboard/types', icon: Shapes });
+  }
+  if (settings?.brands_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Brands', href: '/dashboard/brands', icon: BadgeCheck });
+  }
+  if (settings?.certifications_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Certifications', href: '/dashboard/certifications', icon: ShieldCheck });
+  }
+  if (settings?.awards_enabled || userRole === 'agency_admin') {
+    modules.push({ name: 'Awards', href: '/dashboard/awards', icon: Trophy });
   }
   if (settings?.crm_enabled || userRole === 'agency_admin') {
     modules.push({ name: 'CRM Contacts', href: '/dashboard/crm', icon: MessageSquare });

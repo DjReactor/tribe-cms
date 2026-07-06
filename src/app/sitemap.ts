@@ -95,6 +95,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
+    // Catalog datatypes — Types / Brands / Certifications / Awards & Nominations.
+    // Same gating as projects/locations: master switch + active records.
+    const catalogSections = [
+      { collection: 'types', flag: settings.types_enabled },
+      { collection: 'brands', flag: settings.brands_enabled },
+      { collection: 'certifications', flag: settings.certifications_enabled },
+      { collection: 'awards', flag: settings.awards_enabled },
+    ];
+    for (const { collection, flag } of catalogSections) {
+      if (!flag) continue;
+      const activeItems = await pb.collection(collection).getFullList({
+        filter: 'is_active = true',
+        fields: 'slug,noindex,updated',
+      }).catch(() => []);
+
+      if (activeItems.length > 0) {
+        routes.push({
+          url: `${baseUrl}/${collection}`,
+          changeFrequency: 'monthly',
+          priority: 0.6,
+        });
+        activeItems.forEach((item: any) => {
+          if (!item.noindex) {
+            routes.push({
+              url: `${baseUrl}/${collection}/${item.slug}`,
+              lastModified: new Date(item.updated),
+              changeFrequency: 'monthly',
+              priority: 0.6,
+            });
+          }
+        });
+      }
+    }
+
     if (settings.blog_enabled && !seoSettings?.noindex_blog) {
       routes.push({
         url: `${baseUrl}/blog`,

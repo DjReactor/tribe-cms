@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -47,6 +48,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.BlogIndexPage) return notFound();
@@ -59,6 +61,10 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       currentPage={page}
       totalPages={totalPages}
       media={media}

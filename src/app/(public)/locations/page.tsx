@@ -3,6 +3,7 @@ import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getProjects } from '@/lib/projects';
+import { getCatalog } from "@/lib/catalog";
 import { notFound } from 'next/navigation';
 import type { Location } from '@/types';
 
@@ -52,6 +53,8 @@ export default async function LocationsIndexPageWrapper() {
 
   const projects = await getProjects();
 
+  const { types, brands, certifications, awards } = await getCatalog();
+
   const template = await loadTemplate(settings.active_template);
 
   const content = template.LocationsIndexPage ? (
@@ -59,6 +62,10 @@ export default async function LocationsIndexPageWrapper() {
       locations={locations}
       businessInfo={businessInfo}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       config={settings.template_config || {}}
     />
   ) : (

@@ -3,6 +3,7 @@ import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getProjects } from '@/lib/projects';
+import { getCatalog } from "@/lib/catalog";
 import { notFound } from 'next/navigation';
 import type { Location } from '@/types';
 
@@ -65,6 +66,8 @@ export default async function LocationDetailPageWrapper({ params }: { params: Pr
 
   const projects = await getProjects();
 
+  const { types, brands, certifications, awards } = await getCatalog();
+
   const template = await loadTemplate(settings.active_template);
 
   const content = template.LocationDetailPage ? (
@@ -72,6 +75,10 @@ export default async function LocationDetailPageWrapper({ params }: { params: Pr
       location={location}
       businessInfo={businessInfo}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       relatedLocations={relatedLocations}
       config={settings.template_config || {}}
     />

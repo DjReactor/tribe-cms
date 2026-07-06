@@ -26,6 +26,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
       automation_allowed_host:   initialData?.automation_allowed_host   ?? '',
       projects_enabled:       initialData?.projects_enabled       ?? false,
       locations_enabled:      initialData?.locations_enabled      ?? false,
+      types_enabled:          initialData?.types_enabled          ?? false,
+      brands_enabled:         initialData?.brands_enabled         ?? false,
+      certifications_enabled: initialData?.certifications_enabled ?? false,
+      awards_enabled:         initialData?.awards_enabled         ?? false,
     }
   });
 
@@ -201,6 +205,50 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             <Toggle
               checked={watch('locations_enabled')}
               onChange={(e) => setValue('locations_enabled', e.target.checked)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Types</p>
+              <p className="text-sm text-slate-500">Showcase the types of work or offerings with their own pages.</p>
+            </div>
+            <Toggle
+              checked={watch('types_enabled')}
+              onChange={(e) => setValue('types_enabled', e.target.checked)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Brands</p>
+              <p className="text-sm text-slate-500">Showcase the brands you work with, carry, or service.</p>
+            </div>
+            <Toggle
+              checked={watch('brands_enabled')}
+              onChange={(e) => setValue('brands_enabled', e.target.checked)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Certifications</p>
+              <p className="text-sm text-slate-500">Showcase certifications, partnerships, and affiliations.</p>
+            </div>
+            <Toggle
+              checked={watch('certifications_enabled')}
+              onChange={(e) => setValue('certifications_enabled', e.target.checked)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+            <div>
+              <p className="font-medium text-slate-900">Awards &amp; Nominations</p>
+              <p className="text-sm text-slate-500">Showcase awards and nominations your business has earned.</p>
+            </div>
+            <Toggle
+              checked={watch('awards_enabled')}
+              onChange={(e) => setValue('awards_enabled', e.target.checked)}
             />
           </div>
         </CardContent>

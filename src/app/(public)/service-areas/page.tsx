@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import type { ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -43,6 +44,7 @@ export default async function ServiceAreasIndexPageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const ServiceAreasIndexPageComponent = template.ServiceAreasIndexPage;
 
@@ -52,6 +54,10 @@ export default async function ServiceAreasIndexPageWrapper() {
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       resolvedCopy={resolvedCopy}
       media={media}
       config={settings.template_config || {}}

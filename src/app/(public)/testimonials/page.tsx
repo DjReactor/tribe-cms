@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { notFound } from "next/navigation";
 import type { Testimonial, MediaItem } from "@/types";
 
@@ -37,6 +38,7 @@ export default async function TestimonialsPageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const TestimonialsPageComponent = template.TestimonialsPage;
   const config = settings.template_config || {};
@@ -47,6 +49,10 @@ export default async function TestimonialsPageWrapper() {
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       media={media}
       config={config}
     />

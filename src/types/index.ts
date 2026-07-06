@@ -144,6 +144,32 @@ export interface Location {
   updated?: string
 }
 
+/**
+ * Shared shape of the four catalog datatypes — Types, Brands, Certifications,
+ * Awards & Nominations. One collection each (`types`, `brands`,
+ * `certifications`, `awards`), identical schema, each gated by its own
+ * settings master switch (`types_enabled`, `brands_enabled`, …).
+ */
+export interface CatalogItem {
+  id: string
+  name: string
+  slug: string
+  description: string
+  details: unknown[] | null   // BlockNote JSON (array of blocks)
+  image_url: string           // Full URL from the media library; may be empty
+  is_active: boolean
+  sort_order: number
+  seo_title: string
+  seo_description: string
+  noindex?: boolean
+  updated?: string
+}
+
+export type TypeItem = CatalogItem
+export type Brand = CatalogItem
+export type Certification = CatalogItem
+export type Award = CatalogItem
+
 export interface BlogPost {
   id: string
   title: string
@@ -216,6 +242,10 @@ export interface TemplateSettings {
   blog_enabled: boolean
   projects_enabled?: boolean
   locations_enabled?: boolean
+  types_enabled?: boolean
+  brands_enabled?: boolean
+  certifications_enabled?: boolean
+  awards_enabled?: boolean
   service_areas_index_enabled?: boolean
   show_powered_by: boolean
   active_template: string

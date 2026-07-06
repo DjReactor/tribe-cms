@@ -4,6 +4,7 @@ import { getSettings, getBusinessInfo } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
+import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { notFound } from "next/navigation";
 import type { Service, MediaItem } from "@/types";
@@ -33,6 +34,7 @@ export default async function ServicesIndexPageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
+  const { types, brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.ServicesIndexPage) return notFound();
@@ -48,6 +50,10 @@ export default async function ServicesIndexPageWrapper() {
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       media={media}
       resolvedCopy={resolvedCopy}
       config={settings.template_config || {}}

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import type { Project, Service } from '@/types';
 import { mapProject } from '@/lib/projects';
 import { getLocations } from '@/lib/locations';
+import { getCatalog } from "@/lib/catalog";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -38,6 +39,8 @@ export default async function ProjectsIndexPageWrapper() {
 
   const locations = await getLocations();
 
+  const { types, brands, certifications, awards } = await getCatalog();
+
   const template = await loadTemplate(settings.active_template);
 
   if (!template.ProjectsIndexPage) {
@@ -65,6 +68,10 @@ export default async function ProjectsIndexPageWrapper() {
   return (
     <template.ProjectsIndexPage
       projects={projects}
+      types={types}
+      brands={brands}
+      certifications={certifications}
+      awards={awards}
       businessInfo={businessInfo}
       locations={locations}
       resolvedCopy={{}}
