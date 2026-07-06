@@ -47,6 +47,23 @@ export function ContactForm({
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // SMS-consent disclosure (§12.3) — fetched from the server so the displayed
+  // text is byte-identical to what /api/contact records as consent proof.
+  // Fail-safe: if the text can't load, the checkbox is not rendered and no
+  // consent is claimed.
+  const [consentText, setConsentText] = useState('');
+  const [smsConsent, setSmsConsent] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/contact')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.consent_text) setConsentText(data.consent_text);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
   // Address mode — 'google' if API key is present, else always 'manual'
   const hasGoogleKey = Boolean(process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY);
   const [addressMode, setAddressMode] = useState<'google' | 'manual'>(
@@ -146,6 +163,9 @@ export function ContactForm({
       address_state:  addrState,
       address_zip:    addrZip,
       address_full:   addrFull,
+      // Consent is only claimable when the disclosure was actually shown (§12.3).
+      sms_consent:    Boolean(consentText && smsConsent),
+      page_url:       typeof window !== 'undefined' ? window.location.href : '',
     };
 
     try {
@@ -278,6 +298,21 @@ export function ContactForm({
           </div>
         )}
       </div>
+
+      {/* SMS consent (§12.3) — unchecked by default, optional, TCPA disclosure */}
+      {consentText && (
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={smsConsent}
+            onChange={(e) => setSmsConsent(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--tribe-input-border)] accent-[var(--tribe-brand)]"
+          />
+          <span className="text-xs leading-relaxed text-[var(--tribe-text-muted)]">
+            {consentText}
+          </span>
+        </label>
+      )}
 
       {/* Error message */}
       {status === 'error' && (

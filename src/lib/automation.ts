@@ -24,7 +24,13 @@ type AutomationConfig = {
   allowedHost: string;
   enabled: boolean;
   events: Record<string, boolean>;
+  customHeaders: Record<string, string>;
+  context: Record<string, unknown>;
 };
+
+/** Header names a custom entry may never override (§12.8). */
+const PROTECTED_HEADERS = ['content-type'];
+const PROTECTED_HEADER_PREFIX = 'x-tribe-';
 
 type Pb = Awaited<ReturnType<typeof getAdminPocketBase>>;
 
@@ -46,10 +52,29 @@ async function getAutomationConfig(pb: Pb): Promise<AutomationConfig | null> {
     const enabled = newUrl ? !!s.automation_enabled : !!url;
     const events =
       s.automation_events && typeof s.automation_events === 'object' ? s.automation_events : {};
-    return { url, secret, allowedHost, enabled, events };
+    const customHeaders =
+      s.automation_custom_headers && typeof s.automation_custom_headers === 'object'
+        ? s.automation_custom_headers
+        : {};
+    const context =
+      s.automation_context && typeof s.automation_context === 'object' ? s.automation_context : {};
+    return { url, secret, allowedHost, enabled, events, customHeaders, context };
   } catch {
     return null;
   }
+}
+
+/**
+ * §12.8 envelope context, composed AT SEND TIME (config edits apply to queued
+ * retries): the business snapshot from `business_info` under `context.business`,
+ * with the free-form per-instance `automation_context` merged on top (shallow;
+ * client-specific keys win, a custom `business` key replaces the snapshot).
+ * Data only — client-specific LOGIC stays in n8n.
+ */
+async function buildEnvelopeContext(pb: Pb, cfg: AutomationConfig): Promise<Record<string, unknown>> {
+  const { getBusinessSnapshot } = await import('@/lib/notifications');
+  const business = await getBusinessSnapshot(pb);
+  return { business, ...cfg.context };
 }
 
 /** True when this event should be delivered given the current config. */
@@ -134,6 +159,33 @@ export async function deliverOne(
   }
   if (row.status === 'delivered' || row.status === 'dead') return 'skipped';
 
+  // §12.4 — notification rows deliver through the provider adapters, not the
+  // webhook lane. They ignore the automation (n8n) config entirely.
+  if (row.kind === 'notification') {
+    try {
+      await pb.collection('event_outbox').update(rowId, { status: 'delivering' });
+    } catch {
+      return 'skipped';
+    }
+    const { deliverNotificationRow } = await import('@/lib/notifications');
+    const result = await deliverNotificationRow(pb, row);
+    if (result.ok) {
+      await pb
+        .collection('event_outbox')
+        .update(rowId, { status: 'delivered', delivered_at: new Date().toISOString(), last_error: '' })
+        .catch(() => {});
+      return 'delivered';
+    }
+    if (result.permanent) {
+      await pb
+        .collection('event_outbox')
+        .update(rowId, { status: 'dead', last_error: result.error })
+        .catch(() => {});
+      return 'dead';
+    }
+    return backoff(pb, row, result.error);
+  }
+
   const cfg = cfgIn ?? (await getAutomationConfig(pb));
 
   // Terminal no-op when there is nothing/nowhere to deliver to.
@@ -159,16 +211,23 @@ export async function deliverOne(
     return 'skipped';
   }
 
-  // §5.1 envelope: inject the idempotency_key (the outbox row id) into the body
-  // at send time — it mirrors the X-Tribe-Delivery header and is what consumers
-  // dedupe on. Stored separately as the row id, so it isn't kept in the payload.
-  const rawBody = JSON.stringify({ ...row.payload, idempotency_key: rowId });
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    'X-Tribe-Event': row.event,
-    'X-Tribe-Instance': process.env.INSTANCE_SLUG || 'unknown',
-    'X-Tribe-Delivery': rowId,
-  };
+  // §5.1 envelope: inject the idempotency_key (the outbox row id) and the §12.8
+  // `context` block into the body at send time — the key mirrors X-Tribe-Delivery
+  // and is what consumers dedupe on; context is composed here so config edits
+  // apply to queued retries.
+  const context = await buildEnvelopeContext(pb, cfg);
+  const rawBody = JSON.stringify({ ...row.payload, idempotency_key: rowId, context });
+  const headers: Record<string, string> = {};
+  // §12.8 custom headers first — protected names cannot be overridden.
+  for (const [name, value] of Object.entries(cfg.customHeaders)) {
+    const lower = name.toLowerCase();
+    if (PROTECTED_HEADERS.includes(lower) || lower.startsWith(PROTECTED_HEADER_PREFIX)) continue;
+    if (typeof value === 'string') headers[name] = value;
+  }
+  headers['Content-Type'] = 'application/json';
+  headers['X-Tribe-Event'] = row.event;
+  headers['X-Tribe-Instance'] = process.env.INSTANCE_SLUG || 'unknown';
+  headers['X-Tribe-Delivery'] = rowId;
   if (cfg.secret) {
     const sig = crypto.createHmac('sha256', cfg.secret).update(rawBody).digest('hex');
     headers['X-Tribe-Signature'] = `sha256=${sig}`;
