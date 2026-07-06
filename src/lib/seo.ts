@@ -61,8 +61,10 @@ export function buildLocalBusinessSchema(
       schema["openingHoursSpecification"] = enabledHours.map(h => ({
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": h.day.charAt(0).toUpperCase() + h.day.slice(1),
-        "opens": h.open,
-        "closes": h.close
+        // schema.org Time requires ISO-8601 24-hour HH:MM; "open 24 hours" is
+        // conventionally expressed as 00:00–23:59.
+        "opens": h.open24 ? "00:00" : h.open,
+        "closes": h.open24 ? "23:59" : h.close
       }));
     }
   }

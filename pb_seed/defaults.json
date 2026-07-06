@@ -1,13 +1,13 @@
 {
   "business_info": {
     "hours": [
-      {"day": "monday", "enabled": true, "open": "08:00 am", "close": "06:00 pm"},
-      {"day": "tuesday", "enabled": true, "open": "08:00 am", "close": "06:00 pm"},
-      {"day": "wednesday", "enabled": true, "open": "08:00 am", "close": "06:00 pm"},
-      {"day": "thursday", "enabled": true, "open": "08:00 am", "close": "06:00 pm"},
-      {"day": "friday", "enabled": true, "open": "08:00 am", "close": "06:00 pm"},
-      {"day": "saturday", "enabled": false, "open": "09:00 am", "close": "04:00 pm"},
-      {"day": "sunday", "enabled": false, "open": "09:00 am", "close": "01:00 pm"}
+      {"day": "monday", "enabled": true, "open": "08:00", "close": "18:00", "open24": false},
+      {"day": "tuesday", "enabled": true, "open": "08:00", "close": "18:00", "open24": false},
+      {"day": "wednesday", "enabled": true, "open": "08:00", "close": "18:00", "open24": false},
+      {"day": "thursday", "enabled": true, "open": "08:00", "close": "18:00", "open24": false},
+      {"day": "friday", "enabled": true, "open": "08:00", "close": "18:00", "open24": false},
+      {"day": "saturday", "enabled": false, "open": "09:00", "close": "16:00", "open24": false},
+      {"day": "sunday", "enabled": false, "open": "09:00", "close": "13:00", "open24": false}
     ],
     "emergency_service": "No",
     "service_radius": 25

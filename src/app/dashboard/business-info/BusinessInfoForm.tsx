@@ -12,6 +12,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { useToast } from '@/components/ui/Toast';
 import { Toggle } from '@/components/ui/Toggle';
 import { MediaPickerModal } from '@/components/MediaPickerModal';
+import type { BusinessHour } from '@/types';
 
 const schema = z.object({
   business_name: z.string().min(1, 'Business name is required'),
@@ -32,6 +33,48 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
+
+const DAYS: BusinessHour['day'][] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const DAY_LABELS: Record<BusinessHour['day'], string> = {
+  monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday', thursday: 'Thursday',
+  friday: 'Friday', saturday: 'Saturday', sunday: 'Sunday',
+};
+type HoursStatus = 'open' | 'closed' | 'open24';
+
+// Normalize a stored time to canonical 24-hour "HH:MM" so the <input type="time">
+// accepts it even for legacy records still holding "08:00 am".
+function to24(value: string): string {
+  const raw = (value || '').trim().toLowerCase();
+  if (!raw) return '';
+  const iso = /^(\d{1,2}):(\d{2})$/.exec(raw);
+  if (iso) return `${String(Math.min(23, parseInt(iso[1], 10))).padStart(2, '0')}:${iso[2]}`;
+  const ampm = /^(\d{1,2}):(\d{2})\s*(am|pm)$/.exec(raw);
+  if (!ampm) return '';
+  let hour = parseInt(ampm[1], 10) % 12;
+  if (ampm[3] === 'pm') hour += 12;
+  return `${String(hour).padStart(2, '0')}:${ampm[2]}`;
+}
+
+// Build a stable, ordered 7-day array from whatever (possibly partial/legacy) data exists.
+function buildHours(existing: BusinessHour[] | undefined): BusinessHour[] {
+  const byDay = new Map((existing || []).map((h) => [h.day, h]));
+  return DAYS.map((day) => {
+    const h = byDay.get(day);
+    return {
+      day,
+      enabled: h?.enabled ?? (day !== 'saturday' && day !== 'sunday'),
+      open: to24(h?.open || '') || '09:00',
+      close: to24(h?.close || '') || '17:00',
+      open24: h?.open24 ?? false,
+    };
+  });
+}
+
+function statusOf(h: BusinessHour): HoursStatus {
+  if (!h.enabled) return 'closed';
+  if (h.open24) return 'open24';
+  return 'open';
+}
 
 export default function BusinessInfoForm({ initialData, nicheSchema }: { initialData: any, nicheSchema?: any }) {
   const { addToast } = useToast();
@@ -59,12 +102,22 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
   const [isPending, startTransition] = useTransition();
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
   const [currentMediaField, setCurrentMediaField] = useState<string | null>(null);
+  const [hours, setHours] = useState<BusinessHour[]>(() => buildHours(initialData?.hours));
   const nicheAttributes = watch('niche_attributes') || {};
   const logoUrl = watch('logo_url') || '';
 
+  const setDayStatus = (day: BusinessHour['day'], status: HoursStatus) => {
+    setHours((prev) => prev.map((h) => h.day === day
+      ? { ...h, enabled: status !== 'closed', open24: status === 'open24' }
+      : h));
+  };
+  const setDayTime = (day: BusinessHour['day'], field: 'open' | 'close', value: string) => {
+    setHours((prev) => prev.map((h) => h.day === day ? { ...h, [field]: value } : h));
+  };
+
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
-      const res = await updateBusinessInfo(data);
+      const res = await updateBusinessInfo({ ...data, hours });
       if (res.success) {
         addToast({
           title: 'Changes saved',
@@ -123,6 +176,51 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
             <Input label="State" error={errors.state?.message} {...register('state')} className="col-span-1" />
             <Input label="ZIP Code" error={errors.zip?.message} {...register('zip')} className="col-span-1" />
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Business Hours</CardTitle>
+          <CardDescription>Shown on your site and published as structured data for Google.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {hours.map((h) => {
+            const status = statusOf(h);
+            return (
+              <div key={h.day} className="grid grid-cols-1 sm:grid-cols-[7rem_9rem_1fr] gap-3 sm:items-center">
+                <span className="text-sm font-medium text-slate-900">{DAY_LABELS[h.day]}</span>
+                <select
+                  value={status}
+                  onChange={(e) => setDayStatus(h.day, e.target.value as HoursStatus)}
+                  className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                >
+                  <option value="open">Open</option>
+                  <option value="closed">Closed</option>
+                  <option value="open24">Open 24 hours</option>
+                </select>
+                {status === 'open' ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="time"
+                      value={h.open}
+                      onChange={(e) => setDayTime(h.day, 'open', e.target.value)}
+                      className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                    />
+                    <span className="text-slate-400">–</span>
+                    <input
+                      type="time"
+                      value={h.close}
+                      onChange={(e) => setDayTime(h.day, 'close', e.target.value)}
+                      className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-sm text-slate-400">{status === 'open24' ? 'Open all day' : 'Closed all day'}</span>
+                )}
+              </div>
+            );
+          })}
         </CardContent>
       </Card>
 

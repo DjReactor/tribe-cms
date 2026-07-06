@@ -7,6 +7,17 @@ interface BusinessHoursProps {
 
 const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
+/** Format a canonical 24-hour "HH:MM" value as 12-hour "8:00 AM". Leaves unrecognized input untouched. */
+function formatTime(value: string): string {
+  const m = /^(\d{1,2}):(\d{2})$/.exec((value || '').trim());
+  if (!m) return value;
+  let hour = parseInt(m[1], 10);
+  const period = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+  return `${hour}:${m[2]} ${period}`;
+}
+
 export function BusinessHours({ hours, className = '' }: BusinessHoursProps) {
   if (!hours || hours.length === 0) return null;
 
@@ -20,7 +31,9 @@ export function BusinessHours({ hours, className = '' }: BusinessHoursProps) {
           <tr key={hour.day} className="border-b border-[var(--tribe-border)] last:border-0">
             <td className="py-2 capitalize font-medium text-[var(--tribe-text)]">{hour.day}</td>
             <td className="py-2 text-right text-[var(--tribe-text-muted)]">
-              {hour.enabled ? `${hour.open} - ${hour.close}` : 'Closed'}
+              {hour.enabled
+                ? (hour.open24 ? 'Open 24 hours' : `${formatTime(hour.open)} - ${formatTime(hour.close)}`)
+                : 'Closed'}
             </td>
           </tr>
         ))}

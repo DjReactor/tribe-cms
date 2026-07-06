@@ -1,8 +1,12 @@
 export interface BusinessHour {
   day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
   enabled: boolean
+  /** Canonical 24-hour `HH:MM` (ISO-8601 time), e.g. "08:00". Ignored when `open24`. Formatted to 12h only for display. */
   open: string
+  /** Canonical 24-hour `HH:MM`, e.g. "18:00". Ignored when `open24`. */
   close: string
+  /** Open 24 hours on this day; overrides open/close. */
+  open24?: boolean
 }
 
 export interface BusinessInfo {

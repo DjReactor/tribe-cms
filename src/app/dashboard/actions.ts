@@ -5,6 +5,17 @@ import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
+// Canonical 24-hour HH:MM, or empty for closed/24h days.
+const timeString = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Time must be HH:MM').or(z.literal(''));
+
+const businessHourSchema = z.object({
+  day: z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
+  enabled: z.boolean(),
+  open: timeString,
+  close: timeString,
+  open24: z.boolean().optional(),
+});
+
 const businessInfoSchema = z.object({
   business_name: z.string().min(1, 'Business name is required'),
   email: z.string().email('Invalid email address'),
@@ -21,6 +32,7 @@ const businessInfoSchema = z.object({
   social_instagram: z.string().url('Invalid URL').optional().or(z.literal('')),
   social_google: z.string().url('Invalid URL').optional().or(z.literal('')),
   niche_attributes: z.record(z.string(), z.string()).optional(),
+  hours: z.array(businessHourSchema).optional(),
 });
 
 export async function updateBusinessInfo(data: any) {
