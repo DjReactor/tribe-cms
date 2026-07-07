@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ProjectDetailPageProps } from '@/types/template';
 import { StarRating } from '@/components/shared/StarRating';
+import { ProjectGallery } from './ProjectGallery';
 
 export function ProjectDetailPage({ project, businessInfo, relatedProjects }: ProjectDetailPageProps) {
   const contentSections = [
@@ -44,17 +45,13 @@ export function ProjectDetailPage({ project, businessInfo, relatedProjects }: Pr
         {/* Summary */}
         <p className="text-xl leading-relaxed max-w-3xl" style={{ color: 'var(--tribe-text)' }}>{project.summary}</p>
 
-        {/* Gallery */}
-        {(project.gallery_image_urls ?? []).length > 0 && (
-          <section>
-            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--tribe-heading)' }}>Project Gallery</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {project.gallery_image_urls!.map((url, i) => (
-                <img key={i} src={url} alt={`${project.title} gallery image ${i + 1}`} className="rounded-xl object-cover aspect-square w-full" />
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Gallery — template owns the grid; the shared lightbox handles viewing */}
+        <ProjectGallery
+          images={(project.gallery_image_urls ?? []).map((url, i) => ({
+            url,
+            alt: `${project.title} gallery image ${i + 1}`,
+          }))}
+        />
 
         {/* Story sections */}
         {contentSections.length > 0 && (
