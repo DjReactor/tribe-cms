@@ -48,7 +48,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.BlogIndexPage) return notFound();
@@ -61,7 +61,6 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

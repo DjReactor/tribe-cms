@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getSeoSettings } from '@/lib/settings';
+import { getServices, indexServices, getServicePath } from '@/lib/services';
 import type { Service, ServiceArea, BlogPost } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -18,11 +19,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true' });
+    // Canonical nested paths only — the flat `/services/<slug>` form 301s to
+    // these, and listing both would advertise a redirect chain to crawlers.
+    const services = await getServices();
+    const servicesById = indexServices(services);
     services.forEach(service => {
       if (!service.noindex) {
         routes.push({
-          url: `${baseUrl}/services/${service.slug}`,
+          url: `${baseUrl}${getServicePath(service, servicesById)}`,
           changeFrequency: 'weekly',
           priority: 0.9,
         });
@@ -95,10 +99,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // Catalog datatypes — Types / Brands / Certifications / Awards & Nominations.
+    // Catalog datatypes — Brands / Certifications / Awards & Nominations.
     // Same gating as projects/locations: master switch + active records.
     const catalogSections = [
-      { collection: 'types', flag: settings.types_enabled },
       { collection: 'brands', flag: settings.brands_enabled },
       { collection: 'certifications', flag: settings.certifications_enabled },
       { collection: 'awards', flag: settings.awards_enabled },

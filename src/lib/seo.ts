@@ -91,7 +91,12 @@ export function buildLocalBusinessSchema(
   return schema;
 }
 
-export function buildServiceSchema(service: Service, businessInfo: BusinessInfo, siteUrl: string = '') {
+/**
+ * @param servicePath canonical path for the service (e.g. `/services/a/b`).
+ *   Defaults to the flat `/services/<slug>` form, which is correct for a
+ *   top-level service and 301s to the right place for a nested one.
+ */
+export function buildServiceSchema(service: Service, businessInfo: BusinessInfo, siteUrl: string = '', servicePath?: string) {
   const schema: any = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -104,7 +109,7 @@ export function buildServiceSchema(service: Service, businessInfo: BusinessInfo,
   };
 
   if (siteUrl && service.slug) {
-    schema["url"] = `${siteUrl}/services/${service.slug}`;
+    schema["url"] = `${siteUrl}${servicePath || `/services/${service.slug}`}`;
   }
 
   if (service.cover_image_url) {

@@ -26,7 +26,7 @@ export default async function BrandDetailPageWrapper({ params }: { params: Promi
   if (!settings.brands_enabled) return notFound();
 
   const businessInfo = await getBusinessInfo();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
   const { slug } = await params;
 
   const brand = brands.find((b) => b.slug === slug);
@@ -45,7 +45,6 @@ export default async function BrandDetailPageWrapper({ params }: { params: Promi
       relatedBrands={relatedBrands}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

@@ -26,7 +26,7 @@ export default async function CertificationDetailPageWrapper({ params }: { param
   if (!settings.certifications_enabled) return notFound();
 
   const businessInfo = await getBusinessInfo();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
   const { slug } = await params;
 
   const certification = certifications.find((c) => c.slug === slug);
@@ -45,7 +45,6 @@ export default async function CertificationDetailPageWrapper({ params }: { param
       relatedCertifications={relatedCertifications}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

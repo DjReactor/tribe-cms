@@ -9,16 +9,27 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
 import { Toggle } from '@/components/ui/Toggle';
+import { Select } from '@/components/ui/Select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
 import { BlockNoteEditor } from '@/components/dashboard/BlockNoteEditor';
 import { MediaLibraryModal } from '@/components/dashboard/MediaLibraryModal';
 import { useRouter } from 'next/navigation';
 import { Image as ImageIcon } from 'lucide-react';
+import type { Service } from '@/types/index';
+import {
+  MAX_SERVICE_DEPTH,
+  indexServices,
+  getAncestors,
+  getServiceDepth,
+  getDescendantIds,
+  getSubtreeHeight,
+} from '@/lib/service-tree';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
+  parent: z.string(),
   short_description: z.string().max(160, 'Max 160 characters').optional().or(z.literal('')),
   cover_image_url: z.string().optional().or(z.literal('')),
   is_active: z.boolean(),
@@ -30,7 +41,9 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function ServiceDetailForm({ initialData }: { initialData: any }) {
+export default function ServiceDetailForm(
+  { initialData, allServices = [] }: { initialData: any; allServices?: Service[] },
+) {
   const { addToast } = useToast();
   const router = useRouter();
   const isNew = initialData?.id === 'new';
@@ -41,6 +54,7 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
     defaultValues: {
       name: initialData?.name || '',
       slug: initialData?.slug || '',
+      parent: initialData?.parent || '',
       short_description: initialData?.short_description || '',
       cover_image_url: initialData?.cover_image_url || '',
       is_active: initialData?.is_active ?? true,
@@ -54,6 +68,33 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
   const [isPending, startTransition] = useTransition();
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
   const coverImageUrl = watch('cover_image_url');
+  const parentId = watch('parent');
+
+  /**
+   * Valid parents, mirroring validateParent() in ../actions.ts. Three exclusions:
+   * the service itself, anything already beneath it (that would close a cycle),
+   * and any service too deep to host this one's whole subtree - a service that
+   * has children of its own needs two free tiers, not one.
+   */
+  const servicesById = indexServices(allServices);
+  const descendantIds = isNew ? new Set<string>() : getDescendantIds(initialData.id, allServices);
+  const ownHeight = isNew ? 1 : getSubtreeHeight(initialData.id, allServices);
+
+  const parentOptions = allServices
+    .filter((s) => s.id !== initialData?.id)
+    .filter((s) => !descendantIds.has(s.id))
+    .filter((s) => getServiceDepth(s, servicesById) + ownHeight <= MAX_SERVICE_DEPTH)
+    .map((s) => ({
+      id: s.id,
+      // Show the full trail so two similarly-named services are tellable apart.
+      label: [...getAncestors(s, servicesById).map((a) => a.name), s.name].join('  >  '),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  // URLs are flat whatever the tier - the parent shapes navigation and the
+  // breadcrumb, not the address.
+  const previewPath = `/services/${watch('slug') || 'your-service'}`;
+  const parentName = parentId ? servicesById.get(parentId)?.name : '';
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
@@ -103,6 +144,43 @@ export default function ServiceDetailForm({ initialData }: { initialData: any })
             <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
             <Textarea label="Short Description (Max 160 chars)" error={errors.short_description?.message} {...register('short_description')} className="md:col-span-2" />
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Placement</CardTitle>
+          <CardDescription>
+            Nest this under another service to build a hierarchy, up to {MAX_SERVICE_DEPTH} levels
+            deep. This groups the service in navigation and breadcrumbs — the URL stays flat
+            either way, so moving a service never changes its address.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Select label="Parent Service" {...register('parent')}>
+            <option value="">— None (top level) —</option>
+            {parentOptions.map((opt) => (
+              <option key={opt.id} value={opt.id}>{opt.label}</option>
+            ))}
+          </Select>
+
+          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
+            <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
+            <p className="font-mono text-sm text-slate-900 break-all">{previewPath}</p>
+            {parentName && (
+              <p className="text-xs text-slate-500 mt-2">
+                Shown under <span className="font-medium text-slate-700">{parentName}</span> in
+                navigation and breadcrumbs.
+              </p>
+            )}
+          </div>
+
+          {!isNew && ownHeight > 1 && (
+            <p className="text-xs text-slate-500">
+              This service has sub-services beneath it, so it can only move somewhere with
+              room for {ownHeight} levels.
+            </p>
+          )}
         </CardContent>
       </Card>
 

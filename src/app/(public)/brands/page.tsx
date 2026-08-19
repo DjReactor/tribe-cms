@@ -23,7 +23,7 @@ export default async function BrandsIndexPageWrapper() {
   if (!settings.brands_enabled) return notFound();
 
   const businessInfo = await getBusinessInfo();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
   const locations = await getLocations();
   const projects = await getProjects();
 
@@ -41,7 +41,6 @@ export default async function BrandsIndexPageWrapper() {
       resolvedCopy={resolvedCopy}
       locations={locations}
       projects={projects}
-      types={types}
       certifications={certifications}
       awards={awards}
       config={settings.template_config || {}}

@@ -25,8 +25,9 @@ const schema = z.object({
   is_active: z.boolean(),
   sort_order: z.number(),
   service_ids: z.array(z.string()),
-  location_city: z.string().optional().or(z.literal('')),
-  location_state: z.string().optional().or(z.literal('')),
+  service_area: z.string(),
+  neighborhood: z.string().optional().or(z.literal('')),
+  state: z.string(),
   completed_at: z.string().optional().or(z.literal('')),
   cover_image_url: z.string().optional().or(z.literal('')),
   gallery_media_ids: z.array(z.string()),
@@ -66,6 +67,8 @@ interface GalleryPreview {
 interface Props {
   initialData: any;
   availableServices: any[];
+  availableAreas?: any[];
+  availableStates?: any[];
 }
 
 function charCountClass(len: number, warn: number, max: number) {
@@ -74,7 +77,12 @@ function charCountClass(len: number, warn: number, max: number) {
   return 'text-slate-400';
 }
 
-export default function ProjectDetailForm({ initialData, availableServices }: Props) {
+export default function ProjectDetailForm({
+  initialData,
+  availableServices,
+  availableAreas = [],
+  availableStates = [],
+}: Props) {
   const { addToast } = useToast();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -112,8 +120,9 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
       is_active: initialData?.is_active ?? true,
       sort_order: initialData?.sort_order ?? 0,
       service_ids: initialData?.service_ids ?? initialData?.services ?? [],
-      location_city: initialData?.location_city || initialData?.location?.city || '',
-      location_state: initialData?.location_state || initialData?.location?.state || '',
+      service_area: initialData?.service_area || '',
+      neighborhood: initialData?.neighborhood || '',
+      state: initialData?.state || '',
       completed_at: initialData?.completed_at || '',
       cover_image_url: initialData?.cover_image_url || '',
       gallery_media_ids: initialData?.gallery_media_ids ?? initialData?.gallery_media ?? [],
@@ -270,8 +279,23 @@ export default function ProjectDetailForm({ initialData, availableServices }: Pr
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Location City" {...register('location_city')} />
-            <Input label="Location State" {...register('location_state')} />
+            <Select label="Service Area" {...register('service_area')}>
+              <option value="">— None —</option>
+              {availableAreas.map((a: any) => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </Select>
+            <Select label="State" {...register('state')}>
+              <option value="">— None —</option>
+              {availableStates.map((st: any) => (
+                <option key={st.id} value={st.id}>{st.name} ({st.code})</option>
+              ))}
+            </Select>
+            <Input
+              label="Neighborhood (optional)"
+              placeholder="e.g. Tribeca"
+              {...register('neighborhood')}
+            />
           </div>
 
           {statusValue === 'completed' && (

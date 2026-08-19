@@ -1,6 +1,7 @@
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import type { MediaItem, BlogPost, Service } from '@/types';
 import { getMediaFileUrl } from '@/lib/images';
+import { getServices, indexServices, getServicePath } from '@/lib/services';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -27,11 +28,12 @@ export async function GET() {
     });
 
     // Add Service Cover Images
-    const services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true' });
+    const services = await getServices();
+    const servicesById = indexServices(services);
     services.forEach(service => {
       if (service.cover_image_url) {
         xml += `  <url>\n`;
-        xml += `    <loc>${baseUrl}/services/${service.slug}</loc>\n`;
+        xml += `    <loc>${baseUrl}${getServicePath(service, servicesById)}</loc>\n`;
         xml += `    <image:image>\n`;
         xml += `      <image:loc>${service.cover_image_url}</image:loc>\n`;
         xml += `      <image:title>${service.name}</image:title>\n`;

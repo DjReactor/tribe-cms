@@ -6,7 +6,8 @@ import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
-import type { Service, ServiceArea, MediaItem } from "@/types";
+import { getServiceList } from "@/lib/services";
+import type { Service, ServiceNode, ServiceArea, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<{ 'area-slug': string }> }): Promise<Metadata> {
@@ -43,14 +44,14 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   // getSeoSettings already called in generateMetadata; cache() deduplicates within the request
   
   let area: ServiceArea;
-  let services: Service[] = [];
+  let services: ServiceNode[] = [];
   let media: MediaItem[] = [];
   
   try {
     const resolvedParams = await params;
     const record = await pb.collection('service_areas').getFirstListItem<ServiceArea>(`slug="${resolvedParams['area-slug']}" && is_active=true`);
     area = record;
-    services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true', sort: 'sort_order' });
+    services = await getServiceList();
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {
     return notFound();
@@ -93,7 +94,7 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const ServiceAreaPageComponent = template.ServiceAreaPage;
 
@@ -103,7 +104,6 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

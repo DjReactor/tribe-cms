@@ -39,7 +39,7 @@ export function ServiceAreaPage({ area, businessInfo, services, resolvedCopy, co
                 <h3 className="text-3xl font-bold text-[var(--tribe-heading)] mb-8">Services We Offer in {area.name}</h3>
                 <div className="grid sm:grid-cols-2 gap-6">
                   {services.map(service => (
-                    <Link key={service.id} href={`/services/${service.slug}`} className="p-6 rounded-2xl border border-[var(--tribe-border)] hover:border-[var(--tribe-brand)] hover:shadow-md transition-all group">
+                    <Link key={service.id} href={service.path} className="p-6 rounded-2xl border border-[var(--tribe-border)] hover:border-[var(--tribe-brand)] hover:shadow-md transition-all group">
                       <div className="flex items-center gap-4 mb-3">
                         <span className="text-2xl">{service.icon}</span>
                         <h4 className="font-bold text-lg text-[var(--tribe-heading)] group-hover:text-[var(--tribe-brand)] transition-colors">{service.name}</h4>

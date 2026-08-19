@@ -44,7 +44,7 @@ export default async function ServiceAreasIndexPageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const ServiceAreasIndexPageComponent = template.ServiceAreasIndexPage;
 
@@ -54,7 +54,6 @@ export default async function ServiceAreasIndexPageWrapper() {
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

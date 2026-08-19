@@ -22,9 +22,9 @@ export function ProjectDetailPage({ project, businessInfo, relatedProjects }: Pr
         <div className="relative h-full flex flex-col justify-end max-w-7xl mx-auto px-4 pb-8">
           <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--tribe-text-on-alt)' }}>{project.title}</h1>
           <div className="flex flex-wrap items-center gap-3">
-            {project.location && (
+            {(project.serviceArea || project.neighborhood) && (
               <span className="text-sm" style={{ color: 'var(--tribe-text-on-alt)', opacity: 0.85 }}>
-                {project.location.city}{project.location.state ? `, ${project.location.state}` : ''}
+                {project.serviceArea?.name || project.neighborhood}{project.state ? `, ${project.state.code}` : ''}
               </span>
             )}
             {project.services.map((s) => (

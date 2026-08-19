@@ -5,6 +5,7 @@ import { updateSettings } from './actions';
 import { Button } from '@/components/ui/Button';
 import { Toggle } from '@/components/ui/Toggle';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { useToast } from '@/components/ui/Toast';
 
@@ -24,9 +25,9 @@ export function SettingsForm({ initialData }: { initialData: any }) {
       automation_webhook_url:    initialData?.automation_webhook_url    ?? '',
       automation_webhook_secret: initialData?.automation_webhook_secret ?? '',
       automation_allowed_host:   initialData?.automation_allowed_host   ?? '',
+      services_display_mode:  initialData?.services_display_mode  ?? 'auto',
       projects_enabled:       initialData?.projects_enabled       ?? false,
       locations_enabled:      initialData?.locations_enabled      ?? false,
-      types_enabled:          initialData?.types_enabled          ?? false,
       brands_enabled:         initialData?.brands_enabled         ?? false,
       certifications_enabled: initialData?.certifications_enabled ?? false,
       awards_enabled:         initialData?.awards_enabled         ?? false,
@@ -182,6 +183,30 @@ export function SettingsForm({ initialData }: { initialData: any }) {
 
       <Card>
         <CardHeader>
+          <CardTitle>Services Layout</CardTitle>
+          <CardDescription>
+            How the services index page presents services that are nested under other services.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Select
+            label="Services index layout"
+            value={watch('services_display_mode')}
+            onChange={(e) => setValue('services_display_mode', e.target.value)}
+          >
+            <option value="auto">Automatic — group them only when sub-services exist</option>
+            <option value="flat">Flat — one list, every service side by side</option>
+            <option value="tree">Grouped — always show sub-services under their parent</option>
+          </Select>
+          <p className="text-sm text-slate-500">
+            This only changes the index page. Service URLs always follow the hierarchy,
+            and each service keeps its own page either way.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Feature Modules</CardTitle>
           <CardDescription>Enable optional sections on your website.</CardDescription>
         </CardHeader>
@@ -205,17 +230,6 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             <Toggle
               checked={watch('locations_enabled')}
               onChange={(e) => setValue('locations_enabled', e.target.checked)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
-            <div>
-              <p className="font-medium text-slate-900">Types</p>
-              <p className="text-sm text-slate-500">Showcase the types of work or offerings with their own pages.</p>
-            </div>
-            <Toggle
-              checked={watch('types_enabled')}
-              onChange={(e) => setValue('types_enabled', e.target.checked)}
             />
           </div>
 

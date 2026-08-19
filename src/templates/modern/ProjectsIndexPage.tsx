@@ -33,9 +33,9 @@ function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
         <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--tribe-text-muted)' }}>{project.summary}</p>
-        {project.location && (
+        {(project.serviceArea || project.neighborhood) && (
           <p className="text-xs" style={{ color: 'var(--tribe-text-muted)' }}>
-            {project.location.city}{project.location.state ? `, ${project.location.state}` : ''}
+            {project.serviceArea?.name || project.neighborhood}{project.state ? `, ${project.state.code}` : ''}
           </p>
         )}
         {project.services.length > 0 && (

@@ -5,13 +5,45 @@ import { BeforeAfterSlider } from '@/components/shared/BeforeAfterSlider';
 import Link from 'next/link';
 import { Phone, CheckCircle2 } from 'lucide-react';
 
-export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeAfterPairs, config }: ServiceDetailProps) {
+export function ServiceDetailPage({
+  service,
+  serviceTrail,
+  childServices,
+  businessInfo,
+  serviceAreas,
+  beforeAfterPairs,
+}: ServiceDetailProps) {
   return (
     <article className="bg-[var(--tribe-surface)]">
       {/* Hero */}
       <div className="bg-[var(--tribe-bg)] text-[var(--tribe-text)] py-20 lg:py-28">
         <div className={styles.container}>
           <div className="max-w-4xl">
+            {/* The trail mirrors the JSON-LD BreadcrumbList emitted by the route,
+                so what a visitor sees matches what Google is told. The last
+                crumb is this page, so it is rendered as plain text. */}
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="flex flex-wrap items-center gap-2 text-sm text-[var(--tribe-text-muted)]">
+                <li>
+                  <Link href="/services" className="hover:text-[var(--tribe-brand)] transition-colors">
+                    Services
+                  </Link>
+                </li>
+                {serviceTrail.map((crumb, i) => (
+                  <li key={crumb.path} className="flex items-center gap-2">
+                    <span aria-hidden="true">/</span>
+                    {i === serviceTrail.length - 1 ? (
+                      <span aria-current="page" className="text-[var(--tribe-text)]">{crumb.name}</span>
+                    ) : (
+                      <Link href={crumb.path} className="hover:text-[var(--tribe-brand)] transition-colors">
+                        {crumb.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </nav>
+
             <h1 className={`${styles.headingBase} text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[var(--tribe-text)]`}>
               {service.name}
             </h1>
@@ -42,6 +74,30 @@ export function ServiceDetailPage({ service, businessInfo, serviceAreas, beforeA
                 <p className="lead">{service.short_description}</p>
               )}
             </div>
+
+            {childServices.length > 0 && (
+              <div className="mt-16 border-t border-[var(--tribe-border)] pt-16">
+                <h2 className={`${styles.headingBase} text-3xl font-bold mb-8 text-[var(--tribe-heading)]`}>
+                  {service.name} Services
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {childServices.map(child => (
+                    <Link
+                      key={child.id}
+                      href={child.path}
+                      className="group p-6 rounded-2xl border border-[var(--tribe-border)] hover:border-[var(--tribe-brand)] hover:shadow-md transition-all"
+                    >
+                      <h3 className="font-bold text-xl text-[var(--tribe-heading)] mb-2 group-hover:text-[var(--tribe-brand)] transition-colors">
+                        {child.name}
+                      </h3>
+                      {child.short_description && (
+                        <p className="text-[var(--tribe-text)] text-sm">{child.short_description}</p>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {beforeAfterPairs && beforeAfterPairs.length > 0 && (
               <div className="mt-16 border-t border-[var(--tribe-border)] pt-16">

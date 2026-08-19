@@ -41,6 +41,8 @@ export interface Service {
   id: string
   name: string
   slug: string
+  /** Parent service id. Empty/undefined = top-level. Max 3 tiers (see lib/services.ts). */
+  parent?: string
   short_description: string
   icon: string
   is_active: boolean
@@ -53,10 +55,33 @@ export interface Service {
   updated?: string
 }
 
+/** A `Service` with its children nested. Built by `buildServiceTree`. */
+export interface ServiceNode extends Service {
+  children: ServiceNode[]
+  /** 1-based tier: a top-level service is 1. */
+  depth: number
+  /** Canonical public path, e.g. `/services/remodeling/kitchen`. */
+  path: string
+}
+
+/** A state the business operates in. A picklist, not a place with a page. */
+export interface StateItem {
+  id: string
+  name: string                 // "California"
+  code: string                 // "CA"
+  is_active: boolean
+  sort_order: number
+}
+
 export interface ServiceArea {
   id: string
   name: string
+  /** URL slug — globally unique; areas live at the site root (`/santa-rosa`). */
   slug: string
+  /** Parent area id. Empty = top level. Max 4 tiers (see lib/area-tree.ts). */
+  parent?: string
+  /** Resolved state, when the relation is expanded. */
+  state?: StateItem
   is_active: boolean
   sort_order: number
   custom_h1: string
@@ -69,6 +94,15 @@ export interface ServiceArea {
   geo_longitude?: string
   neighborhoods?: string[] | null
   updated?: string
+}
+
+/** A `ServiceArea` with its children nested. Built by `buildAreaTree`. */
+export interface ServiceAreaNode extends ServiceArea {
+  children: ServiceAreaNode[]
+  /** 1-based tier: a top-level area is 1. */
+  depth: number
+  /** Canonical public path — always flat, e.g. `/santa-rosa`. */
+  path: string
 }
 
 export interface Testimonial {
@@ -102,10 +136,12 @@ export interface Project {
   slug: string
   summary: string
   services: Service[]
-  location?: {
-    city: string
-    state?: string
-  }
+  /** Where the work happened — what combo/area auto-pull matches on. */
+  serviceArea?: ServiceArea
+  /** Finer than the area tree, e.g. "Tribeca" when the area is Manhattan. */
+  neighborhood?: string
+  /** For businesses working across adjacent states. Template picks name or code. */
+  state?: StateItem
   status: ProjectStatus
   completed_at?: string
   cover_image_url: string
@@ -152,7 +188,7 @@ export interface Location {
  * Shared shape of the four catalog datatypes — Types, Brands, Certifications,
  * Awards & Nominations. One collection each (`types`, `brands`,
  * `certifications`, `awards`), identical schema, each gated by its own
- * settings master switch (`types_enabled`, `brands_enabled`, …).
+ * settings master switch (`brands_enabled`, `certifications_enabled`, …).
  */
 export interface CatalogItem {
   id: string
@@ -169,7 +205,6 @@ export interface CatalogItem {
   updated?: string
 }
 
-export type TypeItem = CatalogItem
 export type Brand = CatalogItem
 export type Certification = CatalogItem
 export type Award = CatalogItem
@@ -246,11 +281,12 @@ export interface TemplateSettings {
   blog_enabled: boolean
   projects_enabled?: boolean
   locations_enabled?: boolean
-  types_enabled?: boolean
   brands_enabled?: boolean
   certifications_enabled?: boolean
   awards_enabled?: boolean
   service_areas_index_enabled?: boolean
+  /** Services index layout: 'auto' nests only when a hierarchy exists. */
+  services_display_mode?: 'auto' | 'flat' | 'tree'
   show_powered_by: boolean
   active_template: string
   /** @deprecated Use palette_source / template_palette_overrides / cms_palette instead */

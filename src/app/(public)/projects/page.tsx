@@ -3,10 +3,11 @@ import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo, getSeoSettings } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { notFound } from 'next/navigation';
-import type { Project, Service } from '@/types';
+import type { Project, Service, ServiceNode } from '@/types';
 import { mapProject } from '@/lib/projects';
 import { getLocations } from '@/lib/locations';
 import { getCatalog } from "@/lib/catalog";
+import { getServiceList } from "@/lib/services";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -25,7 +26,7 @@ export default async function ProjectsIndexPageWrapper() {
   const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPocketBaseClient()]);
 
   let projects: Project[] = [];
-  let services: Service[] = [];
+  let services: ServiceNode[] = [];
 
   try {
     const rawProjects = await pb.collection('projects').getFullList({
@@ -34,12 +35,12 @@ export default async function ProjectsIndexPageWrapper() {
       expand: 'services,gallery_media',
     });
     projects = rawProjects.map(mapProject);
-    services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true', sort: 'sort_order' });
+    services = await getServiceList();
   } catch {}
 
   const locations = await getLocations();
 
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
 
@@ -68,7 +69,6 @@ export default async function ProjectsIndexPageWrapper() {
   return (
     <template.ProjectsIndexPage
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

@@ -53,7 +53,7 @@ export default async function LocationsIndexPageWrapper() {
 
   const projects = await getProjects();
 
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
 
@@ -62,7 +62,6 @@ export default async function LocationsIndexPageWrapper() {
       locations={locations}
       businessInfo={businessInfo}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

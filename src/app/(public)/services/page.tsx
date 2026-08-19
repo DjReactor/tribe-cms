@@ -5,6 +5,7 @@ import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
+import { getServices, getServiceList, buildServiceTree, resolveDisplayMode } from "@/lib/services";
 import { buildResolvedCopy } from "@/lib/template";
 import { notFound } from "next/navigation";
 import type { Service, MediaItem } from "@/types";
@@ -24,17 +25,22 @@ export default async function ServicesIndexPageWrapper() {
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
   const pb = await getPocketBaseClient();
-  
-  let services: Service[] = [];
+
+  // Flat list stays the full set across every tier; the tree is the same data
+  // nested. Templates get both so a flat layout needs no hierarchy awareness.
+  const flat = await getServices();
+  const services = await getServiceList();          // depth-first, each with `path`
+  const serviceTree = buildServiceTree(flat);       // the same set, nested
+  const servicesDisplayMode = resolveDisplayMode(settings.services_display_mode, flat);
+
   let media: MediaItem[] = [];
   try {
-    services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true', sort: 'sort_order' });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {}
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.ServicesIndexPage) return notFound();
@@ -47,10 +53,11 @@ export default async function ServicesIndexPageWrapper() {
   return (
     <ServicesIndexPageComponent
       services={services}
+      serviceTree={serviceTree}
+      servicesDisplayMode={servicesDisplayMode}
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

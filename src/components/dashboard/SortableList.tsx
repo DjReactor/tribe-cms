@@ -12,9 +12,17 @@ interface SortableListProps {
   items: SortableItem[];
   onReorder: (newItems: SortableItem[]) => void;
   renderItem: (item: SortableItem, index: number) => React.ReactNode;
+  /**
+   * Optional content rendered *below* a row and outside its draggable box —
+   * used by the services tree to nest a child list under its parent without
+   * making the children part of the parent's drag handle.
+   */
+  renderBelow?: (item: SortableItem, index: number) => React.ReactNode;
+  /** Replaces the built-in "No items found" copy. */
+  emptyLabel?: string;
 }
 
-export function SortableList({ items, onReorder, renderItem }: SortableListProps) {
+export function SortableList({ items, onReorder, renderItem, renderBelow, emptyLabel }: SortableListProps) {
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const dragNodeRef = useRef<HTMLElement | null>(null);
@@ -60,9 +68,8 @@ export function SortableList({ items, onReorder, renderItem }: SortableListProps
         const isDragOver = dragOverIdx === idx;
         const dropPosition = isDragOver ? (draggedIdx !== null && draggedIdx < idx ? 'bottom' : 'top') : null;
 
-        return (
+        const row = (
           <div
-            key={item.id}
             draggable
             onDragStart={(e) => handleDragStart(e, idx)}
             onDragEnter={(e) => handleDragEnter(e, idx)}
@@ -84,10 +91,18 @@ export function SortableList({ items, onReorder, renderItem }: SortableListProps
             </div>
           </div>
         );
+
+        if (!renderBelow) return <React.Fragment key={item.id}>{row}</React.Fragment>;
+        return (
+          <React.Fragment key={item.id}>
+            {row}
+            {renderBelow(item, idx)}
+          </React.Fragment>
+        );
       })}
       {items.length === 0 && (
         <div className="p-8 text-center text-slate-500 text-sm border-2 border-dashed border-slate-200 rounded-xl">
-          No items found. Add one to get started.
+          {emptyLabel || 'No items found. Add one to get started.'}
         </div>
       )}
     </div>

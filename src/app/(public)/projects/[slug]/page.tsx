@@ -100,7 +100,7 @@ export default async function ProjectDetailPageWrapper({ params }: { params: Pro
 
   const locations = await getLocations();
 
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
 
@@ -109,7 +109,6 @@ export default async function ProjectDetailPageWrapper({ params }: { params: Pro
       project={project}
       businessInfo={businessInfo}
       locations={locations}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

@@ -6,7 +6,8 @@ import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
-import type { Service, ServiceArea, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
+import { getServiceList } from "@/lib/services";
+import type { Service, ServiceNode, ServiceArea, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -36,14 +37,14 @@ export default async function HomePageWrapper() {
   const businessInfo = await getBusinessInfo();
   const pb = await getPocketBaseClient();
   
-  let services: Service[] = [];
+  let services: ServiceNode[] = [];
   let serviceAreas: ServiceArea[] = [];
   let testimonials: Testimonial[] = [];
   let media: MediaItem[] = [];
   let beforeAfterPairs: BeforeAfterPair[] = [];
   
   try {
-    services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true', sort: 'sort_order' });
+    services = await getServiceList();
     serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({ filter: 'is_active = true', sort: 'sort_order' });
     testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true', sort: 'sort_order' });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
@@ -52,7 +53,7 @@ export default async function HomePageWrapper() {
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   const copyOverrides = settings.template_config?.copyOverrides || {};
@@ -68,7 +69,6 @@ export default async function HomePageWrapper() {
       serviceAreas={serviceAreas}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       certifications={certifications}
       awards={awards}

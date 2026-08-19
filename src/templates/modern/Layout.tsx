@@ -3,7 +3,7 @@ import { bodyFont, headingFont } from './theme';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function Layout({ children, businessInfo, serviceAreas, locations, projects, types, brands, certifications, awards, settings, config }: LayoutProps) {
+export function Layout({ children, businessInfo, serviceAreas, locations, projects, brands, certifications, awards, settings, config }: LayoutProps) {
   return (
     <div
       className={`${bodyFont.variable} ${headingFont.variable} font-sans min-h-screen flex flex-col bg-[var(--tribe-surface)] text-[var(--tribe-text)]`}
@@ -13,7 +13,6 @@ export function Layout({ children, businessInfo, serviceAreas, locations, projec
         serviceAreas={serviceAreas}
         locations={locations}
         projects={projects}
-        types={types}
         brands={brands}
         certifications={certifications}
         awards={awards}
@@ -29,7 +28,6 @@ export function Layout({ children, businessInfo, serviceAreas, locations, projec
         serviceAreas={serviceAreas}
         locations={locations}
         projects={projects}
-        types={types}
         brands={brands}
         certifications={certifications}
         awards={awards}

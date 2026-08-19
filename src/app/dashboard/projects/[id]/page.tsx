@@ -5,11 +5,12 @@ import { notFound } from 'next/navigation';
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [project, servicesRaw] = await Promise.all([
+  const pb = await getPocketBaseClient();
+  const [project, servicesRaw, areasRaw, statesRaw] = await Promise.all([
     getProject(id),
-    getPocketBaseClient().then(pb =>
-      pb.collection('services').getFullList({ filter: 'is_active = true', sort: 'sort_order' }).catch(() => [])
-    ),
+    pb.collection('services').getFullList({ filter: 'is_active = true', sort: 'sort_order' }).catch(() => []),
+    pb.collection('service_areas').getFullList({ filter: 'is_active = true', sort: 'sort_order' }).catch(() => []),
+    pb.collection('states').getFullList({ filter: 'is_active = true', sort: 'sort_order' }).catch(() => []),
   ]);
 
   if (id !== 'new' && !project) {
@@ -23,7 +24,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           {id === 'new' ? 'New Project' : 'Edit Project'}
         </h1>
       </div>
-      <ProjectDetailForm initialData={project} availableServices={JSON.parse(JSON.stringify(servicesRaw))} />
+      <ProjectDetailForm
+        initialData={project}
+        availableServices={JSON.parse(JSON.stringify(servicesRaw))}
+        availableAreas={JSON.parse(JSON.stringify(areasRaw))}
+        availableStates={JSON.parse(JSON.stringify(statesRaw))}
+      />
     </div>
   );
 }

@@ -1,9 +1,12 @@
-import { getService } from '../actions';
+import { getService, getServices } from '../actions';
 import ServiceDetailForm from './ServiceDetailForm';
 import { notFound } from 'next/navigation';
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  // The whole forest, active or not - the parent picker needs to see every
+  // service to work out valid parents and to exclude this one's descendants.
+  const allServices = await getServices();
 
   let service: any;
   if (id === 'new') {
@@ -28,7 +31,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         </p>
       </div>
 
-      <ServiceDetailForm initialData={service} />
+      <ServiceDetailForm initialData={service} allServices={allServices as any[]} />
     </div>
   );
 }

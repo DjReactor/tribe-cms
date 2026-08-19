@@ -23,7 +23,7 @@ export default async function CertificationsIndexPageWrapper() {
   if (!settings.certifications_enabled) return notFound();
 
   const businessInfo = await getBusinessInfo();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
   const locations = await getLocations();
   const projects = await getProjects();
 
@@ -41,7 +41,6 @@ export default async function CertificationsIndexPageWrapper() {
       resolvedCopy={resolvedCopy}
       locations={locations}
       projects={projects}
-      types={types}
       brands={brands}
       awards={awards}
       config={settings.template_config || {}}

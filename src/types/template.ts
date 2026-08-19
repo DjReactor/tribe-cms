@@ -1,6 +1,7 @@
 import {
   BusinessInfo,
   Service,
+  ServiceNode,
   ServiceArea,
   Testimonial,
   BlogPost,
@@ -10,7 +11,6 @@ import {
   TemplateManifest,
   Project,
   Location,
-  TypeItem,
   Brand,
   Certification,
   Award,
@@ -26,10 +26,9 @@ export interface LayoutProps {
   children: React.ReactNode
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
-  services: Service[]
+  services: ServiceNode[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -42,7 +41,6 @@ export interface HeaderProps {
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -52,11 +50,10 @@ export interface HeaderProps {
 
 export interface FooterProps {
   businessInfo: BusinessInfo
-  services: Service[]
+  services: ServiceNode[]
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -67,11 +64,10 @@ export interface FooterProps {
 export interface HomePageProps {
   businessInfo: BusinessInfo
   resolvedCopy: ResolvedCopy
-  services: Service[]
+  services: ServiceNode[]
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -86,12 +82,11 @@ export interface AboutPageProps {
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
   resolvedCopy: ResolvedCopy
-  services: Service[]
+  services: ServiceNode[]
   testimonials: Testimonial[]
   media: MediaItem[]
   config: TemplateConfig
@@ -102,7 +97,6 @@ export interface ContactPageProps {
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -112,11 +106,15 @@ export interface ContactPageProps {
 }
 
 export interface ServicesIndexProps {
-  services: Service[]
+  /** Every tier, depth-first: each parent immediately followed by its children. */
+  services: ServiceNode[]
+  /** The same services nested by `parent`. Roots only; walk `.children`. */
+  serviceTree: ServiceNode[]
+  /** Resolved from settings — 'auto' has already been decided for you. */
+  servicesDisplayMode: 'flat' | 'tree'
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -127,11 +125,18 @@ export interface ServicesIndexProps {
 
 export interface ServiceDetailProps {
   service: Service
+  /** Ancestors root-first, excluding `service`. Empty for a top-level service. */
+  parentChain: Service[]
+  /** Direct children of `service`, sibling order, each with its `path`. */
+  childServices: ServiceNode[]
+  /** Breadcrumb trail incl. `service` itself, each with its canonical path. */
+  serviceTrail: { name: string; path: string }[]
+  /** Canonical path of `service`, e.g. `/services/remodeling/kitchen`. */
+  servicePath: string
   businessInfo: BusinessInfo
   serviceAreas: ServiceArea[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -144,10 +149,9 @@ export interface ServiceAreaProps {
   area: ServiceArea
   businessInfo: BusinessInfo
   resolvedCopy: ResolvedCopy
-  services: Service[]
+  services: ServiceNode[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -160,7 +164,6 @@ export interface BlogIndexProps {
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -175,7 +178,6 @@ export interface BlogPostProps {
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -188,7 +190,6 @@ export interface StaticPageProps {
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -201,7 +202,6 @@ export interface TestimonialsPageProps {
   testimonials: Testimonial[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -214,7 +214,6 @@ export interface ServiceAreasIndexPageProps {
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -232,12 +231,11 @@ export interface ProjectsIndexPageProps {
   projects: Project[]
   businessInfo: BusinessInfo
   locations: Location[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
   resolvedCopy: ResolvedCopy
-  services: Service[]
+  services: ServiceNode[]
   config: TemplateConfig
 }
 
@@ -245,7 +243,6 @@ export interface ProjectDetailPageProps {
   project: Project
   businessInfo: BusinessInfo
   locations: Location[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -257,7 +254,6 @@ export interface LocationsIndexPageProps {
   locations: Location[]
   businessInfo: BusinessInfo
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -268,7 +264,6 @@ export interface LocationDetailPageProps {
   location: Location
   businessInfo: BusinessInfo
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -281,38 +276,12 @@ export interface LocationDetailPageProps {
 // gated by its settings master switch; the platform falls back to a minimal
 // grid / detail view when the template doesn't export the component.
 
-export interface TypesIndexPageProps {
-  types: TypeItem[]
-  businessInfo: BusinessInfo
-  resolvedCopy: ResolvedCopy
-  locations: Location[]
-  projects: Project[]
-  brands: Brand[]
-  certifications: Certification[]
-  awards: Award[]
-  config: TemplateConfig
-}
-
-export interface TypeDetailPageProps {
-  typeItem: TypeItem
-  businessInfo: BusinessInfo
-  relatedTypes: TypeItem[]
-  locations: Location[]
-  projects: Project[]
-  types: TypeItem[]
-  brands: Brand[]
-  certifications: Certification[]
-  awards: Award[]
-  config: TemplateConfig
-}
-
 export interface BrandsIndexPageProps {
   brands: Brand[]
   businessInfo: BusinessInfo
   resolvedCopy: ResolvedCopy
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   certifications: Certification[]
   awards: Award[]
   config: TemplateConfig
@@ -324,7 +293,6 @@ export interface BrandDetailPageProps {
   relatedBrands: Brand[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -337,7 +305,6 @@ export interface CertificationsIndexPageProps {
   resolvedCopy: ResolvedCopy
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   awards: Award[]
   config: TemplateConfig
@@ -349,7 +316,6 @@ export interface CertificationDetailPageProps {
   relatedCertifications: Certification[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -362,7 +328,6 @@ export interface AwardsIndexPageProps {
   resolvedCopy: ResolvedCopy
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   config: TemplateConfig
@@ -374,7 +339,6 @@ export interface AwardDetailPageProps {
   relatedAwards: Award[]
   locations: Location[]
   projects: Project[]
-  types: TypeItem[]
   brands: Brand[]
   certifications: Certification[]
   awards: Award[]
@@ -403,8 +367,6 @@ export interface TemplatePack {
   ProjectDetailPage?: React.FC<ProjectDetailPageProps>
   LocationsIndexPage?: React.FC<LocationsIndexPageProps>
   LocationDetailPage?: React.FC<LocationDetailPageProps>
-  TypesIndexPage?: React.FC<TypesIndexPageProps>
-  TypeDetailPage?: React.FC<TypeDetailPageProps>
   BrandsIndexPage?: React.FC<BrandsIndexPageProps>
   BrandDetailPage?: React.FC<BrandDetailPageProps>
   CertificationsIndexPage?: React.FC<CertificationsIndexPageProps>

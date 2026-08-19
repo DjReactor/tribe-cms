@@ -21,7 +21,9 @@ export function mapProject(raw: any): Project {
     is_active: raw.is_active,
     sort_order: raw.sort_order,
     services: raw.expand?.services ?? [],
-    location: raw.location_city ? { city: raw.location_city, state: raw.location_state || undefined } : undefined,
+    serviceArea: raw.expand?.service_area ?? undefined,
+    neighborhood: raw.neighborhood || undefined,
+    state: raw.expand?.state ?? undefined,
     completed_at: raw.completed_at || undefined,
     cover_image_url: raw.cover_image_url || '',
     gallery_image_urls: galleryMedia.map((m: any) => `${pbUrl}/api/files/media/${m.id}/${m.file}`),
@@ -65,7 +67,7 @@ export const getProjects = cache(async (): Promise<Project[]> => {
     const raw = await pb.collection('projects').getFullList({
       filter: 'is_active = true',
       sort: 'sort_order',
-      expand: 'services,gallery_media',
+      expand: 'services,gallery_media,service_area,state',
     });
     return raw.map(mapProject);
   } catch {

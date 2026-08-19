@@ -64,7 +64,7 @@ export function HomePage({
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.map(service => (
-                <Link key={service.id} href={`/services/${service.slug}`} className="group block p-8 rounded-2xl bg-[var(--tribe-surface)] hover:bg-[var(--tribe-surface)] hover:shadow-xl border border-[var(--tribe-border)] hover:border-[var(--tribe-border)] transition-all">
+                <Link key={service.id} href={service.path} className="group block p-8 rounded-2xl bg-[var(--tribe-surface)] hover:bg-[var(--tribe-surface)] hover:shadow-xl border border-[var(--tribe-border)] hover:border-[var(--tribe-border)] transition-all">
                   <div className="w-12 h-12 bg-[var(--tribe-surface)] rounded-xl flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-110 transition-transform text-[var(--tribe-brand)]">
                     {service.icon || '✦'}
                   </div>

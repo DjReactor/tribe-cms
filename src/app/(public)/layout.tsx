@@ -5,9 +5,10 @@ import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
-import type { ServiceArea, Testimonial, Service } from "@/types";
+import type { ServiceArea, Testimonial, Service, ServiceNode } from "@/types";
 import { buildLocalBusinessSchema } from "@/lib/seo";
 import { getActivePalette, generatePaletteCss } from "@/lib/color-palette";
+import { getServiceList } from "@/lib/services";
 
 export const dynamic = 'force-dynamic';
 
@@ -63,7 +64,7 @@ export default async function PublicLayout({
   const pb = await getPocketBaseClient();
   let serviceAreas: ServiceArea[] = [];
   let testimonials: Testimonial[] = [];
-  let services: Service[] = [];
+  let services: ServiceNode[] = [];
 
   try {
     serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({
@@ -71,14 +72,14 @@ export default async function PublicLayout({
       sort: 'sort_order'
     });
     testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true' });
-    services = await pb.collection('services').getFullList<Service>({ filter: 'is_active = true' });
+    services = await getServiceList();
   } catch(e) {
     console.error('Failed to load data for layout', e);
   }
 
   const locations = await getLocations();
   const projects = await getProjects();
-  const { types, brands, certifications, awards } = await getCatalog();
+  const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
   const palette = await getActivePalette(template.manifest?.defaultPalette);
@@ -99,7 +100,6 @@ export default async function PublicLayout({
         services={services}
         locations={locations}
         projects={projects}
-        types={types}
         brands={brands}
         certifications={certifications}
         awards={awards}
