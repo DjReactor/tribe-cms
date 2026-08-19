@@ -2,7 +2,7 @@
 
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getAdminPocketBase } from '@/lib/pocketbase-admin';
-import { requireAuth } from '@/lib/auth';
+import { requireAgencyAdmin } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
 /**
@@ -31,7 +31,7 @@ export async function getSettings() {
     // settings has createRule null (superuser-only) — seed normally creates the
     // singleton, so this fallback needs the admin client.
     const admin = await getAdminPocketBase();
-    return admin.collection('settings').create({});
+    return admin.collection('settings').create({ active_template: 'modern' });
   });
   for (const key of AGENCY_ONLY_SETTINGS_KEYS) delete record[key];
   return record;
@@ -39,7 +39,7 @@ export async function getSettings() {
 
 export async function updateSettings(id: string, data: any) {
   try {
-    const user = await requireAuth();
+    await requireAgencyAdmin();
     const clean = { ...data };
     for (const key of AGENCY_ONLY_SETTINGS_KEYS) delete clean[key];
     const pb = await getPocketBaseClient();

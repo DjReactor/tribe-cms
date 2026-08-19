@@ -1,7 +1,7 @@
 'use server';
 
 import { getPocketBaseClient } from '@/lib/pocketbase';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, requireAgencyAdmin } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -95,7 +95,8 @@ export async function updateSeoSettings(data: any) {
 
 export async function updateCopyOverrides(overrides: Record<string, string>) {
   try {
-    await requireAuth();
+    // Site Content is an agency-only page (see lib/dashboard-access.ts).
+    await requireAgencyAdmin();
     const pb = await getPocketBaseClient();
     const record = await pb.collection('settings').getFirstListItem('');
 

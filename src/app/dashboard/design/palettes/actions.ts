@@ -1,9 +1,12 @@
 'use server'
 
 import { getPocketBaseClient } from '@/lib/pocketbase'
+import { requireAgencyAdmin } from '@/lib/auth'
 import type { ColorPaletteColors } from '@/types/color-palette'
 import { revalidatePath } from 'next/cache'
 
+// Design is an agency-only surface (see lib/dashboard-access.ts); every mutator
+// below re-checks the role so the RPC edge matches the hidden route.
 export interface PaletteState {
   source: 'template' | 'cms'
   templateOverrides: Partial<ColorPaletteColors>
@@ -34,6 +37,7 @@ export async function setPaletteSource(
   source: 'template' | 'cms'
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireAgencyAdmin()
     const { pb, record } = await getSettingsRecord()
     await pb.collection('settings').update(record.id, { palette_source: source })
     revalidatePath('/', 'layout')
@@ -47,6 +51,7 @@ export async function saveTemplateOverrides(
   overrides: Partial<ColorPaletteColors>
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireAgencyAdmin()
     const { pb, record } = await getSettingsRecord()
     await pb.collection('settings').update(record.id, {
       template_palette_overrides: overrides,
@@ -61,6 +66,7 @@ export async function saveTemplateOverrides(
 
 export async function resetTemplateOverrides(): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireAgencyAdmin()
     const { pb, record } = await getSettingsRecord()
     await pb.collection('settings').update(record.id, {
       template_palette_overrides: {},
@@ -77,6 +83,7 @@ export async function saveCmsPalette(
   colors: ColorPaletteColors
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireAgencyAdmin()
     const { pb, record } = await getSettingsRecord()
     await pb.collection('settings').update(record.id, { cms_palette: colors })
     revalidatePath('/', 'layout')
@@ -90,6 +97,7 @@ export async function activateCmsPalette(
   colors: ColorPaletteColors
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requireAgencyAdmin()
     const { pb, record } = await getSettingsRecord()
     await pb.collection('settings').update(record.id, {
       cms_palette: colors,

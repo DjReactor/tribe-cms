@@ -44,16 +44,15 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
     { name: 'Service Areas', href: '/dashboard/service-areas', icon: MapPin, show: true },
     { name: 'Locations', href: '/dashboard/locations', icon: MapPinned, show: settings?.locations_enabled || isAgency },
     { name: 'Projects', href: '/dashboard/projects', icon: Briefcase, show: settings?.projects_enabled || isAgency },
-    { name: 'Types', href: '/dashboard/types', icon: Shapes, show: settings?.types_enabled || isAgency },
     { name: 'Brands', href: '/dashboard/brands', icon: BadgeCheck, show: settings?.brands_enabled || isAgency },
     { name: 'Certifications', href: '/dashboard/certifications', icon: ShieldCheck, show: settings?.certifications_enabled || isAgency },
     { name: 'Awards', href: '/dashboard/awards', icon: Trophy, show: settings?.awards_enabled || isAgency },
+    { name: 'Media Library', href: '/dashboard/media', icon: Images, show: true },
   ];
 
   const designSeo: NavItem[] = [
     { name: 'Design', href: '/dashboard/design', icon: Palette, show: true },
     { name: 'Site Content', href: '/dashboard/content', icon: FileText, show: true },
-    { name: 'Media Library', href: '/dashboard/media', icon: Images, show: true },
     { name: 'SEO & Visibility', href: '/dashboard/seo', icon: LineChart, show: true },
   ];
 
@@ -70,11 +69,14 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
     { name: 'Agency Settings', href: '/dashboard/settings/agency', icon: ShieldAlert, show: isAgency, danger: true },
   ];
 
-  const groups: { label: string; items: NavItem[] }[] = [
+  // Business Owners get Core + Business Info only; Design & SEO and System are
+  // agency-operated. Route access is enforced server-side by the matching
+  // segment layouts (see lib/dashboard-access.ts) — keep the two in sync.
+  const groups: { label: string; items: NavItem[]; agencyOnly?: boolean }[] = [
     { label: 'Core', items: core },
     { label: 'Business Info', items: businessInfo },
-    { label: 'Design & SEO', items: designSeo },
-    { label: 'System', items: system },
+    { label: 'Design & SEO', items: designSeo, agencyOnly: true },
+    { label: 'System', items: system, agencyOnly: true },
   ];
 
   const renderItem = (item: NavItem) => {
@@ -109,6 +111,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
 
       <div className="flex-1 overflow-y-auto px-4 py-2 space-y-8 pb-8">
         {groups.map((group) => {
+          if (group.agencyOnly && !isAgency) return null;
           const items = group.items.filter((item) => item.show);
           if (items.length === 0) return null;
           return (

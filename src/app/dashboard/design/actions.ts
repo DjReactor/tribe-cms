@@ -3,7 +3,7 @@
 import { getTemplateManifests } from '@/lib/template-registry';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getAdminPocketBase } from '@/lib/pocketbase-admin';
-import { requireAuth } from '@/lib/auth';
+import { requireAgencyAdmin } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import type { TemplateRegistryManifest } from '@/lib/template-registry';
 
@@ -15,7 +15,7 @@ export async function activateTemplate(
   templateId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await requireAuth();
+    await requireAgencyAdmin();
 
     // Validate that the requested template actually exists
     const available = getTemplateManifests();
@@ -60,7 +60,7 @@ export async function activateTemplate(
 
 export async function saveImageOverrides(overrides: Record<string, string>) {
   try {
-    await requireAuth();
+    await requireAgencyAdmin();
     const pb = await getPocketBaseClient();
     let settingId = null;
     let currentConfig = {};

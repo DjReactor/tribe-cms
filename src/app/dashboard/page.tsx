@@ -1,5 +1,6 @@
 import { getBusinessInfo, getSettings } from '@/lib/settings';
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { verifySession } from '@/lib/auth';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { CheckCircle2, Circle } from 'lucide-react';
@@ -8,6 +9,10 @@ import Link from 'next/link';
 export default async function DashboardHome() {
   const businessInfo = await getBusinessInfo();
   const settings = await getSettings();
+  // SEO lives in the agency-only Design & SEO section, so the score card and the
+  // setup step that links there are agency-only too.
+  const user = await verifySession();
+  const isAgency = user?.role === 'agency_admin';
 
   let totalContacts = 0;
   let activeServicesCount = 0;
@@ -35,18 +40,20 @@ export default async function DashboardHome() {
       // safe fallback
     }
 
-    // Compute SEO score (mirrors /dashboard/seo logic)
-    try {
-      const seoSettings = await pb.collection('seo_settings').getFirstListItem('').catch(() => null);
-      const logs404 = await pb.collection('seo_404_log').getFullList({ sort: '-last_seen' }).catch(() => []);
-      const unresolved404s = logs404.filter((l: any) => !l.resolved).length;
+    // Compute SEO score (mirrors /dashboard/seo logic) — agency-only card
+    if (isAgency) {
+      try {
+        const seoSettings = await pb.collection('seo_settings').getFirstListItem('').catch(() => null);
+        const logs404 = await pb.collection('seo_404_log').getFullList({ sort: '-last_seen' }).catch(() => []);
+        const unresolved404s = logs404.filter((l: any) => !l.resolved).length;
 
-      if (!seoSettings?.site_name) seoScore -= 10;
-      if (!seoSettings?.default_og_image) seoScore -= 5;
-      if (!seoSettings?.google_verification) seoScore -= 5;
-      if (unresolved404s > 0) seoScore -= Math.min(20, unresolved404s * 2);
-    } catch (e) {
-      // safe fallback
+        if (!seoSettings?.site_name) seoScore -= 10;
+        if (!seoSettings?.default_og_image) seoScore -= 5;
+        if (!seoSettings?.google_verification) seoScore -= 5;
+        if (unresolved404s > 0) seoScore -= Math.min(20, unresolved404s * 2);
+      } catch (e) {
+        // safe fallback
+      }
     }
   } catch (e) {
     // outer PocketBase connection failure — use defaults
@@ -67,12 +74,12 @@ export default async function DashboardHome() {
       href: '/dashboard/services',
       isComplete: false, // We would check services count here
     },
-    {
+    ...(isAgency ? [{
       name: 'Configure SEO',
       description: 'Set your target keywords and site meta details.',
       href: '/dashboard/seo',
       isComplete: false,
-    }
+    }] : []),
   ];
 
   const completedSteps = setupSteps.filter(s => s.isComplete).length;
@@ -108,17 +115,19 @@ export default async function DashboardHome() {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>SEO Health Score</CardDescription>
-            <CardTitle className="text-4xl font-light text-blue-600">{seoScore}/100</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-xs font-medium ${
-              seoScore >= 90 ? 'text-emerald-600' : seoScore >= 70 ? 'text-amber-600' : 'text-red-600'
-            }`}>{seoScoreLabel}</div>
-          </CardContent>
-        </Card>
+        {isAgency && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription>SEO Health Score</CardDescription>
+              <CardTitle className="text-4xl font-light text-blue-600">{seoScore}/100</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={`text-xs font-medium ${
+                seoScore >= 90 ? 'text-emerald-600' : seoScore >= 70 ? 'text-amber-600' : 'text-red-600'
+              }`}>{seoScoreLabel}</div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <Card className="bg-gradient-to-br from-white to-slate-50/50">
