@@ -15,6 +15,10 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
         brands_enabled: record.brands_enabled ?? false,
         certifications_enabled: record.certifications_enabled ?? false,
         awards_enabled: record.awards_enabled ?? false,
+        // The `/service-areas` index route gates on this. It is written by the
+        // agency settings form and was never mapped here, so the toggle was
+        // inert and the page 404'd however it was set.
+        service_areas_index_enabled: record.service_areas_index_enabled ?? false,
         crm_enabled: record.crm_enabled ?? false,
         retell_enabled: record.retell_enabled ?? false,
         reviews_enabled: record.reviews_enabled ?? false,
@@ -49,6 +53,7 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
     brands_enabled: true,
     certifications_enabled: true,
     awards_enabled: true,
+    service_areas_index_enabled: true,
     crm_enabled: true,
     retell_enabled: true,
     reviews_enabled: true,

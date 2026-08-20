@@ -6,7 +6,8 @@ import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
-import type { ServiceArea, MediaItem } from "@/types";
+import { getAreaList, getAreaRoots } from "@/lib/service-areas";
+import type { MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,16 +29,18 @@ export default async function ServiceAreasIndexPageWrapper() {
 
   const businessInfo = await getBusinessInfo();
   const pb = await getPocketBaseClient();
-  let serviceAreas: ServiceArea[] = [];
   let media: MediaItem[] = [];
 
   try {
-    serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({
-      filter: 'is_active = true',
-      sort: 'sort_order',
-    });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch(e) {}
+
+  // Both shapes of the same forest, sharing their node objects: the flat
+  // depth-first list for a template that ignores hierarchy, and the roots for
+  // one that renders State › County › City. Area paths are flat at every tier,
+  // so nesting here is presentation only.
+  const serviceAreas = await getAreaList();
+  const areaTree = await getAreaRoots();
 
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
@@ -51,6 +54,7 @@ export default async function ServiceAreasIndexPageWrapper() {
   return (
     <ServiceAreasIndexPageComponent
       serviceAreas={serviceAreas}
+      areaTree={areaTree}
       businessInfo={businessInfo}
       locations={locations}
       projects={projects}

@@ -112,8 +112,14 @@ export function hasBlockContent(body: unknown): boolean {
   });
 }
 
-/** Does this area's name appear in a testimonial's free-text location? */
-function locationNamesArea(location: string, areaName: string): boolean {
+/**
+ * Does this area's name appear in a testimonial's free-text location?
+ *
+ * Exported because the public pages auto-pull reviews with this exact test: if
+ * the checklist counted matches one way and the page rendered them another, the
+ * agency would be told a page has proof it does not show (or the reverse).
+ */
+export function locationNamesArea(location: string, areaName: string): boolean {
   const name = norm(areaName);
   if (!name) return false;
   return norm(location).includes(name);

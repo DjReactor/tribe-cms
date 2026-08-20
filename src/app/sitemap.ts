@@ -2,7 +2,9 @@ import { MetadataRoute } from 'next';
 import { getPocketBaseClient } from '@/lib/pocketbase';
 import { getSeoSettings } from '@/lib/settings';
 import { getServices, indexServices, getServicePath } from '@/lib/services';
-import type { Service, ServiceArea, BlogPost } from '@/types';
+import { getServiceAreas, getAreaPath } from '@/lib/service-areas';
+import { getLivePairs } from '@/lib/pairs';
+import type { BlogPost } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,19 +36,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     });
 
-    // Only include service areas if not globally noindexed
+    // The whole area tree, at flat paths — `getAreaPath` is the one place an
+    // area URL is built, so a nested area appears once, at the same address its
+    // page sets as canonical.
     if (!seoSettings?.noindex_service_areas) {
-      const areas = await pb.collection('service_areas').getFullList<ServiceArea>({ filter: 'is_active = true' });
+      const areas = await getServiceAreas();
       areas.forEach(area => {
         if (!area.noindex) {
           routes.push({
-            url: `${baseUrl}/${area.slug}`,
+            url: `${baseUrl}${getAreaPath(area)}`,
             changeFrequency: 'weekly',
             priority: 0.8,
           });
         }
       });
     }
+
+    // Landing pages. `getLivePairs` has already dropped anything whose service
+    // or area is no longer active, so what lands here is exactly what the route
+    // will serve. A pair's own `noindex` is independent of its area's: the two
+    // are separate pages at separate URLs.
+    const livePairs = await getLivePairs();
+    livePairs.forEach(({ pair, path }) => {
+      if (!pair.noindex) {
+        routes.push({
+          url: `${baseUrl}${path}`,
+          lastModified: pair.updated ? new Date(pair.updated) : undefined,
+          changeFrequency: 'monthly',
+          priority: 0.8,
+        });
+      }
+    });
 
     const settings = await pb.collection('settings').getFirstListItem('');
 
@@ -157,5 +177,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap:', error);
   }
 
-  return routes;
+  // Never emit a path a redirect rule owns. Middleware applies redirects BEFORE
+  // routing, so a URL that is some rule's `from_path` answers 301 rather than
+  // serving the page — listing it advertises a redirect as content, and listing
+  // both it and its target advertises the same page twice. Slug saves already
+  // call `clearRedirectShadowing`; this is the backstop for rules typed by hand
+  // in the redirects UI.
+  const pathOf = (url: string) => (url.startsWith(baseUrl) ? url.slice(baseUrl.length) || '/' : url);
+  let redirected = new Set<string>();
+  try {
+    const rules = await pb.collection('redirects').getFullList({ fields: 'from_path' });
+    redirected = new Set(rules.map((rule: any) => rule.from_path).filter(Boolean));
+  } catch {
+    // No rules readable — emit the routes as built.
+  }
+
+  return redirected.size === 0
+    ? routes
+    : routes.filter((route) => !redirected.has(pathOf(route.url)));
 }

@@ -3,6 +3,10 @@ import {
   Service,
   ServiceNode,
   ServiceArea,
+  ServiceAreaNode,
+  AreaWithLanding,
+  ServiceWithLanding,
+  Pair,
   Testimonial,
   BlogPost,
   MediaItem,
@@ -25,7 +29,7 @@ export type ResolvedCopy = Record<string, string>
 export interface LayoutProps {
   children: React.ReactNode
   businessInfo: BusinessInfo
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   services: ServiceNode[]
   locations: Location[]
   projects: Project[]
@@ -38,7 +42,7 @@ export interface LayoutProps {
 
 export interface HeaderProps {
   businessInfo: BusinessInfo
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -51,7 +55,7 @@ export interface HeaderProps {
 export interface FooterProps {
   businessInfo: BusinessInfo
   services: ServiceNode[]
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -65,7 +69,7 @@ export interface HomePageProps {
   businessInfo: BusinessInfo
   resolvedCopy: ResolvedCopy
   services: ServiceNode[]
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -79,7 +83,7 @@ export interface HomePageProps {
 
 export interface AboutPageProps {
   businessInfo: BusinessInfo
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -94,7 +98,7 @@ export interface AboutPageProps {
 
 export interface ContactPageProps {
   businessInfo: BusinessInfo
-  serviceAreas: ServiceArea[]
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -131,10 +135,16 @@ export interface ServiceDetailProps {
   childServices: ServiceNode[]
   /** Breadcrumb trail incl. `service` itself, each with its canonical path. */
   serviceTrail: { name: string; path: string }[]
-  /** Canonical path of `service`, e.g. `/services/remodeling/kitchen`. */
+  /** Canonical path of `service`, e.g. `/services/kitchen-remodeling`. */
   servicePath: string
   businessInfo: BusinessInfo
-  serviceAreas: ServiceArea[]
+  /**
+   * Every active area, each with THIS service's landing page resolved:
+   * `landingPath` is that page's URL, or null when the pair does not exist.
+   * Link it when it is a path, render the name as text when it is null —
+   * never fall back to the area hub. See `AreaWithLanding`.
+   */
+  serviceAreas: AreaWithLanding[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -146,10 +156,76 @@ export interface ServiceDetailProps {
 }
 
 export interface ServiceAreaProps {
+  /**
+   * The area itself. `also_serving` (places named but deliberately never
+   * linked), `geo_latitude`/`geo_longitude` and the expanded `stateRecord` are
+   * all on this record — this route expands the state relation, so
+   * `area.stateRecord?.code` is safe here and nowhere else by default.
+   */
   area: ServiceArea
+  /** Canonical path of `area` — always flat, e.g. `/santa-rosa`. */
+  areaPath: string
+  /** Breadcrumb trail incl. `area` itself, each crumb with its own path. */
+  areaTrail: { name: string; path: string }[]
+  /** Direct children of `area`, sibling order, each with its `path`. */
+  childAreas: ServiceAreaNode[]
   businessInfo: BusinessInfo
   resolvedCopy: ResolvedCopy
-  services: ServiceNode[]
+  /**
+   * Every active service, each with ITS landing page in this area resolved:
+   * `landingPath` is that page's URL, or null when the pair does not exist.
+   * Link it when it is a path, render the name as text when it is null.
+   * See `ServiceWithLanding`.
+   */
+  services: ServiceWithLanding[]
+  /** Auto-pulled: active projects done in this area. */
+  localProjects: Project[]
+  /** Auto-pulled: visible reviews whose location names this area. */
+  localTestimonials: Testimonial[]
+  locations: Location[]
+  projects: Project[]
+  brands: Brand[]
+  certifications: Certification[]
+  awards: Award[]
+  media: MediaItem[]
+  config: TemplateConfig
+}
+
+/**
+ * A landing page for exactly one service in exactly one area, at
+ * `/{area.slug}/{pair.slug}`.
+ *
+ * These pages are OPT-IN RECORDS, not a computed route: an unpaired
+ * service×area combination 404s, so the page count equals what somebody
+ * actually wrote. Render it as a page about this work in this place — the props
+ * carry the proof to do that (`localProjects`, `localTestimonials`, the area's
+ * `also_serving` and geo).
+ */
+export interface PairPageProps {
+  pair: Pair
+  service: Service
+  /** The area. `also_serving`, geo and the expanded `stateRecord` are on it. */
+  area: ServiceArea
+  /** Canonical path of this page, e.g. `/santa-rosa/kitchen-remodeling`. */
+  pairPath: string
+  /** Canonical path of `service`'s own page, e.g. `/services/kitchen-remodeling`. */
+  servicePath: string
+  /** Home › Area › this page. The last crumb is this page — render it as text. */
+  trail: { name: string; path: string }[]
+  /**
+   * `h1` and `intro`, already resolved: the pair's own copy when it has any,
+   * otherwise the template's `pair_h1` / `pair_intro` slots with the service
+   * and area names filled in.
+   */
+  resolvedCopy: ResolvedCopy
+  /** Auto-pulled: active projects for THIS service in THIS area. */
+  localProjects: Project[]
+  /** Auto-pulled: visible reviews whose location names this area. */
+  localTestimonials: Testimonial[]
+  /** Every active service, each with its landing page in THIS area resolved. */
+  services: ServiceWithLanding[]
+  businessInfo: BusinessInfo
+  serviceAreas: ServiceAreaNode[]
   locations: Location[]
   projects: Project[]
   brands: Brand[]
@@ -210,7 +286,10 @@ export interface TestimonialsPageProps {
 }
 
 export interface ServiceAreasIndexPageProps {
-  serviceAreas: ServiceArea[]
+  /** Every tier, depth-first: each parent immediately followed by its children. */
+  serviceAreas: ServiceAreaNode[]
+  /** The same areas nested by `parent`. Roots only; walk `.children`. */
+  areaTree: ServiceAreaNode[]
   businessInfo: BusinessInfo
   locations: Location[]
   projects: Project[]
@@ -356,6 +435,7 @@ export interface TemplatePack {
   ServicesIndexPage?: React.FC<ServicesIndexProps>
   ServiceDetailPage?: React.FC<ServiceDetailProps>
   ServiceAreaPage?: React.FC<ServiceAreaProps>
+  PairPage?: React.FC<PairPageProps>
   BlogIndexPage?: React.FC<BlogIndexProps>
   BlogPostPage?: React.FC<BlogPostProps>
   PrivacyPage?: React.FC<StaticPageProps>

@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Trash2, Edit2, Plus, AlertTriangle } from 'lucide-react';
+import { Trash2, Edit2, Plus, AlertTriangle, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Toggle } from '@/components/ui/Toggle';
@@ -116,7 +116,22 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
                     )}
                   </td>
                   <td className="px-6 py-4 font-mono text-xs text-slate-500">
-                    {area ? getPairPath(area.slug, pair.slug) : `/…/${pair.slug}`}
+                    {/* Live only while the page is published — an unpublished
+                        pair 404s, so linking it would send the agency to the
+                        404 page rather than their draft. */}
+                    {area && pair.is_published ? (
+                      <a
+                        href={getPairPath(area.slug, pair.slug)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 hover:text-blue-600 hover:underline"
+                      >
+                        {getPairPath(area.slug, pair.slug)}
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    ) : (
+                      area ? getPairPath(area.slug, pair.slug) : `/…/${pair.slug}`
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <ReadinessScore passed={score.passed} total={score.total} />

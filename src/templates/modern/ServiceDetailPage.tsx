@@ -141,17 +141,31 @@ export function ServiceDetailPage({
                 </Link>
               </div>
 
-              {/* Service Areas */}
+              {/* Where we do this work.
+
+                  `landingPath` is this service's landing page in that area, or
+                  null when nobody wrote one. The rule is uniform and is the
+                  whole point of the prop: a path is a link, a null is text.
+                  Never substitute the area hub for a missing pair — pointing
+                  every town at a generic page from every service page is a
+                  topical mismatch, not internal linking. Writing the pair later
+                  turns the text into a link with no edit here. */}
               {serviceAreas.length > 0 && (
                 <div className="bg-[var(--tribe-surface)] p-8 rounded-3xl border border-[var(--tribe-border)]">
-                  <h3 className="font-bold text-xl text-[var(--tribe-heading)] mb-6">Areas We Serve</h3>
+                  <h3 className="font-bold text-xl text-[var(--tribe-heading)] mb-6">
+                    Where We Offer {service.name}
+                  </h3>
                   <ul className="space-y-4">
                     {serviceAreas.map(area => (
-                      <li key={area.id}>
-                        <Link href={`/${area.slug}`} className="flex items-center text-[var(--tribe-text)] hover:text-[var(--tribe-brand)] transition-colors">
-                          <CheckCircle2 className="w-5 h-5 mr-3 text-[var(--tribe-brand)] shrink-0" />
+                      <li key={area.id} className="flex items-center text-[var(--tribe-text)]">
+                        <CheckCircle2 className="w-5 h-5 mr-3 text-[var(--tribe-brand)] shrink-0" />
+                        {area.landingPath ? (
+                          <Link href={area.landingPath} className="font-medium hover:text-[var(--tribe-brand)] transition-colors">
+                            {service.name} in {area.name}
+                          </Link>
+                        ) : (
                           <span className="font-medium">{area.name}</span>
-                        </Link>
+                        )}
                       </li>
                     ))}
                   </ul>

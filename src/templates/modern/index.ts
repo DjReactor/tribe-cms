@@ -9,6 +9,8 @@ import { ContactPage }         from './ContactPage'
 import { ServicesIndexPage }   from './ServicesIndexPage'
 import { ServiceDetailPage }   from './ServiceDetailPage'
 import { ServiceAreaPage }     from './ServiceAreaPage'
+import { ServiceAreasIndexPage } from './ServiceAreasIndexPage'
+import { PairPage }            from './PairPage'
 import { BlogIndexPage }       from './BlogIndexPage'
 import { BlogPostPage }        from './BlogPostPage'
 import { PrivacyPage }         from './PrivacyPage'
@@ -137,6 +139,38 @@ export const manifest: TemplateManifest = {
       type: "textarea",
       page: "Service Area Pages",
       hint: "Introductory paragraph under the H1 on service area pages."
+    },
+    // ── Service Areas Index ───────────────────────────────────────────────
+    "service_areas_heading": {
+      label: "Service Areas Page Heading",
+      default: "Where We Work",
+      type: "text",
+      page: "Service Areas Index"
+    },
+    "service_areas_intro": {
+      label: "Service Areas Page Intro",
+      default: "{{business_name}} serves the areas below. Pick yours to see what we do there.",
+      type: "textarea",
+      page: "Service Areas Index"
+    },
+    // ── Landing Pages (service × area) ────────────────────────────────────
+    // Only ever a FALLBACK: a landing page's own H1 and intro win when the
+    // agency wrote them, and the dashboard readiness checklist nags precisely
+    // because every page falling through to the same generated heading is the
+    // shape landing pages exist to avoid.
+    "pair_h1": {
+      label: "Landing Page Headline (fallback)",
+      default: "{{service_name}} in {{area_name}}",
+      type: "text",
+      page: "Landing Pages",
+      hint: "Used only when a landing page has no H1 of its own. {{service_name}} and {{area_name}} are replaced automatically."
+    },
+    "pair_intro": {
+      label: "Landing Page Intro (fallback)",
+      default: "{{service_name}} from {{business_name}}, serving {{area_name}} and the surrounding area.",
+      type: "textarea",
+      page: "Landing Pages",
+      hint: "Used only when a landing page has no intro of its own."
     }
   }
 }
@@ -153,6 +187,8 @@ const templatePack: TemplatePack = {
   ServicesIndexPage,
   ServiceDetailPage,
   ServiceAreaPage,
+  ServiceAreasIndexPage,
+  PairPage,
   BlogIndexPage,
   BlogPostPage,
   PrivacyPage,

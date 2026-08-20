@@ -164,6 +164,42 @@ export interface ManualChecklistItem {
   description?: string
 }
 
+/**
+ * The two sides of the mutual link between services and areas.
+ *
+ * `landingPath` is the pair page's URL, or `null` when no landing page exists
+ * for that combination. That single field is the whole contract templates need:
+ *
+ *   if a node gives a path, link it; if it is null, render the name as text.
+ *
+ * Templates never test whether a page exists, and never build the URL. The
+ * consequences are deliberate:
+ *
+ *  - An unpaired area on a "where we do this" list renders as TEXT. It does not
+ *    fall back to the area hub — pointing twenty-five towns at generic hubs
+ *    from every service page is a topical mismatch and a pile of low-value
+ *    internal links.
+ *  - There is no `hasLandingPage` boolean, because it would be exactly
+ *    `landingPath !== null` — derived state with somewhere to drift to.
+ *  - Creating a pair later turns that text into a link with no template edit.
+ *    That property is what makes the opt-in model workable.
+ *
+ * `children` is enriched too, so a template rendering the tree gets the same
+ * contract at every tier.
+ */
+export interface AreaWithLanding extends Omit<ServiceAreaNode, 'children'> {
+  children: AreaWithLanding[]
+  /** This area's landing page for the service in scope, or null. */
+  landingPath: string | null
+}
+
+/** The service side of the same contract — see `AreaWithLanding`. */
+export interface ServiceWithLanding extends Omit<ServiceNode, 'children'> {
+  children: ServiceWithLanding[]
+  /** This service's landing page in the area in scope, or null. */
+  landingPath: string | null
+}
+
 export interface Testimonial {
   id: string
   author_name: string

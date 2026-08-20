@@ -14,8 +14,10 @@ import {
   buildServiceTree,
   findServiceNode,
 } from "@/lib/services";
+import { getAreaRoots } from "@/lib/service-areas";
+import { getPairIndex, areasWithLanding, flattenLanding } from "@/lib/pairs";
 import { buildServiceSchema, buildBreadcrumbSchema } from "@/lib/seo";
-import type { Service, ServiceArea, BeforeAfterPair, MediaItem } from "@/types";
+import type { Service, AreaWithLanding, BeforeAfterPair, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
 /**
@@ -83,16 +85,24 @@ export default async function ServiceDetailPageWrapper(
   const servicePath = getServicePath(service);
 
   const pb = await getPocketBaseClient();
-  let serviceAreas: ServiceArea[] = [];
   let beforeAfterPairs: BeforeAfterPair[] = [];
   let media: MediaItem[] = [];
   try {
-    serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({ filter: 'is_active = true', sort: 'sort_order' });
     beforeAfterPairs = await pb.collection('before_after_pairs').getFullList<BeforeAfterPair>({ filter: 'is_active = true', sort: 'sort_order' });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
   } catch (e) {
     // Optional sections — the page still renders without them.
   }
+
+  // The areas half of the mutual link. Every area arrives carrying THIS
+  // service's landing page as `landingPath`, or null where no pair exists —
+  // so the template writes one uniform line (link a path, render text for a
+  // null) and never asks whether a page exists. An unpaired area deliberately
+  // does NOT fall back to `/{area}`: pointing every town at a generic hub from
+  // every service page is a topical mismatch, not internal linking.
+  const serviceAreas: AreaWithLanding[] = flattenLanding(
+    areasWithLanding(await getAreaRoots(), service.id, await getPairIndex()),
+  );
 
   const locations = await getLocations();
   const projects = await getProjects();

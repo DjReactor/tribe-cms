@@ -51,7 +51,7 @@ export function Footer({ businessInfo, services, serviceAreas, settings, config 
             <h3 className="font-semibold text-[var(--tribe-text)] mb-4">Service Areas</h3>
             <ul className="space-y-2 text-sm">
               {serviceAreas.map(a => (
-                <li key={a.id}><Link href={`/${a.slug}`} className="hover:text-[var(--tribe-text)] transition-colors">{a.name}</Link></li>
+                <li key={a.id}><Link href={a.path} className="hover:text-[var(--tribe-text)] transition-colors">{a.name}</Link></li>
               ))}
             </ul>
           </div>

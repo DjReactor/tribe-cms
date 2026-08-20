@@ -44,7 +44,7 @@ export function AboutPage({ businessInfo, serviceAreas, resolvedCopy, config }: 
                 <h3 className="font-bold text-lg mb-4 text-[var(--tribe-heading)]">Service Areas</h3>
                 <div className="flex flex-wrap gap-2">
                   {serviceAreas.map(area => (
-                    <Link key={area.id} href={`/${area.slug}`} className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-full text-sm font-medium transition-colors">
+                    <Link key={area.id} href={area.path} className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-full text-sm font-medium transition-colors">
                       {area.name}
                     </Link>
                   ))}

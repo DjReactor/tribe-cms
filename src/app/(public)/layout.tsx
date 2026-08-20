@@ -5,10 +5,11 @@ import { getPocketBaseClient } from "@/lib/pocketbase";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
-import type { ServiceArea, Testimonial, Service, ServiceNode } from "@/types";
+import type { ServiceAreaNode, Testimonial, ServiceNode } from "@/types";
 import { buildLocalBusinessSchema } from "@/lib/seo";
 import { getActivePalette, generatePaletteCss } from "@/lib/color-palette";
 import { getServiceList } from "@/lib/services";
+import { getAreaList } from "@/lib/service-areas";
 
 export const dynamic = 'force-dynamic';
 
@@ -62,15 +63,12 @@ export default async function PublicLayout({
   const siteUrl = process.env.SITE_URL || '';
 
   const pb = await getPocketBaseClient();
-  let serviceAreas: ServiceArea[] = [];
+  let serviceAreas: ServiceAreaNode[] = [];
   let testimonials: Testimonial[] = [];
   let services: ServiceNode[] = [];
 
   try {
-    serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({
-      filter: 'is_active = true',
-      sort: 'sort_order'
-    });
+    serviceAreas = await getAreaList();
     testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true' });
     services = await getServiceList();
   } catch(e) {

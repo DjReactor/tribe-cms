@@ -202,7 +202,7 @@ export function HomePage({
             </div>
             <div className="flex flex-wrap justify-center gap-4">
               {serviceAreas.map(area => (
-                <Link key={area.id} href={`/${area.slug}`} className="px-6 py-3 rounded-full bg-[var(--tribe-surface-alt)] hover:bg-slate-700 border border-[var(--tribe-border)] transition-colors font-medium">
+                <Link key={area.id} href={area.path} className="px-6 py-3 rounded-full bg-[var(--tribe-surface-alt)] hover:bg-slate-700 border border-[var(--tribe-border)] transition-colors font-medium">
                   {area.name}
                 </Link>
               ))}

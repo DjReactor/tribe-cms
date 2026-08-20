@@ -7,7 +7,8 @@ import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { getServiceList } from "@/lib/services";
-import type { Service, ServiceNode, ServiceArea, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
+import { getAreaList } from "@/lib/service-areas";
+import type { ServiceNode, ServiceAreaNode, Testimonial, MediaItem, BeforeAfterPair } from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -38,14 +39,14 @@ export default async function HomePageWrapper() {
   const pb = await getPocketBaseClient();
   
   let services: ServiceNode[] = [];
-  let serviceAreas: ServiceArea[] = [];
+  let serviceAreas: ServiceAreaNode[] = [];
   let testimonials: Testimonial[] = [];
   let media: MediaItem[] = [];
   let beforeAfterPairs: BeforeAfterPair[] = [];
   
   try {
     services = await getServiceList();
-    serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({ filter: 'is_active = true', sort: 'sort_order' });
+    serviceAreas = await getAreaList();
     testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true', sort: 'sort_order' });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
     beforeAfterPairs = await pb.collection('before_after_pairs').getFullList<BeforeAfterPair>({ filter: 'is_active = true', sort: 'sort_order' });

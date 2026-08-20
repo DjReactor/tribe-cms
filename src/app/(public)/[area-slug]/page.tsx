@@ -7,21 +7,60 @@ import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
 import { getServiceList } from "@/lib/services";
-import type { Service, ServiceNode, ServiceArea, MediaItem } from "@/types";
+import {
+  getServiceAreas,
+  getAreaRoots,
+  indexAreas,
+  getAreaPath,
+  getAreaTrail,
+  findAreaNode,
+} from "@/lib/service-areas";
+import { getPairIndex, servicesWithLanding, flattenLanding, localProof } from "@/lib/pairs";
+import { buildBreadcrumbSchema } from "@/lib/seo";
+import type { ServiceArea, StateItem, ServiceWithLanding, Testimonial, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
+
+/**
+ * Service-area pages live at the SITE ROOT — `/santa-rosa`, not
+ * `/service-areas/santa-rosa` — and the path is flat at every tier of the area
+ * hierarchy. That is what keeps a landing page at exactly two segments
+ * (`/{area}/{service}`) however deep the geography goes; see `lib/area-tree`.
+ *
+ * Because this route sits at the root it competes with every static route on
+ * the site. Next resolves static segments first, so `/blog` stays the blog —
+ * which is precisely why area slugs are validated against
+ * `RESERVED_ROOT_SLUGS` on save: an area slugged `blog` would not error, it
+ * would silently sit behind the real one.
+ */
+
+/**
+ * The area record with its state expanded.
+ *
+ * `ServiceArea.state` is the relation ID; the resolved record rides on
+ * `stateRecord`, which is normally undefined because no other route expands it.
+ * This route does, deliberately — "Santa Rosa, CA" and region schema need it.
+ */
+async function findArea(slug: string): Promise<ServiceArea | null> {
+  try {
+    const pb = await getPocketBaseClient();
+    const record = await pb.collection('service_areas').getFirstListItem<ServiceArea>(
+      `slug="${slug}" && is_active=true`,
+      { expand: 'state' },
+    );
+    const expand = (record as ServiceArea & { expand?: { state?: StateItem } }).expand;
+    return { ...record, stateRecord: expand?.state };
+  } catch {
+    return null;
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ 'area-slug': string }> }): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
   const seoSettings = await getSeoSettings();
   const siteUrl = process.env.SITE_URL || '';
 
-  let area: ServiceArea | null = null;
-  try {
-    const pb = await getPocketBaseClient();
-    const { 'area-slug': areaSlug } = await params;
-    area = await pb.collection('service_areas').getFirstListItem<ServiceArea>(`slug="${areaSlug}" && is_active=true`);
-  } catch {}
-
+  const { 'area-slug': areaSlug } = await params;
+  const area = await findArea(areaSlug);
   if (!area) return {};
 
   const title = area.seo_title || area.name;
@@ -31,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ 'area-slu
   return {
     title,
     description,
-    alternates: { canonical: `${siteUrl}/${area.slug}` },
+    alternates: { canonical: `${siteUrl}${getAreaPath(area)}` },
     ...(shouldNoindex && { robots: { index: false, follow: true } }),
     openGraph: { title, description, type: 'website' },
   };
@@ -40,25 +79,53 @@ export async function generateMetadata({ params }: { params: Promise<{ 'area-slu
 export default async function ServiceAreaPageWrapper({ params }: { params: Promise<{ 'area-slug': string }> }) {
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
+  const seoSettings = await getSeoSettings();
+  const siteUrl = process.env.SITE_URL || '';
   const pb = await getPocketBaseClient();
-  // getSeoSettings already called in generateMetadata; cache() deduplicates within the request
-  
-  let area: ServiceArea;
-  let services: ServiceNode[] = [];
-  let media: MediaItem[] = [];
-  
-  try {
-    const resolvedParams = await params;
-    const record = await pb.collection('service_areas').getFirstListItem<ServiceArea>(`slug="${resolvedParams['area-slug']}" && is_active=true`);
-    area = record;
-    services = await getServiceList();
-    media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
-  } catch(e) {
-    return notFound();
-  }
+
+  const resolvedParams = await params;
+  const area = await findArea(resolvedParams['area-slug']);
+  if (!area) return notFound();
 
   const template = await loadTemplate(settings.active_template);
   if (!template.ServiceAreaPage) return notFound();
+
+  // ── Hierarchy ────────────────────────────────────────────────────────────
+  // The trail and the children are how the area hierarchy reaches users and
+  // Google, since the URLs deliberately do not carry it.
+  const areaPath = getAreaPath(area);
+  const areaTrail = getAreaTrail(area, indexAreas(await getServiceAreas()));
+  const childAreas = findAreaNode(await getAreaRoots(), area.id)?.children ?? [];
+
+  // ── The services half of the mutual link ─────────────────────────────────
+  // Every service arrives carrying ITS landing page in THIS area as
+  // `landingPath`, or null where no pair exists. The template links a path and
+  // renders a null as text — it never asks whether a page exists, and creating
+  // the pair later turns that text into a link with no template edit.
+  const services: ServiceWithLanding[] = flattenLanding(
+    servicesWithLanding(await getServiceList(), area.id, await getPairIndex()),
+  );
+
+  let testimonials: Testimonial[] = [];
+  let media: MediaItem[] = [];
+  try {
+    testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true', sort: 'sort_order' });
+    media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });
+  } catch (e) {
+    // Optional sections — the page still renders without them.
+  }
+
+  const locations = await getLocations();
+  const projects = await getProjects();
+  const { brands, certifications, awards } = await getCatalog();
+
+  // ── Auto-pull ────────────────────────────────────────────────────────────
+  // Work done here and reviews from here, matched on the area alone because no
+  // single service is in scope. Area pages need this as much as pair pages do:
+  // a single-service business publishes no pairs at all, so `/santa-rosa` IS
+  // their "Kitchen Remodeling in Santa Rosa" page.
+  const { projects: localProjects, testimonials: localTestimonials } =
+    localProof({ projects, testimonials }, area);
 
   const copyOverrides = settings.template_config?.copyOverrides || {};
 
@@ -92,25 +159,46 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
     businessInfo
   ).replace(/\{\{area_name\}\}/g, area.name);
 
-  const locations = await getLocations();
-  const projects = await getProjects();
-  const { brands, certifications, awards } = await getCatalog();
+  // The full ancestor trail feeds the breadcrumb, so a 4-tier area emits a
+  // 5-crumb list (Service Areas › … › this) rather than a fixed two. The index
+  // crumb is only offered when that page is actually switched on.
+  const breadcrumbSchema = seoSettings?.enable_breadcrumbs !== false
+    ? buildBreadcrumbSchema([
+        ...(settings.service_areas_index_enabled
+          ? [{ name: 'Service Areas', item: `${siteUrl}/service-areas` }]
+          : []),
+        ...areaTrail.map((crumb) => ({ name: crumb.name, item: `${siteUrl}${crumb.path}` })),
+      ])
+    : null;
 
   const ServiceAreaPageComponent = template.ServiceAreaPage;
 
   return (
-    <ServiceAreaPageComponent
-      area={area}
-      businessInfo={businessInfo}
-      locations={locations}
-      projects={projects}
-      brands={brands}
-      certifications={certifications}
-      awards={awards}
-      services={services}
-      media={media}
-      resolvedCopy={resolvedCopy}
-      config={settings.template_config || {}}
-    />
+    <>
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
+      <ServiceAreaPageComponent
+        area={area}
+        areaPath={areaPath}
+        areaTrail={areaTrail}
+        childAreas={childAreas}
+        businessInfo={businessInfo}
+        locations={locations}
+        projects={projects}
+        brands={brands}
+        certifications={certifications}
+        awards={awards}
+        services={services}
+        localProjects={localProjects}
+        localTestimonials={localTestimonials}
+        media={media}
+        resolvedCopy={resolvedCopy}
+        config={settings.template_config || {}}
+      />
+    </>
   );
 }

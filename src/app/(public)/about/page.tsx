@@ -7,8 +7,9 @@ import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { getServiceList } from "@/lib/services";
+import { getAreaList } from "@/lib/service-areas";
 import { notFound } from "next/navigation";
-import type { ServiceArea, Service, ServiceNode, Testimonial, MediaItem } from "@/types";
+import type { ServiceAreaNode, ServiceNode, Testimonial, MediaItem } from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -26,12 +27,12 @@ export default async function AboutPageWrapper() {
   const businessInfo = await getBusinessInfo();
   const pb = await getPocketBaseClient();
   
-  let serviceAreas: ServiceArea[] = [];
+  let serviceAreas: ServiceAreaNode[] = [];
   let services: ServiceNode[] = [];
   let testimonials: Testimonial[] = [];
   let media: MediaItem[] = [];
   try {
-    serviceAreas = await pb.collection('service_areas').getFullList<ServiceArea>({ filter: 'is_active = true', sort: 'sort_order' });
+    serviceAreas = await getAreaList();
     services = await getServiceList();
     testimonials = await pb.collection('testimonials').getFullList<Testimonial>({ filter: 'is_visible = true', sort: 'sort_order' });
     media = await pb.collection('media').getFullList<MediaItem>({ sort: 'sort_order' });

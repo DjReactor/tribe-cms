@@ -26,7 +26,7 @@ export function Header({ businessInfo, serviceAreas, blogEnabled, config }: Head
                     {serviceAreas.map(area => (
                       <Link 
                         key={area.id} 
-                        href={`/${area.slug}`}
+                        href={area.path}
                         className="block px-4 py-2 hover:bg-[var(--tribe-surface)] hover:text-[var(--tribe-brand)]"
                       >
                         {area.name}
