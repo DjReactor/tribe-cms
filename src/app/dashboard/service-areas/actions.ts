@@ -18,7 +18,7 @@ const serviceAreaSchema = z.object({
   noindex: z.boolean().default(false),
   geo_latitude: z.string().optional().or(z.literal('')),
   geo_longitude: z.string().optional().or(z.literal('')),
-  neighborhoods: z.array(z.string()).default([])
+  also_serving: z.array(z.string()).default([])
     .transform((arr) => Array.from(new Set(arr.map((s) => s.trim()).filter(Boolean)))),
 });
 

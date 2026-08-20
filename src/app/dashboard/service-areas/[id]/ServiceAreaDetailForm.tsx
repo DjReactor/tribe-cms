@@ -28,7 +28,7 @@ const schema = z.object({
   geo_longitude: z.string().optional().or(z.literal('')),
   noindex: z.boolean(),
   page_content: z.any().optional(),
-  neighborhoods: z.array(z.string()),
+  also_serving: z.array(z.string()),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -54,7 +54,7 @@ export default function ServiceAreaDetailForm({ initialData }: { initialData: an
       geo_longitude: initialData?.geo_longitude || '',
       noindex: initialData?.noindex ?? false,
       page_content: initialData?.page_content || undefined,
-      neighborhoods: initialData?.neighborhoods || [],
+      also_serving: initialData?.also_serving || [],
     }
   });
 
@@ -109,10 +109,10 @@ export default function ServiceAreaDetailForm({ initialData }: { initialData: an
             <Input label="Custom H1 Headline" placeholder="Leaves blank for default" error={errors.custom_h1?.message} {...register('custom_h1')} className="md:col-span-2" />
             <Textarea label="Custom Intro Paragraph" placeholder="Leaves blank for default" error={errors.custom_intro?.message} {...register('custom_intro')} className="md:col-span-2" />
             <TagInput
-              label="Neighborhoods (sub-areas served)"
-              hint="Add the neighborhoods this area covers — shown under the area on the site."
-              value={watch('neighborhoods')}
-              onChange={(v) => setValue('neighborhoods', v, { shouldDirty: true })}
+              label="Also Serving"
+              hint="Places named on this page but given no page of their own. If somewhere deserves its own page, add it as a nested service area instead."
+              value={watch('also_serving')}
+              onChange={(v) => setValue('also_serving', v, { shouldDirty: true })}
               className="md:col-span-2"
             />
           </div>

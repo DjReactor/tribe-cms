@@ -27,9 +27,11 @@ import {
  * without a catch-all and real ambiguity. Flat area paths keep every combo at
  * exactly two segments no matter how deep the geography goes.
  *
- * `ServiceArea.neighborhoods` (the string array) is the tier *below* this tree:
+ * `ServiceArea.also_serving` (the string array) is the tier *below* this tree:
  * names mentioned as content to prove local coverage, never given their own
- * URLs. Page-worthy => its own area record; name-worthy => a string.
+ * URLs. Page-worthy => its own area record; name-worthy => a string. It was
+ * called `neighborhoods` until areas gained a 4th tier, at which point tier 4
+ * *was* the neighborhood tier and the old name pointed at the wrong thing.
  */
 
 /** State › County › City › Neighborhood. */

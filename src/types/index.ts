@@ -92,7 +92,12 @@ export interface ServiceArea {
   noindex?: boolean
   geo_latitude?: string
   geo_longitude?: string
-  neighborhoods?: string[] | null
+  /**
+   * Places named on this area's page but given no page of their own — the tier
+   * below the area tree. Page-worthy => its own `ServiceArea`; name-worthy =>
+   * a string here. (Was `neighborhoods`, renamed once areas gained a 4th tier.)
+   */
+  also_serving?: string[] | null
   updated?: string
 }
 
@@ -103,6 +108,58 @@ export interface ServiceAreaNode extends ServiceArea {
   depth: number
   /** Canonical public path — always flat, e.g. `/santa-rosa`. */
   path: string
+}
+
+/**
+ * A landing page for exactly one service in exactly one area, at
+ * `/{area.slug}/{slug}`.
+ *
+ * Pairs are OPT-IN RECORDS, never a computed route: an unpaired combination
+ * 404s, so the page count equals what somebody actually wrote. The key is
+ * `service` + `service_area` and nothing else — a third dimension would
+ * reintroduce the cartesian product that reads as a doorway to Google. If
+ * another axis is ever needed it belongs in the page body, not in the key.
+ */
+export interface Pair {
+  id: string
+  /** Service id — half of the unique key. */
+  service: string
+  /** Service-area id — the other half. Also the first URL segment's owner. */
+  service_area: string
+  /**
+   * Second URL segment. Materialised at write time (defaulting to the service
+   * slug), never resolved at render — it only has to be unique within its area.
+   */
+  slug: string
+  h1: string
+  intro: string
+  /** BlockNote blocks. Empty is the publish gate: no body => cannot publish. */
+  body: unknown[] | null
+  seo_title: string
+  seo_description: string
+  noindex?: boolean
+  is_published: boolean
+  /**
+   * Set when the pair's service or area is deactivated or deleted. The record
+   * survives (neither relation cascades) so the agency sees a flag and decides.
+   */
+  auto_unpublished: boolean
+  /** Ticks against `TemplateSettings`-adjacent agency-defined checklist items. */
+  manual_checklist: Record<string, boolean> | null
+  sort_order: number
+  /** Resolved service, when the relation is expanded. */
+  serviceRecord?: Service
+  /** Resolved area, when the relation is expanded. */
+  areaRecord?: ServiceArea
+  created?: string
+  updated?: string
+}
+
+/** One agency-defined readiness item, stored in `settings.manual_checklist_items`. */
+export interface ManualChecklistItem {
+  id: string
+  label: string
+  description?: string
 }
 
 export interface Testimonial {
