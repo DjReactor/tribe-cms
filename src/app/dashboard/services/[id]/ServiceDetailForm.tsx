@@ -103,6 +103,13 @@ export default function ServiceDetailForm(
         : await updateService(initialData.id, data);
       if (res.success) {
         addToast({ title: isNew ? 'Service created' : 'Service updated', type: 'success' });
+        if ('unpublished' in res && res.unpublished) {
+          addToast({
+            title: `${res.unpublished} landing page${res.unpublished === 1 ? '' : 's'} unpublished`,
+            description: 'Hiding a service takes its landing pages down. They are flagged for review.',
+            type: 'info',
+          });
+        }
         router.push('/dashboard/services');
       } else {
         addToast({ title: 'Error saving', description: res.error, type: 'error' });

@@ -73,6 +73,14 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
     if (!res.success) {
       setServices((prev) => prev.map((s) => (s.id === id ? { ...s, is_active: current } : s)));
       addToast({ title: 'Error toggling status', description: res.error, type: 'error' });
+      return;
+    }
+    if (res.unpublished) {
+      addToast({
+        title: `${res.unpublished} landing page${res.unpublished === 1 ? '' : 's'} unpublished`,
+        description: 'They are flagged under Landing Pages for review.',
+        type: 'info',
+      });
     }
   };
 
@@ -92,7 +100,7 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
         prev.filter((s) => s.id !== id).map((s) => (s.parent === id ? { ...s, parent: '' } : s)));
       addToast({ title: 'Service deleted', type: 'success' });
     } else {
-      addToast({ title: 'Error deleting service', description: res.error, type: 'error' });
+      addToast({ title: 'Cannot delete this service', description: res.error, type: 'error' });
     }
   };
 

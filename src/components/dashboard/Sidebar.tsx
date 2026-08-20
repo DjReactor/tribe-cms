@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Building2, Wrench, MapPin,
   FileText, LineChart, Settings as SettingsIcon,
   MessageSquare, Phone, Star, ShieldAlert, Palette, Key, Briefcase, Images, MapPinned,
-  Handshake, Tag, BarChart3, Inbox, Shapes, BadgeCheck, ShieldCheck, Trophy
+  Handshake, Tag, BarChart3, Inbox, Shapes, BadgeCheck, ShieldCheck, Trophy, Map, Signpost
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -42,6 +42,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
     { name: 'Basic Info', href: '/dashboard/business-info', icon: Building2, show: true },
     { name: 'Services', href: '/dashboard/services', icon: Wrench, show: true },
     { name: 'Service Areas', href: '/dashboard/service-areas', icon: MapPin, show: true },
+    { name: 'States', href: '/dashboard/states', icon: Map, show: true },
     { name: 'Locations', href: '/dashboard/locations', icon: MapPinned, show: settings?.locations_enabled || isAgency },
     { name: 'Projects', href: '/dashboard/projects', icon: Briefcase, show: settings?.projects_enabled || isAgency },
     { name: 'Brands', href: '/dashboard/brands', icon: BadgeCheck, show: settings?.brands_enabled || isAgency },
@@ -53,6 +54,7 @@ export function Sidebar({ settings, userRole }: SidebarProps) {
   const designSeo: NavItem[] = [
     { name: 'Design', href: '/dashboard/design', icon: Palette, show: true },
     { name: 'Site Content', href: '/dashboard/content', icon: FileText, show: true },
+    { name: 'Landing Pages', href: '/dashboard/landing-pages', icon: Signpost, show: true },
     { name: 'SEO & Visibility', href: '/dashboard/seo', icon: LineChart, show: true },
   ];
 

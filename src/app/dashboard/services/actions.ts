@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import type { Service } from '@/types/index';
 import { indexServices, getServicePath, validateServiceParent } from '@/lib/services';
+import { autoUnpublishPairsFor, pairsForService, blockedByPairsMessage } from '@/lib/pairs';
 
 const serviceSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -141,8 +142,14 @@ export async function updateService(id: string, data: any) {
     if (before && before.slug !== parsedData.slug) await syncSlugRedirect(oldPath, newPath);
     await clearRedirectShadowing(newPath);
 
+    // Hiding a service takes its landing pages down with it (decision 4).
+    let unpublished = 0;
+    if (before?.is_active && !parsedData.is_active) {
+      unpublished = await autoUnpublishPairsFor({ service: id });
+    }
+
     revalidateServices();
-    return { success: true };
+    return { success: true, unpublished };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return { success: false, error: error.issues[0].message };
@@ -172,16 +179,34 @@ export async function toggleServiceActive(id: string, is_active: boolean) {
     await requireAuth();
     const pb = await getPocketBaseClient();
     await pb.collection('services').update(id, { is_active });
+
+    const unpublished = is_active ? 0 : await autoUnpublishPairsFor({ service: id });
+
     revalidateServices();
-    return { success: true };
+    return { success: true, unpublished };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
 
+/**
+ * PocketBase refuses to delete a record a required relation points at, and a
+ * landing page requires its service. Rather than surfacing that as a constraint
+ * error, refuse first and say what to do — which is also what the design wants:
+ * a landing page is reviewed by a human, never removed as a side effect.
+ *
+ * Sub-services are a different case: `parent` is optional, so they survive the
+ * delete and surface as top-level services.
+ */
 export async function deleteService(id: string) {
   try {
     await requireAuth();
+
+    const dependents = await pairsForService(id);
+    if (dependents.length > 0) {
+      return { success: false, error: blockedByPairsMessage(dependents.length, 'service') };
+    }
+
     const pb = await getPocketBaseClient();
     await pb.collection('services').delete(id);
     revalidateServices();

@@ -80,8 +80,10 @@ export interface ServiceArea {
   slug: string
   /** Parent area id. Empty = top level. Max 4 tiers (see lib/area-tree.ts). */
   parent?: string
+  /** State id — powers "Santa Rosa, CA" and region schema. */
+  state?: string
   /** Resolved state, when the relation is expanded. */
-  state?: StateItem
+  stateRecord?: StateItem
   is_active: boolean
   sort_order: number
   custom_h1: string
