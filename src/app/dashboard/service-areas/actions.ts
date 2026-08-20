@@ -7,6 +7,8 @@ import { z } from 'zod';
 import type { ServiceArea } from '@/types/index';
 import { validateAreaParent, isReservedRootSlug, RESERVED_ROOT_SLUGS } from '@/lib/area-tree';
 import { autoUnpublishPairsFor, pairsForArea, blockedByPairsMessage } from '@/lib/pairs';
+import { getPairPath } from '@/lib/pair-readiness';
+import { syncSlugRedirects, clearRedirectShadowing } from '@/lib/redirects';
 
 const serviceAreaSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -98,6 +100,28 @@ function suggestAreaSlug(slug: string, taken: Set<string>, stateCode?: string): 
   return `${slug}-area`;
 }
 
+/**
+ * Every URL an area slug change moves.
+ *
+ * An area is the FIRST segment of every landing page underneath it
+ * (`/{area.slug}/{pair.slug}`), so renaming one area strands N+1 URLs, not one
+ * — its own page plus every pair. This is the one place in the CMS where a
+ * single-field edit relocates a whole branch of the site.
+ *
+ * A parent change moves nothing: area URLs are flat, so the address never
+ * encoded the ancestry that changed.
+ */
+async function pathsMovedByAreaSlug(id: string, oldSlug: string, newSlug: string) {
+  const pairs = await pairsForArea(id);
+  return [
+    { from: `/${oldSlug}`, to: `/${newSlug}` },
+    ...pairs.map((pair) => ({
+      from: getPairPath(oldSlug, pair.slug),
+      to: getPairPath(newSlug, pair.slug),
+    })),
+  ];
+}
+
 async function stateCodeFor(id: string | undefined): Promise<string | undefined> {
   if (!id) return undefined;
   try {
@@ -135,6 +159,8 @@ export async function createServiceArea(data: any) {
 
     const record = await pb.collection('service_areas').create({ ...parsedData, sort_order: 999 });
 
+    await clearRedirectShadowing(`/${parsedData.slug}`);
+
     revalidateAreas();
     return { success: true, id: record.id };
   } catch (error: any) {
@@ -161,8 +187,18 @@ export async function updateServiceArea(id: string, data: any) {
     if (slugError) return { success: false, error: slugError };
 
     const before = areas.find((area) => area.id === id);
+    const slugChanged = Boolean(before && before.slug !== parsedData.slug);
+    // Read the pairs at their OLD address before the area moves underneath them.
+    const moves = slugChanged
+      ? await pathsMovedByAreaSlug(id, before!.slug, parsedData.slug)
+      : [];
 
     await pb.collection('service_areas').update(id, parsedData);
+
+    if (slugChanged) {
+      await syncSlugRedirects(moves, 'Auto-created when a service area slug changed');
+      await clearRedirectShadowing(...moves.map((move) => move.to));
+    }
 
     // Hiding an area takes its landing pages down with it (decision 4).
     let unpublished = 0;
@@ -171,7 +207,7 @@ export async function updateServiceArea(id: string, data: any) {
     }
 
     revalidateAreas();
-    return { success: true, unpublished };
+    return { success: true, unpublished, movedUrls: moves.length };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
       return { success: false, error: error.issues[0].message };

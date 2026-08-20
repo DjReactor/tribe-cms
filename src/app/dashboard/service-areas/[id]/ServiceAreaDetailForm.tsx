@@ -125,6 +125,15 @@ export default function ServiceAreaDetailForm(
         : await updateServiceArea(initialData.id, data);
       if (res.success) {
         addToast({ title: isNew ? 'Service Area created' : 'Service Area updated', type: 'success' });
+        if ('movedUrls' in res && res.movedUrls) {
+          addToast({
+            title: `${res.movedUrls} URL${res.movedUrls === 1 ? '' : 's'} redirected`,
+            description: res.movedUrls > 1
+              ? 'The area and its landing pages all moved, so the old addresses now 301 to the new ones.'
+              : 'The old address now 301s to the new one.',
+            type: 'info',
+          });
+        }
         if ('unpublished' in res && res.unpublished) {
           addToast({
             title: `${res.unpublished} landing page${res.unpublished === 1 ? '' : 's'} unpublished`,

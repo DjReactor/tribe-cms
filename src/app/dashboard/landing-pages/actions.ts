@@ -5,7 +5,8 @@ import { requireAgencyAdmin } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import type { Pair, Service, ServiceArea, ManualChecklistItem } from '@/types/index';
-import { canPublish, type ReadinessSource } from '@/lib/pair-readiness';
+import { canPublish, getPairPath, type ReadinessSource } from '@/lib/pair-readiness';
+import { syncSlugRedirect, clearRedirectShadowing } from '@/lib/redirects';
 
 /**
  * Landing pages (`pairs`) — one service in one area, at `/{area.slug}/{slug}`.
@@ -140,10 +141,11 @@ export async function createPair(input: { service: string; service_area: string 
       .getFullList<Pair>({ filter: `service_area = "${input.service_area}"` })
       .catch(() => []);
 
+    const slug = uniqueSlugInArea(service.slug, areaPairs, null);
     const record = await pb.collection('pairs').create({
       service: input.service,
       service_area: input.service_area,
-      slug: uniqueSlugInArea(service.slug, areaPairs, null),
+      slug,
       h1: '',
       intro: '',
       body: null,
@@ -153,6 +155,8 @@ export async function createPair(input: { service: string; service_area: string 
       manual_checklist: {},
       sort_order: 999,
     });
+
+    await clearRedirectShadowing(getPairPath(area.slug, slug));
 
     revalidatePairs();
     return { success: true, id: record.id };
@@ -206,17 +210,30 @@ export async function updatePair(id: string, data: unknown) {
       };
     }
 
+    const slug = parsed.slug.trim();
     await pb.collection('pairs').update(id, {
       ...parsed,
-      slug: parsed.slug.trim(),
+      slug,
       // Publishing is the agency saying they have looked at it, so it clears
       // the flag a cascade left behind.
       auto_unpublished: parsed.is_published ? false : pair.auto_unpublished,
     });
 
     const area = await pb.collection('service_areas').getOne(pair.service_area).catch(() => null);
+
+    // The pair owns only the second segment; the first moves with the area, and
+    // the area's own save handles that side (see service-areas/actions.ts).
+    if (area?.slug && slug !== pair.slug) {
+      await syncSlugRedirect(
+        getPairPath(area.slug, pair.slug),
+        getPairPath(area.slug, slug),
+        'Auto-created when a landing page slug changed',
+      );
+      await clearRedirectShadowing(getPairPath(area.slug, slug));
+    }
+
     revalidatePairs(area?.slug, pair.slug);
-    if (area?.slug && parsed.slug !== pair.slug) revalidatePairs(area.slug, parsed.slug);
+    if (area?.slug && slug !== pair.slug) revalidatePairs(area.slug, slug);
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.issues[0].message };
