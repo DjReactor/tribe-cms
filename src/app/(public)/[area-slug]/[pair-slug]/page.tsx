@@ -6,13 +6,12 @@ import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
-import { getServiceList, getServicePath } from "@/lib/services";
+import { getServiceRoots, getServicePath } from "@/lib/services";
 import { getAreaList, getAreaPath } from "@/lib/service-areas";
 import {
   resolveLivePair,
   getPairIndex,
   servicesWithLanding,
-  flattenLanding,
   localProof,
 } from "@/lib/pairs";
 import { getPairPath } from "@/lib/pair-readiness";
@@ -126,8 +125,8 @@ export default async function PairPageWrapper({ params }: RouteParams) {
 
   // Every service with its landing page IN THIS AREA resolved — the sibling
   // pages a visitor on this page might actually want.
-  const services: ServiceWithLanding[] = flattenLanding(
-    servicesWithLanding(await getServiceList(), area.id, await getPairIndex()),
+  const services: ServiceWithLanding[] = servicesWithLanding(
+    await getServiceRoots(), area.id, await getPairIndex(),
   );
 
   // ── Copy ─────────────────────────────────────────────────────────────────

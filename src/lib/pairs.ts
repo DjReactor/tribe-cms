@@ -201,40 +201,65 @@ export async function resolveLivePair(areaSlug: string, pairSlug: string): Promi
   return live.find((entry) => entry.area.slug === areaSlug && entry.pair.slug === pairSlug) ?? null;
 }
 
-/** Depth-first flatten that keeps whatever the caller attached to each node. */
-export function flattenLanding<T extends { children: T[] }>(nodes: T[]): T[] {
-  return nodes.flatMap((node) => [node, ...flattenLanding(node.children)]);
+// ── The mutual link ────────────────────────────────────────────────────────
+//
+// `areasWithLanding` / `servicesWithLanding` attach `landingPath` to a whole
+// forest and hand it back depth-first FLAT — the same shape `getAreaList()` /
+// `getServiceList()` return, so a template treats these lists exactly like the
+// plain ones. `.children` is enriched too, off the same node objects, so a
+// template that walks the tree instead gets the contract at every tier.
+//
+// Both halves take ROOTS and do the flatten internally, deliberately. An
+// earlier version exported the recursion and the flatten separately, and two of
+// the three call sites handed the recursive enricher an already-flat list: every
+// nested node then came back once per tier it sat under, silently, with
+// duplicate React keys. Keeping both steps in here means a caller cannot do
+// either of them twice.
+
+function flattenNodes<T extends { children: T[] }>(nodes: T[]): T[] {
+  return nodes.flatMap((node) => [node, ...flattenNodes(node.children)]);
 }
 
-/**
- * Attach `landingPath` to a tree of areas, for one service.
- *
- * Recursive so `.children` carries the same contract — a template rendering the
- * area tree gets a path (or a null) at every tier, not just the roots.
- */
-export function areasWithLanding(
-  nodes: ServiceAreaNode[],
+function attachAreaLanding(
+  roots: ServiceAreaNode[],
   serviceId: string,
   index: Map<string, string>,
 ): AreaWithLanding[] {
-  return nodes.map((node) => ({
+  return roots.map((node) => ({
     ...node,
-    children: areasWithLanding(node.children, serviceId, index),
+    children: attachAreaLanding(node.children, serviceId, index),
     landingPath: index.get(pairKey(serviceId, node.id)) ?? null,
   }));
 }
 
-/** The service side of the same enrichment — see `areasWithLanding`. */
-export function servicesWithLanding(
-  nodes: ServiceNode[],
+function attachServiceLanding(
+  roots: ServiceNode[],
   areaId: string,
   index: Map<string, string>,
 ): ServiceWithLanding[] {
-  return nodes.map((node) => ({
+  return roots.map((node) => ({
     ...node,
-    children: servicesWithLanding(node.children, areaId, index),
+    children: attachServiceLanding(node.children, areaId, index),
     landingPath: index.get(pairKey(node.id, areaId)) ?? null,
   }));
+}
+
+/** Every area, depth-first, each carrying THIS service's landing page or null. */
+export function areasWithLanding(
+  roots: ServiceAreaNode[],
+  serviceId: string,
+  index: Map<string, string>,
+): AreaWithLanding[] {
+  return flattenNodes(attachAreaLanding(roots, serviceId, index));
+}
+
+/** Every service, depth-first, each carrying ITS landing page in THIS area or null. */
+export function servicesWithLanding(
+  roots: ServiceNode[],
+  areaId: string,
+  index: Map<string, string>,
+): ServiceWithLanding[] {
+  return flattenNodes(attachServiceLanding(roots, areaId, index));
 }
 
 /**

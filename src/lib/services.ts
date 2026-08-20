@@ -24,6 +24,16 @@ export const getServices = cache(async (): Promise<Service[]> => {
 });
 
 /**
+ * The forest built exactly once per request, in both shapes. `list` and `roots`
+ * share their node objects, so the flat view and the nested view can never
+ * disagree.
+ */
+const getServiceHierarchy = cache(async (): Promise<{ list: ServiceNode[]; roots: ServiceNode[] }> => {
+  const roots = buildServiceTree(await getServices());
+  return { roots, list: flattenServiceTree(roots) };
+});
+
+/**
  * Every active service as a flat, hierarchy-aware list: depth-first order, each
  * item carrying its `depth`, `children` and canonical `path`.
  *
@@ -31,7 +41,16 @@ export const getServices = cache(async (): Promise<Service[]> => {
  * path, a template linking to a service never has to know whether that service
  * is nested, and never emits a link that just 301s somewhere else.
  */
-export const getServiceList = cache(async (): Promise<ServiceNode[]> => {
-  const services = await getServices();
-  return flattenServiceTree(buildServiceTree(services));
-});
+export async function getServiceList(): Promise<ServiceNode[]> {
+  return (await getServiceHierarchy()).list;
+}
+
+/**
+ * The same set nested: top-level services only, walk `.children` for the rest.
+ *
+ * This is what the landing-page enrichers want — they take ROOTS and flatten
+ * internally, so handing them `getServiceList()` would walk every subtree twice.
+ */
+export async function getServiceRoots(): Promise<ServiceNode[]> {
+  return (await getServiceHierarchy()).roots;
+}

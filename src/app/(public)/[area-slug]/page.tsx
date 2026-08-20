@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
 import { getPocketBaseClient } from "@/lib/pocketbase";
+import { cache } from "react";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy, resolveTemplateTokens } from "@/lib/template";
-import { getServiceList } from "@/lib/services";
+import { getServiceRoots } from "@/lib/services";
 import {
   getServiceAreas,
   getAreaRoots,
@@ -15,7 +16,7 @@ import {
   getAreaTrail,
   findAreaNode,
 } from "@/lib/service-areas";
-import { getPairIndex, servicesWithLanding, flattenLanding, localProof } from "@/lib/pairs";
+import { getPairIndex, servicesWithLanding, localProof } from "@/lib/pairs";
 import { buildBreadcrumbSchema } from "@/lib/seo";
 import type { ServiceArea, StateItem, ServiceWithLanding, Testimonial, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -39,8 +40,11 @@ import { notFound } from "next/navigation";
  * `ServiceArea.state` is the relation ID; the resolved record rides on
  * `stateRecord`, which is normally undefined because no other route expands it.
  * This route does, deliberately — "Santa Rosa, CA" and region schema need it.
+ *
+ * Cached per request: `generateMetadata` and the page body both need the record,
+ * and without this that is two identical queries on every area page view.
  */
-async function findArea(slug: string): Promise<ServiceArea | null> {
+const findArea = cache(async (slug: string): Promise<ServiceArea | null> => {
   try {
     const pb = await getPocketBaseClient();
     const record = await pb.collection('service_areas').getFirstListItem<ServiceArea>(
@@ -52,7 +56,7 @@ async function findArea(slug: string): Promise<ServiceArea | null> {
   } catch {
     return null;
   }
-}
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ 'area-slug': string }> }): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -102,8 +106,8 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   // `landingPath`, or null where no pair exists. The template links a path and
   // renders a null as text — it never asks whether a page exists, and creating
   // the pair later turns that text into a link with no template edit.
-  const services: ServiceWithLanding[] = flattenLanding(
-    servicesWithLanding(await getServiceList(), area.id, await getPairIndex()),
+  const services: ServiceWithLanding[] = servicesWithLanding(
+    await getServiceRoots(), area.id, await getPairIndex(),
   );
 
   let testimonials: Testimonial[] = [];

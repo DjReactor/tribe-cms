@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 
 /**
@@ -90,9 +91,13 @@ function renderInline(nodes: unknown, keyPrefix: string): ReactNode {
     if (styles.underline) element = <u>{element}</u>;
     if (styles.strike) element = <s>{element}</s>;
 
-    return Object.keys(style).length > 0
-      ? <span key={key} style={style}>{element}</span>
-      : <span key={key}>{element}</span>;
+    // Unmarked, uncoloured text is emitted bare — most body copy is exactly
+    // that, and wrapping every run in a `<span>` would double the markup of an
+    // ordinary paragraph for nothing. (Plain strings inside an array need no
+    // key; only elements do.)
+    const coloured = Object.keys(style).length > 0;
+    if (!coloured && typeof element === 'string') return element;
+    return <span key={key} style={coloured ? style : undefined}>{element}</span>;
   });
 }
 
@@ -132,7 +137,12 @@ function renderBlock(block: Block, key: string): ReactNode {
       const Tag = (level === 1 ? 'h2' : level === 2 ? 'h3' : 'h4') as 'h2' | 'h3' | 'h4';
       // Deliberately shifted down one: the page's own H1 is the template's, and
       // body copy must never introduce a second one.
-      return <Tag key={key}>{inline}{children}</Tag>;
+      //
+      // Nested blocks render as SIBLINGS, not inside the heading — BlockNote
+      // lets a heading or a paragraph own children, and a heading or `<p>`
+      // wrapping block-level content is invalid HTML that browsers silently
+      // restructure.
+      return <Fragment key={key}><Tag>{inline}</Tag>{children}</Fragment>;
     }
     case 'quote':
       return <blockquote key={key}>{inline}{children}</blockquote>;
@@ -169,8 +179,9 @@ function renderBlock(block: Block, key: string): ReactNode {
     case 'pageBreak':
       return <hr key={key} />;
     default:
-      // paragraph and anything this file has not been taught yet.
-      return <p key={key}>{inline}{children}</p>;
+      // paragraph, and anything this file has not been taught yet. Children are
+      // siblings for the same reason as headings, above.
+      return <Fragment key={key}><p>{inline}</p>{children}</Fragment>;
   }
 }
 

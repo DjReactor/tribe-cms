@@ -15,7 +15,7 @@ import {
   findServiceNode,
 } from "@/lib/services";
 import { getAreaRoots } from "@/lib/service-areas";
-import { getPairIndex, areasWithLanding, flattenLanding } from "@/lib/pairs";
+import { getPairIndex, areasWithLanding } from "@/lib/pairs";
 import { buildServiceSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { Service, AreaWithLanding, BeforeAfterPair, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
@@ -100,8 +100,8 @@ export default async function ServiceDetailPageWrapper(
   // null) and never asks whether a page exists. An unpaired area deliberately
   // does NOT fall back to `/{area}`: pointing every town at a generic hub from
   // every service page is a topical mismatch, not internal linking.
-  const serviceAreas: AreaWithLanding[] = flattenLanding(
-    areasWithLanding(await getAreaRoots(), service.id, await getPairIndex()),
+  const serviceAreas: AreaWithLanding[] = areasWithLanding(
+    await getAreaRoots(), service.id, await getPairIndex(),
   );
 
   const locations = await getLocations();
