@@ -19,8 +19,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    // Canonical nested paths only — the flat `/services/<slug>` form 301s to
-    // these, and listing both would advertise a redirect chain to crawlers.
+    // `getServicePath` is the one place a service URL is built, and it is flat
+    // at every tier — so each service appears once, at the same address the
+    // page sets as its canonical.
     const services = await getServices();
     const servicesById = indexServices(services);
     services.forEach(service => {

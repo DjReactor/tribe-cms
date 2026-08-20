@@ -19,15 +19,17 @@ import type { Service, ServiceArea, BeforeAfterPair, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
 /**
-
+ * One dynamic segment, matched exactly against a globally unique slug
+ * (migration 2010000000). Service URLs are flat at every tier, so this route
+ * sees the whole address and there is nothing to reconcile: `/services/<slug>`
+ * or nothing.
  *
- * Resolution deliberately keys off the LAST segment only (slugs are globally
- * unique, enforced by migration 2010000000). Ancestors in the requested path
- * are never checked, so any stale ancestry — a re-parented service, a renamed
- * or deleted parent, an old flat `/services/<slug>` link — still resolves and
- * is 301'd to the canonical path below. That one rule replaces what would
- * otherwise be redirect bookkeeping on every re-parent, and it keeps Google
- * from indexing the same page under several paths.
+ * A NESTED path like `/services/remodeling/kitchen` 404s, deliberately. The
+ * site never emits one — the hierarchy lives in navigation and breadcrumbs, not
+ * in the address — so the only source of one is an inbound link, typically from
+ * a site a client migrated off. Those get a rule in the redirects UI, aimed at
+ * the handful of URLs that actually have history, rather than a catch-all that
+ * resolves anything ending in a valid slug.
  */
 async function resolve(slug: string) {
   const services = await getServices();

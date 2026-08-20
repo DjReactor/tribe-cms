@@ -44,11 +44,11 @@ async function allServices(): Promise<Service[]> {
   return pb.collection('services').getFullList<Service>({ sort: 'sort_order' }).catch(() => []);
 }
 
-/** Service pages are dynamic under one catch-all segment - blow the lot away. */
+/** Service detail pages are dynamic under one segment - blow the lot away. */
 function revalidateServices() {
   revalidatePath('/dashboard/services');
   revalidatePath('/services');
-  revalidatePath('/services/[...slug]', 'page');
+  revalidatePath('/services/[slug]', 'page');
   revalidatePath('/sitemap.xml');
 }
 
