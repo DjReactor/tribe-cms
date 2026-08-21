@@ -91,6 +91,8 @@ export interface ServiceArea {
   page_content: unknown[] | null
   seo_title: string
   seo_description: string
+  /** Primary keyword, scored advisorily by lib/focus-keyword.ts. */
+  focus_keyword?: string
   noindex?: boolean
   geo_latitude?: string
   geo_longitude?: string
@@ -316,8 +318,11 @@ export interface BlogPost {
   published_at: string
   seo_title: string
   seo_description: string
+  /** Primary keyword, scored advisorily by lib/focus-keyword.ts. */
+  focus_keyword?: string
   noindex?: boolean
   canonical_url?: string
+  created?: string
   updated?: string
 }
 
