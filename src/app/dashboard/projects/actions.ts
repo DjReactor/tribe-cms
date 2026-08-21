@@ -4,6 +4,7 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 const projectSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -110,6 +111,13 @@ export async function createProject(data: any) {
     await requireAuth();
     const parsed = projectSchema.parse(data);
     const { service_ids, gallery_media_ids, testimonial_enabled, ...rest } = parsed;
+
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const slug = normalizeSlug(rest.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+    rest.slug = slug;
+
     const flatData = {
       ...rest,
       services: service_ids,
@@ -141,6 +149,13 @@ export async function updateProject(id: string, data: any) {
     await requireAuth();
     const parsed = projectSchema.parse(data);
     const { service_ids, gallery_media_ids, testimonial_enabled, ...rest } = parsed;
+
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const slug = normalizeSlug(rest.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+    rest.slug = slug;
+
     const flatData = {
       ...rest,
       services: service_ids,

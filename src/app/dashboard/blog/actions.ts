@@ -4,6 +4,7 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 const blogSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -39,6 +40,12 @@ export async function createBlogPost(data: any) {
       (parsedData as any).published_at = new Date().toISOString();
     }
     (parsedData as any).author_type = 'manual';
+
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const slug = normalizeSlug(parsedData.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+    parsedData.slug = slug;
     
     const pb = await getPocketBaseClient();
     const record = await pb.collection('blog_posts').create(parsedData);
@@ -59,6 +66,12 @@ export async function updateBlogPost(id: string, data: any) {
   try {
     await requireAuth();
     const parsedData = blogSchema.parse(data);
+
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const updateSlug = normalizeSlug(parsedData.slug);
+    if (!updateSlug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+    parsedData.slug = updateSlug;
     
     // Auto-set published_at when first published
     if (parsedData.status === 'published') {

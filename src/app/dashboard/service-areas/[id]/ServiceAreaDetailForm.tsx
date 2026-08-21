@@ -27,6 +27,7 @@ import {
   isReservedRootSlug,
 } from '@/lib/area-tree';
 import { slugify } from '@/lib/slug';
+import { FocusKeywordAnalysis } from '@/components/dashboard/FocusKeywordAnalysis';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -79,6 +80,14 @@ export default function ServiceAreaDetailForm(
   const [isPending, startTransition] = useTransition();
   const parentId = watch('parent');
   const slug = watch('slug');
+  // Watched so the focus-keyword analysis re-scores as the page is written,
+  // from the same pure module a server would use.
+  const focusKeyword = watch('focus_keyword');
+  const seoTitle = watch('seo_title');
+  const seoDescription = watch('seo_description');
+  const customH1 = watch('custom_h1');
+  const pageContent = watch('page_content');
+  const areaName = watch('name');
 
   /**
    * Valid parents, mirroring validateAreaParent() in ../actions.ts. Three
@@ -273,9 +282,34 @@ export default function ServiceAreaDetailForm(
           <CardDescription>Optimize how this page appears on Google.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <Input label="Focus Keyword" error={errors.focus_keyword?.message} {...register('focus_keyword')} />
+          <div>
+            <Input
+              label="Focus Keyword"
+              placeholder="kitchen remodeling santa rosa"
+              error={errors.focus_keyword?.message}
+              {...register('focus_keyword')}
+            />
+            <p className="mt-1.5 text-sm text-slate-500">
+              The search this page is meant to win. Everything below is checked against it.
+            </p>
+          </div>
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
+
+          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
+            <FocusKeywordAnalysis
+              subject={{
+                keyword: focusKeyword || '',
+                // The H1 falls back to the template's generated heading, which
+                // is what the page actually renders when no override is set.
+                heading: customH1 || areaName || '',
+                seoTitle: seoTitle || areaName || '',
+                seoDescription: seoDescription || '',
+                slug: slug || '',
+                body: pageContent,
+              }}
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input label="Latitude (for GeoSchema)" error={errors.geo_latitude?.message} {...register('geo_latitude')} />

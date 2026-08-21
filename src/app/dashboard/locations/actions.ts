@@ -4,9 +4,8 @@ import { getPocketBaseClient } from '@/lib/pocketbase';
 import { requireAuth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { slugify } from '@/lib/slug';
 
-const slugify = (s: string) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
 const locationSchema = z.object({
   area_name: z.string().min(1, 'Area name is required'),

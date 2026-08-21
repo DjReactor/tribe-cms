@@ -14,6 +14,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { useToast } from '@/components/ui/Toast';
 import { BlockNoteEditor } from '@/components/dashboard/BlockNoteEditor';
 import { useRouter } from 'next/navigation';
+import { slugify } from '@/lib/slug';
+import { FocusKeywordAnalysis } from '@/components/dashboard/FocusKeywordAnalysis';
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -50,8 +52,6 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
   });
 
   const isNew = initialData?.id === 'new';
-  const slugify = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
   const [isPending, startTransition] = useTransition();
 
@@ -118,9 +118,33 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
           <CardDescription>Optimize how this post appears on Google.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <Input label="Focus Keyword" error={errors.focus_keyword?.message} {...register('focus_keyword')} />
+          <div>
+            <Input
+              label="Focus Keyword"
+              placeholder="how long a kitchen permit takes"
+              error={errors.focus_keyword?.message}
+              {...register('focus_keyword')}
+            />
+            <p className="mt-1.5 text-sm text-slate-500">
+              The search this post is meant to win. Everything below is checked against it.
+            </p>
+          </div>
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
+
+          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
+            <FocusKeywordAnalysis
+              subject={{
+                keyword: watch('focus_keyword') || '',
+                // A post's H1 is its title — there is no separate heading field.
+                heading: watch('title') || '',
+                seoTitle: watch('seo_title') || watch('title') || '',
+                seoDescription: watch('seo_description') || '',
+                slug: watch('slug') || '',
+                body: watch('content'),
+              }}
+            />
+          </div>
           <Input label="Canonical URL (Optional)" placeholder="https://..." error={errors.canonical_url?.message} {...register('canonical_url')} />
           
           <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60 mt-4">

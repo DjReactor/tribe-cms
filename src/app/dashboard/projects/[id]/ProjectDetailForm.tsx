@@ -15,6 +15,7 @@ import { useToast } from '@/components/ui/Toast';
 import { MediaLibraryModal } from '@/components/dashboard/MediaLibraryModal';
 import { useRouter } from 'next/navigation';
 import { Star, X, Image as ImageIcon } from 'lucide-react';
+import { slugify } from '@/lib/slug';
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -144,8 +145,6 @@ export default function ProjectDetailForm({
     },
   });
 
-  const slugify = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
   // Clear completed_at when status changes away from 'completed'
   const statusValue = watch('status');

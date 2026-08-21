@@ -1,46 +1,41 @@
 'use client';
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-import { useMemo } from "react";
-import type { PartialBlock } from "@blocknote/core";
+import dynamic from 'next/dynamic';
+import type { BlockNoteEditorProps } from './BlockNoteEditorClient';
 
-interface BlockNoteEditorProps {
-  initialContent?: PartialBlock[] | string;
-  onChange: (json: PartialBlock[]) => void;
-  editable?: boolean;
-}
-
-export function BlockNoteEditor({ initialContent, onChange, editable = true }: BlockNoteEditorProps) {
-  const initialBlocks = useMemo(() => {
-    if (typeof initialContent === 'string' && initialContent) {
-      try {
-        return JSON.parse(initialContent);
-      } catch (e) {
-        return undefined;
-      }
-    }
-    if (Array.isArray(initialContent) && initialContent.length > 0) {
-        return initialContent;
-    }
-    return undefined;
-  }, [initialContent]);
-
-  const editor = useCreateBlockNote({
-    initialContent: initialBlocks,
-  });
-
-  return (
-    <div className="min-h-[300px] border border-slate-200/80 rounded-xl overflow-hidden bg-white shadow-sm focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all pb-8 pt-4">
-      <BlockNoteView 
-        editor={editor} 
-        editable={editable}
-        onChange={() => {
-          onChange(editor.document);
-        }}
-        theme="light"
-      />
-    </div>
-  );
-}
+/**
+ * The rich-text editor, loaded in the browser only.
+ *
+ * BlockNote's `useCreateBlockNote` touches `window` while constructing the
+ * editor, and a `'use client'` component is still SERVER-rendered for the
+ * initial HTML — so a static import made every dashboard page containing an
+ * editor throw `ReferenceError: window is not defined` and return a 500. That
+ * was every content-editing screen in the product: services, service areas,
+ * landing pages, blog posts and the catalog sections. Only Projects, which
+ * uses plain textareas, was unaffected.
+ *
+ * `ssr: false` is the right answer HERE and the wrong answer for the public
+ * site, which is worth being explicit about because the two look identical:
+ *
+ *   - This is an editor. Nobody indexes it, it cannot work without a browser,
+ *     and there is nothing to gain from server HTML that will be replaced on
+ *     hydration anyway.
+ *   - `components/shared/BlockNoteRenderer` is the read-only public half, and
+ *     it renders on the SERVER precisely because the body of a landing page or
+ *     a blog post IS the page. Content that only exists after hydration is
+ *     content Google has no reason to rank, so that one was fixed by emitting
+ *     real markup instead — never by hiding it behind `ssr: false`.
+ *
+ * Import sites are unchanged: this file keeps the `BlockNoteEditor` name.
+ */
+export const BlockNoteEditor = dynamic<BlockNoteEditorProps>(
+  () => import('./BlockNoteEditorClient').then((m) => m.BlockNoteEditorClient),
+  {
+    ssr: false,
+    // Same box as the editor so the form does not jump when it loads.
+    loading: () => (
+      <div className="min-h-[300px] rounded-xl border border-slate-200/80 bg-white shadow-sm flex items-center justify-center">
+        <span className="text-sm text-slate-400">Loading editor…</span>
+      </div>
+    ),
+  },
+);

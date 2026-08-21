@@ -5,6 +5,7 @@ import { requireAuth } from '@/lib/auth';
 import { isCatalogKind, type CatalogKind } from '@/lib/catalog-kinds';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 // Shared server actions for the four catalog datatypes (types / brands /
 // certifications / awards). `kind` is validated against the whitelist before
@@ -51,7 +52,12 @@ export async function createCatalogItem(kind: string, data: any) {
     await requireAuth();
     const parsed = catalogItemSchema.parse(data);
     const pb = await getPocketBaseClient();
-    const record = await pb.collection(kind).create({ ...parsed, sort_order: 999 });
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const slug = normalizeSlug(parsed.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
+    const record = await pb.collection(kind).create({ ...parsed, slug, sort_order: 999 });
     revalidateCatalog(kind, parsed.slug);
     return { success: true, id: record.id };
   } catch (error: any) {
@@ -68,7 +74,12 @@ export async function updateCatalogItem(kind: string, id: string, data: any) {
     await requireAuth();
     const parsed = catalogItemSchema.parse(data);
     const pb = await getPocketBaseClient();
-    await pb.collection(kind).update(id, parsed);
+    // A slug is a URL segment; normalise it server-side however it was typed.
+    // See src/lib/slug.ts for why storing the raw string breaks the page.
+    const slug = normalizeSlug(parsed.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
+    await pb.collection(kind).update(id, { ...parsed, slug });
     revalidateCatalog(kind, parsed.slug);
     return { success: true };
   } catch (error: any) {

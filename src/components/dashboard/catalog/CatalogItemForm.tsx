@@ -16,6 +16,7 @@ import { BlockNoteEditor } from '@/components/dashboard/BlockNoteEditor';
 import { MediaLibraryModal } from '@/components/dashboard/MediaLibraryModal';
 import { useRouter } from 'next/navigation';
 import { Image as ImageIcon } from 'lucide-react';
+import { slugify } from '@/lib/slug';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -36,8 +37,6 @@ export default function CatalogItemForm({ kind, initialData }: { kind: CatalogKi
   const router = useRouter();
   const meta = CATALOG_KIND_META[kind];
   const isNew = initialData?.id === 'new';
-  const slugify = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   const { register, handleSubmit, setValue, watch, formState: { errors, dirtyFields } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
