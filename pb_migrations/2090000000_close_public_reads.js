@@ -22,10 +22,21 @@
 //                  createRule stays null — the public contact form writes
 //                  through the admin client.
 //
-//   redirects      Read only through the admin client, in every caller
-//   seo_404_log    (lib/redirects.ts, api/track-404, api/internal/redirects).
-//                  Public read served no purpose at all, so these go to
-//                  superuser-only rather than merely authenticated.
+//   redirects      Superuser-only rather than merely authenticated, because no
+//   seo_404_log    Business-Owner surface shows either one. Callers, all
+//                  checked: lib/redirects.ts, api/track-404 and
+//                  api/internal/redirects use the admin client; the
+//                  dashboard/seo reads use the cookie client but that segment
+//                  is gated by requireAgencyPage(), and an agency admin is a
+//                  PocketBase superuser, so they are unaffected. Those two are
+//                  also exported server actions with no auth gate of their own,
+//                  which means this rule closes a direct POST to them from an
+//                  unauthenticated caller — previously that returned the whole
+//                  redirect list. One caller did have to change: sitemap.ts
+//                  filtered redirected URLs out of /sitemap.xml using the
+//                  ordinary client on a public route, and its catch would have
+//                  swallowed the new 403 and silently stopped filtering. It
+//                  reads through the admin client now.
 //
 //   settings       Cannot be locked: the public site reads it anonymously via
 //                  the cookie client on every render (lib/settings.ts), so a

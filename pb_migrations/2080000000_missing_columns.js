@@ -118,26 +118,34 @@ migrate((app) => {
 
   return null;
 }, (app) => {
-  const dropField = (collectionName, fieldName) => {
+  // Drops only fields carrying the id this migration assigns, so `down` can
+  // only ever remove what `up` added. Matching on name alone would be
+  // destructive here: an instance that already had `created`/`updated` (the
+  // PocketBase Admin UI adds them to any collection made through the UI, which
+  // is how much of the live schema was built) keeps them under PocketBase's own
+  // shared id, and a name-matched drop would delete timestamps that predate
+  // this work. `up` skips those instances; `down` has to skip them too.
+  const dropField = (collectionName, fieldName, expectedId) => {
     let collection;
     try {
       collection = app.findCollectionByNameOrId(collectionName);
     } catch (_) {
       return;
     }
-    if (!collection.fields.some(f => f.name === fieldName)) return;
+    const field = collection.fields.find(f => f.name === fieldName);
+    if (!field || field.id !== expectedId) return;
     collection.fields.removeByName(fieldName);
     app.save(collection);
   };
 
-  dropField("business_info", "state");
-  dropField("business_info", "zip");
-  dropField("blog_posts", "canonical_url");
-  dropField("blog_posts", "noindex");
+  dropField("business_info", "state", "text_business_info_state");
+  dropField("business_info", "zip", "text_business_info_zip");
+  dropField("blog_posts", "canonical_url", "text_blog_posts_canonical_url");
+  dropField("blog_posts", "noindex", "bool_blog_posts_noindex");
 
   for (const name of ["blog_posts", "services", "service_areas"]) {
-    dropField(name, "created");
-    dropField(name, "updated");
+    dropField(name, "created", "autodate_" + name + "_created");
+    dropField(name, "updated", "autodate_" + name + "_updated");
   }
 
   return null;

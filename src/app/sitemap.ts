@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { getSeoSettings } from '@/lib/settings';
 import { getServices, indexServices, getServicePath } from '@/lib/services';
 import { getServiceAreas, getAreaPath } from '@/lib/service-areas';
@@ -183,10 +184,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // both it and its target advertises the same page twice. Slug saves already
   // call `clearRedirectShadowing`; this is the backstop for rules typed by hand
   // in the redirects UI.
+  // Read through the admin client: `redirects` is superuser-only since
+  // `2090000000`, and /sitemap.xml is a public route with no session, so the
+  // ordinary client reads nothing here. The `catch` would swallow that and
+  // silently stop filtering, which is the exact duplicate-advertisement the
+  // block exists to prevent.
   const pathOf = (url: string) => (url.startsWith(baseUrl) ? url.slice(baseUrl.length) || '/' : url);
   let redirected = new Set<string>();
   try {
-    const rules = await pb.collection('redirects').getFullList({ fields: 'from_path' });
+    const admin = await getAdminPocketBase();
+    const rules = await admin.collection('redirects').getFullList({ fields: 'from_path' });
     redirected = new Set(rules.map((rule: any) => rule.from_path).filter(Boolean));
   } catch {
     // No rules readable — emit the routes as built.

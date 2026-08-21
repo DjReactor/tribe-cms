@@ -8,12 +8,20 @@ import { z } from 'zod';
 /**
  * The dashboard used to write `client_name` / `company` / `review_text` /
  * `is_approved`. The collection has never had any of those: it stores
- * `author_name` / `title` / `content` / `is_visible`. PocketBase drops unknown
- * keys without complaining, so "Add Testimonial" saved a row containing only
- * the rating and a sort order — no name, no quote, and `is_visible` unset,
- * which every public query filters on. The testimonial could not appear
- * anywhere, and the dashboard list read the same wrong names back, so
- * webhook-imported reviews showed as blank rows too.
+ * `author_name` / `title` / `content` / `is_visible`. That broke all three
+ * operations, in two different ways:
+ *
+ *   Add      failed outright. `author_name` and `content` are required, and
+ *            neither was among the keys sent, so PocketBase answered 400
+ *            "Cannot be blank" and the form showed an error toast. The agency
+ *            could not add a testimonial at all — loudly, not silently.
+ *   Hide/show did nothing, silently. The toggle PATCHed `is_approved`, an
+ *            unknown key, which PocketBase drops without complaint: HTTP 200,
+ *            success toast, `is_visible` unchanged. Verified both ways against
+ *            a live instance.
+ *   The list  rendered `client_name` / `review_text` / `is_approved`, so every
+ *            row showed a blank name and an empty quote and read as "Hidden" —
+ *            including reviews the webhook had imported correctly.
  *
  * The collection is the side that was right: the reviews webhook, all six
  * public read paths and the templates already agree on these names. So the
@@ -37,6 +45,16 @@ const testimonialSchema = z.object({
   rating: z.coerce.number().min(1).max(5),
   content: z.string().min(1, 'Review text is required'),
   is_visible: z.boolean().default(true),
+});
+
+/**
+ * Update takes the same shape minus the `is_visible` default. With the default
+ * in place, any caller that omitted the key — the natural thing to do when
+ * editing only the text — would have zod fill in `true` and quietly republish a
+ * testimonial the agency had hidden. Omitted here means "leave it as it is".
+ */
+const testimonialUpdateSchema = testimonialSchema.extend({
+  is_visible: z.boolean().optional(),
 });
 
 export async function getTestimonials() {
@@ -76,7 +94,8 @@ export async function updateTestimonial(id: string, data: any) {
     await requireAuth();
     // Validated like create: this used to forward the caller's object straight
     // through, so a stale field name failed silently here too.
-    const parsedData = testimonialSchema.parse(data);
+    const parsedData = testimonialUpdateSchema.parse(data);
+    if (parsedData.is_visible === undefined) delete parsedData.is_visible;
     const pb = await getPocketBaseClient();
     await pb.collection('testimonials').update(id, parsedData);
     revalidatePath('/dashboard/testimonials');
