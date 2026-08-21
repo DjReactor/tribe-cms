@@ -135,7 +135,7 @@ export function PairPage({
 
               <div className="bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)] p-8 rounded-3xl shadow-xl text-center">
                 <h2 className="font-bold text-2xl mb-4">{service.name} in {area.name}</h2>
-                <p className="text-[var(--tribe-text)]/80 mb-8">Talk to a local team that has done this work here.</p>
+                <p className="text-[var(--tribe-brand-text)]/80 mb-8">Talk to a local team that has done this work here.</p>
 
                 {businessInfo.phone && (
                   <a href={`tel:${businessInfo.phone}`} className="w-full bg-[var(--tribe-surface)] text-[var(--tribe-brand)] transition-colors px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center mb-4 shadow-md">
@@ -144,7 +144,7 @@ export function PairPage({
                   </a>
                 )}
 
-                <Link href="/contact" className="w-full border-2 border-white/30 hover:border-white transition-colors text-[var(--tribe-text)] px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center">
+                <Link href="/contact" className="w-full border-2 border-[var(--tribe-brand-text)]/30 hover:border-[var(--tribe-brand-text)] transition-colors text-[var(--tribe-brand-text)] px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center">
                   Request a Quote
                 </Link>
               </div>

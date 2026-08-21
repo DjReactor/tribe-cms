@@ -45,7 +45,7 @@ export function ServiceAreaPage({
             </nav>
           )}
 
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-[var(--tribe-brand)] mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--tribe-brand)]/10 text-[var(--tribe-brand)] mb-8">
             <MapPin className="w-8 h-8" />
           </div>
           <div className="max-w-4xl mx-auto">
@@ -175,7 +175,7 @@ export function ServiceAreaPage({
             <div className="sticky top-28 space-y-8">
               <div className="bg-[var(--tribe-brand)] text-[var(--tribe-brand-text)] p-8 rounded-3xl shadow-xl text-center">
                 <h2 className="font-bold text-2xl mb-4">Book Your Service in {areaLabel}</h2>
-                <p className="text-[var(--tribe-text)]/80 mb-8">Fast, reliable, and local experts ready to help.</p>
+                <p className="text-[var(--tribe-brand-text)]/80 mb-8">Fast, reliable, and local experts ready to help.</p>
 
                 {businessInfo.phone && (
                   <a href={`tel:${businessInfo.phone}`} className="w-full bg-[var(--tribe-surface)] text-[var(--tribe-brand)] hover:bg-[var(--tribe-surface)] transition-colors px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center mb-4 shadow-md">
@@ -184,7 +184,7 @@ export function ServiceAreaPage({
                   </a>
                 )}
 
-                <Link href="/contact" className="w-full border-2 border-white/30 hover:border-white hover:bg-[var(--tribe-surface)]/10 transition-colors text-[var(--tribe-text)] px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center">
+                <Link href="/contact" className="w-full border-2 border-[var(--tribe-brand-text)]/30 hover:border-[var(--tribe-brand-text)] transition-colors text-[var(--tribe-brand-text)] px-6 py-4 rounded-xl font-bold inline-flex items-center justify-center">
                   Contact Us Online
                 </Link>
               </div>
