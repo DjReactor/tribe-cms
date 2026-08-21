@@ -8,6 +8,7 @@ import { getCatalog } from "@/lib/catalog";
 import { buildBlogPostingSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
+import { BlogPostFallback } from '@/components/shared/TemplateFallbacks';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -78,7 +79,6 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
   const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.BlogPostPage) return notFound();
 
   const BlogPostPageComponent = template.BlogPostPage;
 
@@ -102,6 +102,7 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       )}
+      {BlogPostPageComponent ? (
       <BlogPostPageComponent
         post={post}
         businessInfo={businessInfo}
@@ -114,6 +115,9 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
         media={media}
         config={settings.template_config || {}}
       />
+      ) : (
+        <BlogPostFallback post={post} />
+      )}
     </>
   );
 }

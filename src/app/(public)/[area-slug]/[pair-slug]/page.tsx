@@ -16,8 +16,7 @@ import {
 } from "@/lib/pairs";
 import { getPairPath } from "@/lib/pair-readiness";
 import { buildServiceSchema, buildBreadcrumbSchema } from "@/lib/seo";
-import { BlockNoteRenderer } from "@/components/shared/BlockNoteRenderer";
-import Link from "next/link";
+import { PairFallback } from "@/components/shared/TemplateFallbacks";
 import type { ServiceArea, StateItem, ServiceWithLanding, Testimonial, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -232,25 +231,15 @@ export default async function PairPageWrapper({ params }: RouteParams) {
           config={settings.template_config || {}}
         />
       ) : (
-        /* Minimal built-in view, matching what projects / locations / the
-           catalog sections do when a template omits their detail component.
-           A landing page cannot be published without a body, so a template
-           that has not implemented `PairPage` must not silently bin content
-           the agency wrote and the sitemap advertises — and the dashboard
-           links this URL the moment the page is published. */
-        <div className="max-w-4xl mx-auto px-4 py-16 space-y-6">
-          <nav aria-label="Breadcrumb" className="text-sm">
-            <Link href={trail[0].path}>{area.name}</Link>
-          </nav>
-          <h1 className="text-4xl font-bold">{resolvedCopy.h1}</h1>
-          {resolvedCopy.intro && <p className="text-lg text-slate-600">{resolvedCopy.intro}</p>}
-          {Array.isArray(pair.body) && pair.body.length > 0 && (
-            <BlockNoteRenderer content={pair.body} />
-          )}
-          <p className="text-sm">
-            <Link href={servicePath}>More about {service.name}</Link>
-          </p>
-        </div>
+        <PairFallback
+          pair={pair}
+          service={service}
+          area={area}
+          servicePath={servicePath}
+          trail={trail}
+          h1={resolvedCopy.h1}
+          intro={resolvedCopy.intro}
+        />
       )}
     </>
   );

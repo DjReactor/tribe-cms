@@ -20,6 +20,7 @@ import { getPairIndex, servicesWithLanding, localProof } from "@/lib/pairs";
 import { buildBreadcrumbSchema } from "@/lib/seo";
 import type { ServiceArea, StateItem, ServiceWithLanding, Testimonial, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
+import { ServiceAreaFallback } from '@/components/shared/TemplateFallbacks';
 
 /**
  * Service-area pages live at the SITE ROOT — `/santa-rosa`, not
@@ -92,7 +93,6 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   if (!area) return notFound();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.ServiceAreaPage) return notFound();
 
   // ── Hierarchy ────────────────────────────────────────────────────────────
   // The trail and the children are how the area hierarchy reaches users and
@@ -185,6 +185,7 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       )}
+      {ServiceAreaPageComponent ? (
       <ServiceAreaPageComponent
         area={area}
         areaPath={areaPath}
@@ -203,6 +204,17 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
         resolvedCopy={resolvedCopy}
         config={settings.template_config || {}}
       />
+      ) : (
+        /* The sitemap lists every active area, so this must render. */
+        <ServiceAreaFallback
+          area={area}
+          areaTrail={areaTrail}
+          childAreas={childAreas}
+          services={services}
+          h1={resolvedCopy.h1}
+          intro={resolvedCopy.intro}
+        />
+      )}
     </>
   );
 }

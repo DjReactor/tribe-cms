@@ -7,8 +7,8 @@ import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { getAreaList } from "@/lib/service-areas";
-import { notFound } from "next/navigation";
 import type { ServiceAreaNode, MediaItem } from "@/types";
+import { ContactFallback } from '@/components/shared/TemplateFallbacks';
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -38,12 +38,16 @@ export default async function ContactPageWrapper() {
   const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.ContactPage) return notFound();
 
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 
   const ContactPageComponent = template.ContactPage;
+  // The sitemap lists /contact unconditionally, so it has to render something —
+  // and a contact page with no way to make contact is not a page.
+  if (!ContactPageComponent) {
+    return <ContactFallback businessInfo={businessInfo} heading={resolvedCopy.contact_heading} />;
+  }
 
   return (
     <ContactPageComponent

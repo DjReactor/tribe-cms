@@ -8,8 +8,8 @@ import { getCatalog } from "@/lib/catalog";
 import { buildResolvedCopy } from "@/lib/template";
 import { getServiceList } from "@/lib/services";
 import { getAreaList } from "@/lib/service-areas";
-import { notFound } from "next/navigation";
 import type { ServiceAreaNode, ServiceNode, Testimonial, MediaItem } from "@/types";
+import { AboutFallback } from '@/components/shared/TemplateFallbacks';
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -43,12 +43,15 @@ export default async function AboutPageWrapper() {
   const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.AboutPage) return notFound();
 
   const copyOverrides = settings.template_config?.copyOverrides || {};
   const resolvedCopy = buildResolvedCopy(template.manifest?.supportedCopyKeys, copyOverrides, businessInfo);
 
   const AboutPageComponent = template.AboutPage;
+  // The sitemap lists /about unconditionally, so it has to render something.
+  if (!AboutPageComponent) {
+    return <AboutFallback businessInfo={businessInfo} heading={resolvedCopy.about_page_heading} />;
+  }
 
   return (
     <AboutPageComponent

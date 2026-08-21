@@ -19,6 +19,7 @@ import { getPairIndex, areasWithLanding } from "@/lib/pairs";
 import { buildServiceSchema, buildBreadcrumbSchema } from "@/lib/seo";
 import type { Service, AreaWithLanding, BeforeAfterPair, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
+import { ServiceDetailFallback } from '@/components/shared/TemplateFallbacks';
 
 /**
  * One dynamic segment, matched exactly against a globally unique slug
@@ -109,7 +110,6 @@ export default async function ServiceDetailPageWrapper(
   const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.ServiceDetailPage) return notFound();
   const ServiceDetailPageComponent = template.ServiceDetailPage;
 
   const parentChain: Service[] = getAncestors(service, byId);
@@ -139,6 +139,7 @@ export default async function ServiceDetailPageWrapper(
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       )}
+      {ServiceDetailPageComponent ? (
       <ServiceDetailPageComponent
         service={service}
         parentChain={parentChain}
@@ -156,6 +157,14 @@ export default async function ServiceDetailPageWrapper(
         media={media}
         config={settings.template_config || {}}
       />
+      ) : (
+        <ServiceDetailFallback
+          service={service}
+          serviceTrail={serviceTrail}
+          childServices={childServices}
+          serviceAreas={serviceAreas}
+        />
+      )}
     </>
   );
 }

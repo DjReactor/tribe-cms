@@ -7,6 +7,7 @@ import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
 import type { BlogPost, MediaItem } from "@/types";
 import { notFound } from "next/navigation";
+import { BlogIndexFallback } from '@/components/shared/TemplateFallbacks';
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -51,9 +52,9 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
   const { brands, certifications, awards } = await getCatalog();
 
   const template = await loadTemplate(settings.active_template);
-  if (!template.BlogIndexPage) return notFound();
 
   const BlogIndexPageComponent = template.BlogIndexPage;
+  if (!BlogIndexPageComponent) return <BlogIndexFallback posts={posts} />;
 
   return (
     <BlogIndexPageComponent
