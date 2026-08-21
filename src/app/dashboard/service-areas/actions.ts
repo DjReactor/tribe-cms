@@ -9,6 +9,7 @@ import { validateAreaParent, isReservedRootSlug, RESERVED_ROOT_SLUGS } from '@/l
 import { autoUnpublishPairsFor, pairsForArea, blockedByPairsMessage } from '@/lib/pairs';
 import { getPairPath } from '@/lib/pair-readiness';
 import { syncSlugRedirects, clearRedirectShadowing } from '@/lib/redirects';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 const serviceAreaSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -152,14 +153,19 @@ export async function createServiceArea(data: any) {
     const parentError = validateAreaParent(parsedData.parent || '', null, areas);
     if (parentError) return { success: false, error: parentError };
 
+    // Normalise BEFORE the slug rules, so uniqueness and the reserved-slug
+    // check test the value that will actually be stored and looked up.
+    const slug = normalizeSlug(parsedData.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
     const slugError = checkAreaSlug(
-      parsedData.slug, null, areas, await stateCodeFor(parsedData.state || undefined),
+      slug, null, areas, await stateCodeFor(parsedData.state || undefined),
     );
     if (slugError) return { success: false, error: slugError };
 
-    const record = await pb.collection('service_areas').create({ ...parsedData, sort_order: 999 });
+    const record = await pb.collection('service_areas').create({ ...parsedData, slug, sort_order: 999 });
 
-    await clearRedirectShadowing(`/${parsedData.slug}`);
+    await clearRedirectShadowing(`/${slug}`);
 
     revalidateAreas();
     return { success: true, id: record.id };
@@ -181,19 +187,22 @@ export async function updateServiceArea(id: string, data: any) {
     const parentError = validateAreaParent(parsedData.parent || '', id, areas);
     if (parentError) return { success: false, error: parentError };
 
+    const slug = normalizeSlug(parsedData.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
     const slugError = checkAreaSlug(
-      parsedData.slug, id, areas, await stateCodeFor(parsedData.state || undefined),
+      slug, id, areas, await stateCodeFor(parsedData.state || undefined),
     );
     if (slugError) return { success: false, error: slugError };
 
     const before = areas.find((area) => area.id === id);
-    const slugChanged = Boolean(before && before.slug !== parsedData.slug);
+    const slugChanged = Boolean(before && before.slug !== slug);
     // Read the pairs at their OLD address before the area moves underneath them.
     const moves = slugChanged
-      ? await pathsMovedByAreaSlug(id, before!.slug, parsedData.slug)
+      ? await pathsMovedByAreaSlug(id, before!.slug, slug)
       : [];
 
-    await pb.collection('service_areas').update(id, parsedData);
+    await pb.collection('service_areas').update(id, { ...parsedData, slug });
 
     if (slugChanged) {
       await syncSlugRedirects(moves, 'Auto-created when a service area slug changed');

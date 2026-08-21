@@ -26,6 +26,7 @@ import {
   getAreaSubtreeHeight,
   isReservedRootSlug,
 } from '@/lib/area-tree';
+import { slugify } from '@/lib/slug';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -54,8 +55,6 @@ export default function ServiceAreaDetailForm(
   const { addToast } = useToast();
   const router = useRouter();
   const isNew = initialData?.id === 'new';
-  const slugify = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   const { register, handleSubmit, setValue, watch, formState: { errors, dirtyFields } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -104,7 +103,9 @@ export default function ServiceAreaDetailForm(
 
   // Area URLs are flat whatever the tier, which is what keeps a landing page at
   // exactly two segments however deep the geography goes.
-  const previewPath = `/${slug || 'your-area'}`;
+  // The server normalises on save, so preview the normalised value — otherwise
+  // typing "Napa Valley" shows `/Napa Valley` and stores `/napa-valley`.
+  const previewPath = `/${slugify(slug || '') || 'your-area'}`;
   const parentName = parentId ? areasById.get(parentId)?.name : '';
 
   /**
@@ -112,7 +113,7 @@ export default function ServiceAreaDetailForm(
    * warn before the round trip. The server re-checks both rules — this is the
    * same mirror-the-rule-in-the-picker pattern the parent selector uses.
    */
-  const normalizedSlug = (slug || '').trim().toLowerCase();
+  const normalizedSlug = slugify(slug || '');
   const slugReserved = normalizedSlug !== '' && isReservedRootSlug(normalizedSlug);
   const slugTaken = normalizedSlug !== '' && allAreas.some(
     (a) => a.id !== initialData?.id && a.slug.toLowerCase() === normalizedSlug,

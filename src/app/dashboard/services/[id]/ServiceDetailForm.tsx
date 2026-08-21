@@ -17,6 +17,7 @@ import { MediaLibraryModal } from '@/components/dashboard/MediaLibraryModal';
 import { useRouter } from 'next/navigation';
 import { Image as ImageIcon } from 'lucide-react';
 import type { Service } from '@/types/index';
+import { slugify } from '@/lib/slug';
 import {
   MAX_SERVICE_DEPTH,
   indexServices,
@@ -47,8 +48,6 @@ export default function ServiceDetailForm(
   const { addToast } = useToast();
   const router = useRouter();
   const isNew = initialData?.id === 'new';
-  const slugify = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   const { register, handleSubmit, setValue, watch, formState: { errors, dirtyFields } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {

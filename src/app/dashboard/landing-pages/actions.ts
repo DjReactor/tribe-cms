@@ -7,6 +7,7 @@ import { z } from 'zod';
 import type { Pair, Service, ServiceArea, ManualChecklistItem } from '@/types/index';
 import { canPublish, getPairPath, type ReadinessSource } from '@/lib/pair-readiness';
 import { syncSlugRedirect, clearRedirectShadowing } from '@/lib/redirects';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 /**
  * Landing pages (`pairs`) — one service in one area, at `/{area.slug}/{slug}`.
@@ -50,6 +51,7 @@ export async function getLandingPagesData(): Promise<{
   source: ReadinessSource;
   checklistItems: ManualChecklistItem[];
 }> {
+  await requireAgencyAdmin();
   const pb = await getPocketBaseClient();
 
   const [pairs, services, areas, projects, testimonials, checklistItems] = await Promise.all([
@@ -141,7 +143,7 @@ export async function createPair(input: { service: string; service_area: string 
       .getFullList<Pair>({ filter: `service_area = "${input.service_area}"` })
       .catch(() => []);
 
-    const slug = uniqueSlugInArea(service.slug, areaPairs, null);
+    const slug = uniqueSlugInArea(normalizeSlug(service.slug) || 'page', areaPairs, null);
     const record = await pb.collection('pairs').create({
       service: input.service,
       service_area: input.service_area,
@@ -196,21 +198,23 @@ export async function updatePair(id: string, data: unknown) {
       if (blocker) return { success: false, error: blocker };
     }
 
+    // Normalise BEFORE the clash check, so it tests the value that will be
+    // stored and that the public route will look up. A slug is a URL segment:
+    // `Kitchen Remodel` or `kitchen/remodel` would make the page unreachable.
+    const slug = normalizeSlug(parsed.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
     const areaPairs = await pb.collection('pairs')
       .getFullList<Pair>({ filter: `service_area = "${pair.service_area}"` })
       .catch(() => []);
-    const slugClash = areaPairs.some(
-      (p) => p.id !== id && p.slug.toLowerCase() === parsed.slug.trim().toLowerCase(),
-    );
+    const slugClash = areaPairs.some((p) => p.id !== id && p.slug.toLowerCase() === slug);
     if (slugClash) {
       return {
         success: false,
-        error: `Another landing page in this area already uses "/${parsed.slug}". `
-          + `Try "${uniqueSlugInArea(parsed.slug, areaPairs, id)}".`,
+        error: `Another landing page in this area already uses "/${slug}". `
+          + `Try "${uniqueSlugInArea(slug, areaPairs, id)}".`,
       };
     }
-
-    const slug = parsed.slug.trim();
     await pb.collection('pairs').update(id, {
       ...parsed,
       slug,

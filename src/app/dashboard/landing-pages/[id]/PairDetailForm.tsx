@@ -25,6 +25,7 @@ import {
   getPairPath,
   type ReadinessSource,
 } from '@/lib/pair-readiness';
+import { slugify } from '@/lib/slug';
 
 const schema = z.object({
   slug: z.string().min(1, 'Slug is required'),
@@ -132,7 +133,7 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
           <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
             <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
             <p className="font-mono text-sm text-slate-900 break-all">
-              {getPairPath(area?.slug || '…', slug || 'your-page')}
+              {getPairPath(area?.slug || '…', slugify(slug || '') || 'your-page')}
             </p>
           </div>
 

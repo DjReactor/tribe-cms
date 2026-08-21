@@ -8,6 +8,7 @@ import type { Service } from '@/types/index';
 import { indexServices, getServicePath, validateServiceParent } from '@/lib/services';
 import { autoUnpublishPairsFor, pairsForService, blockedByPairsMessage } from '@/lib/pairs';
 import { syncSlugRedirect, clearRedirectShadowing } from '@/lib/redirects';
+import { normalizeSlug, SLUG_UNUSABLE_MESSAGE } from '@/lib/slug';
 
 const SLUG_REDIRECT_NOTE = 'Auto-created when a service slug changed';
 
@@ -62,7 +63,13 @@ export async function createService(data: any) {
     const parentError = validateServiceParent(parsedData.parent || '', null, services);
     if (parentError) return { success: false, error: parentError };
 
-    const record = await pb.collection('services').create({ ...parsedData, sort_order: 999 });
+    // A service slug is its whole public address, and it also seeds the default
+    // slug of every landing page for this service — so it has to be a clean URL
+    // segment however it was typed.
+    const slug = normalizeSlug(parsedData.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
+    const record = await pb.collection('services').create({ ...parsedData, slug, sort_order: 999 });
 
     const created = record as unknown as Service;
     await clearRedirectShadowing(getServicePath(created, indexServices([...services, created])));
@@ -87,17 +94,20 @@ export async function updateService(id: string, data: any) {
     const parentError = validateServiceParent(parsedData.parent || '', id, services);
     if (parentError) return { success: false, error: parentError };
 
+    const slug = normalizeSlug(parsedData.slug);
+    if (!slug) return { success: false, error: SLUG_UNUSABLE_MESSAGE };
+
     const before = services.find((svc) => svc.id === id);
     const oldPath = before ? getServicePath(before, indexServices(services)) : '';
 
-    await pb.collection('services').update(id, parsedData);
+    await pb.collection('services').update(id, { ...parsedData, slug });
 
-    const after = services.map((svc) => (svc.id === id ? ({ ...svc, ...parsedData } as Service) : svc));
+    const after = services.map((svc) => (svc.id === id ? ({ ...svc, ...parsedData, slug } as Service) : svc));
     const newPath = getServicePath(after.find((svc) => svc.id === id)!, indexServices(after));
 
     // Only an own-slug change strands a URL; a parent change is self-healing,
     // because the address never encoded the parent in the first place.
-    if (before && before.slug !== parsedData.slug) {
+    if (before && before.slug !== slug) {
       await syncSlugRedirect(oldPath, newPath, SLUG_REDIRECT_NOTE);
     }
     await clearRedirectShadowing(newPath);
