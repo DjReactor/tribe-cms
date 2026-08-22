@@ -1,5 +1,6 @@
 import type { HomePageProps } from '@/types/template';
 import Link from 'next/link';
+import Image from 'next/image';
 import { styles } from './theme';
 import { StarRating } from '@/components/shared/StarRating';
 import { ContactForm } from '@/components/shared/ContactForm';
@@ -28,9 +29,13 @@ export function HomePage({
       {/* Hero Section */}
       <section className="relative py-28 md:py-40 bg-[var(--tribe-bg)] text-[var(--tribe-text)] overflow-hidden">
         {heroImage && (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImage})` }}
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
           />
         )}
         <div className="absolute inset-0 bg-[var(--tribe-bg)]/70" />
@@ -93,7 +98,7 @@ export function HomePage({
           <div className="aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-slate-200 relative">
             {/* If there is a gallery image, use it, otherwise placeholder */}
             {media.find(m => m.category === 'gallery')?.file ? (
-              <img src={getMediaFileUrl(media.find(m => m.category === 'gallery'))} alt="About Us" className="w-full h-full object-cover" />
+              <Image src={getMediaFileUrl(media.find(m => m.category === 'gallery'))} alt="About Us" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             ) : (
               <div className="absolute inset-0 bg-slate-200 flex items-center justify-center text-[var(--tribe-text-muted)]">Image Placeholder</div>
             )}
@@ -174,7 +179,7 @@ export function HomePage({
                   
                   <div className="mt-8 pt-6 border-t border-[var(--tribe-border)] flex items-center gap-4">
                     {testimonial.author_photo_url ? (
-                      <img src={testimonial.author_photo_url} alt={testimonial.author_name} className="w-12 h-12 rounded-full object-cover" />
+                      <Image src={testimonial.author_photo_url} alt={testimonial.author_name} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-[var(--tribe-text-muted)]">
                         <User className="w-6 h-6" />
@@ -244,8 +249,8 @@ export function HomePage({
               {shownProjects.map(project => (
                 <Link key={project.id} href={`/projects/${project.slug}`} className="group block rounded-2xl overflow-hidden bg-[var(--tribe-surface)] hover:shadow-xl border border-[var(--tribe-border)] transition-all">
                   {project.cover_image_url && (
-                    <div className="aspect-[4/3] overflow-hidden bg-[var(--tribe-surface-alt)]">
-                      <img src={project.cover_image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[var(--tribe-surface-alt)]">
+                      <Image src={project.cover_image_url} alt={project.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform" />
                     </div>
                   )}
                   <div className="p-8">

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -25,7 +25,7 @@ export default async function TestimonialsPageWrapper() {
 
   if (!template.TestimonialsPage) return notFound();
 
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   let testimonials: Testimonial[] = [];
   let media: MediaItem[] = [];
 

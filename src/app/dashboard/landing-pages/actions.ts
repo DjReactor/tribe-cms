@@ -38,6 +38,11 @@ const pairSchema = z.object({
 const plain = <T,>(value: unknown): T => JSON.parse(JSON.stringify(value)) as T;
 
 function revalidatePairs(areaSlug?: string, slug?: string) {
+  // Every one of these records is passed to the shared (public) layout
+  // (nav, JSON-LD, global props), so a change affects every public page,
+  // not just this section's routes. Public pages are cached, so scope the
+  // invalidation to the layout rather than enumerating routes that drift.
+  revalidatePath('/', 'layout');
   revalidatePath('/dashboard/landing-pages');
   if (areaSlug && slug) revalidatePath(`/${areaSlug}/${slug}`);
   revalidatePath('/sitemap.xml');

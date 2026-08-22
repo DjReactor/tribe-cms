@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { getSeoSettings } from '@/lib/settings';
 import { getServices, indexServices, getServicePath } from '@/lib/services';
@@ -10,7 +10,7 @@ import type { BlogPost } from '@/types';
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   const seoSettings = await getSeoSettings();
   const baseUrl = process.env.SITE_URL || 'http://localhost:3000';
 

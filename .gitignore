@@ -46,3 +46,7 @@ next-env.d.ts
 /pb_data/
 /pb_public/
 *.db
+
+# Python bytecode (local dev launcher)
+__pycache__/
+*.pyc

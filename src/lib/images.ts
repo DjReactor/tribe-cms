@@ -34,6 +34,11 @@ export function resolveImage(
  */
 export function getMediaFileUrl(mediaItem: { id: string, file?: string } | undefined | null): string {
   if (!mediaItem || !mediaItem.file) return '';
-  const pbUrl = process.env.NEXT_PUBLIC_POCKETBASE_URL || 'http://127.0.0.1:8090';
+  // Same-origin relative path by default: `/api/files/...` is proxied to
+  // PocketBase by middleware rule #2. The old `http://127.0.0.1:8090` default
+  // produced an address no browser can reach, and NEXT_PUBLIC_POCKETBASE_URL is
+  // not set anywhere in the repo. Relative also lets next/image optimise these
+  // without any `remotePatterns` allowlist.
+  const pbUrl = process.env.NEXT_PUBLIC_POCKETBASE_URL || '';
   return `${pbUrl}/api/files/media/${mediaItem.id}/${mediaItem.file}`;
 }

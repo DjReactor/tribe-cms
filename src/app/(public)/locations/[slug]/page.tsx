@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getProjects } from '@/lib/projects';
 import { getCatalog } from "@/lib/catalog";
 import { notFound } from 'next/navigation';
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const siteUrl = process.env.SITE_URL || '';
   let location: Location | null = null;
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const { slug } = await params;
     location = await pb.collection('locations').getFirstListItem<Location>(pb.filter('slug={:slug} && is_active=true', { slug }));
   } catch {}
@@ -34,7 +34,7 @@ export default async function LocationDetailPageWrapper({ params }: { params: Pr
   const settings = await getSettings();
   if (!settings.locations_enabled) return notFound();
 
-  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPocketBaseClient()]);
+  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPublicPocketBase()]);
   const siteUrl = process.env.SITE_URL || '';
   const { slug } = await params;
 
@@ -100,3 +100,22 @@ export default async function LocationDetailPageWrapper({ params }: { params: Pr
     </>
   );
 }
+
+/**
+ * ISR for a dynamic route.
+ *
+ * An empty list means nothing is prerendered at build time — the build has no
+ * PocketBase to query, and enumerating every slug would make build time scale
+ * with client content. What this export DOES do is opt the route into caching:
+ * the first request for a slug renders and caches it, and later requests are
+ * served from cache until `revalidatePath` or the layout `revalidate` backstop
+ * invalidates it.
+ *
+ * Without this export the route is plain dynamic and is never cached at all,
+ * however many `revalidate` values sit above it. Verified by build output.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;

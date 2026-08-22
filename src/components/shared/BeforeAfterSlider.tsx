@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
+import Image from 'next/image';
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -14,6 +15,11 @@ export function BeforeAfterSlider({
   beforeLabel = 'Before', 
   afterLabel = 'After' 
 }: BeforeAfterSliderProps) {
+  // A pair whose image files went missing must not take the page down:
+  // next/image throws on an empty src (a raw <img> only showed a broken icon),
+  // and a throw here would 500 a cached public page.
+  const hasBothImages = Boolean(beforeImage && afterImage);
+
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,8 +60,10 @@ export function BeforeAfterSlider({
     };
   }, [isDragging]);
 
+  if (!hasBothImages) return null;
+
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative w-full aspect-video overflow-hidden bg-[var(--tribe-surface)] select-none cursor-ew-resize group rounded-xl"
       onMouseDown={(e: ReactMouseEvent) => {
@@ -68,10 +76,12 @@ export function BeforeAfterSlider({
       }}
     >
       {/* After Image (Background) */}
-      <img 
-        src={afterImage} 
-        alt={afterLabel} 
-        className="absolute inset-0 w-full h-full object-cover"
+      <Image
+        src={afterImage}
+        alt={afterLabel}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover"
         draggable={false}
       />
       
@@ -85,10 +95,12 @@ export function BeforeAfterSlider({
         className="absolute inset-0 w-full h-full object-cover"
         style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
       >
-        <img 
-          src={beforeImage} 
-          alt={beforeLabel} 
-          className="absolute inset-0 w-full h-full object-cover"
+        <Image
+          src={beforeImage}
+          alt={beforeLabel}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
           draggable={false}
         />
         

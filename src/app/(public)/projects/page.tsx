@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo, getSeoSettings } from '@/lib/settings';
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { notFound } from 'next/navigation';
 import type { Project, Service, ServiceNode } from '@/types';
 import { mapProject } from '@/lib/projects';
@@ -23,7 +23,7 @@ export default async function ProjectsIndexPageWrapper() {
   const settings = await getSettings();
   if (!settings.projects_enabled) return notFound();
 
-  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPocketBaseClient()]);
+  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPublicPocketBase()]);
 
   let projects: Project[] = [];
   let services: ServiceNode[] = [];

@@ -3,6 +3,7 @@ import { styles } from './theme';
 import { BlockNoteRenderer } from '@/components/shared/BlockNoteRenderer';
 import { BeforeAfterSlider } from '@/components/shared/BeforeAfterSlider';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, CheckCircle2 } from 'lucide-react';
 
 export function ServiceDetailPage({
@@ -63,7 +64,7 @@ export function ServiceDetailPage({
           <div className="lg:col-span-2">
             {service.cover_image_url && (
               <div className="rounded-3xl overflow-hidden mb-12 shadow-md">
-                <img src={service.cover_image_url} alt={service.name} className="w-full h-auto" />
+                <Image src={service.cover_image_url} alt={service.name} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 66vw" className="w-full h-auto" />
               </div>
             )}
             

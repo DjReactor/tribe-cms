@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePageWrapper() {
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   
   let services: ServiceNode[] = [];
   let serviceAreas: ServiceAreaNode[] = [];

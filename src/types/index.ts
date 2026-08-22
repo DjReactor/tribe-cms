@@ -405,6 +405,8 @@ export interface TemplateSettings {
   automation_enabled?: boolean
   automation_events?: Record<string, boolean>  // per-event on/off toggles
   automation_allowed_host?: string             // SSRF allowlist host for outbound events
+  cache_ttl_minutes?: number                   // Agency-set full-cache purge interval; 0/absent = framework backstop only
+  cache_last_purged?: string                   // ISO date stamped by /api/internal/revalidate
   template_config?: {
     imageOverrides?: Record<string, string>
     copyOverrides?: Record<string, string>   // User-saved overrides for template copy slots

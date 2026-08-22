@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -85,7 +85,7 @@ export default async function ServiceDetailPageWrapper(
   const { service, services, byId } = resolved;
   const servicePath = getServicePath(service);
 
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   let beforeAfterPairs: BeforeAfterPair[] = [];
   let media: MediaItem[] = [];
   try {
@@ -168,3 +168,22 @@ export default async function ServiceDetailPageWrapper(
     </>
   );
 }
+
+/**
+ * ISR for a dynamic route.
+ *
+ * An empty list means nothing is prerendered at build time — the build has no
+ * PocketBase to query, and enumerating every slug would make build time scale
+ * with client content. What this export DOES do is opt the route into caching:
+ * the first request for a slug renders and caches it, and later requests are
+ * served from cache until `revalidatePath` or the layout `revalidate` backstop
+ * invalidates it.
+ *
+ * Without this export the route is plain dynamic and is never cached at all,
+ * however many `revalidate` values sit above it. Verified by build output.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;

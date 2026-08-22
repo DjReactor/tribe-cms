@@ -134,6 +134,7 @@ export async function createProject(data: any) {
     const record = await pb.collection('projects').create(flatData);
     revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
+    revalidatePath('/', 'layout');   // projects are a global layout prop
     revalidatePath('/sitemap.xml');
     return { success: true, id: record.id };
   } catch (error: any) {
@@ -172,6 +173,7 @@ export async function updateProject(id: string, data: any) {
     await pb.collection('projects').update(id, flatData);
     revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
+    revalidatePath('/', 'layout');   // projects are a global layout prop
     revalidatePath(`/projects/${rest.slug}`);
     revalidatePath('/sitemap.xml');
     return { success: true };
@@ -190,6 +192,7 @@ export async function deleteProject(id: string) {
     await pb.collection('projects').delete(id);
     revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
+    revalidatePath('/', 'layout');   // projects are a global layout prop
     revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (error: any) {
@@ -218,6 +221,7 @@ export async function toggleProjectActive(id: string, is_active: boolean) {
     await pb.collection('projects').update(id, { is_active });
     revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
+    revalidatePath('/', 'layout');   // projects are a global layout prop
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

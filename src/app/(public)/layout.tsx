@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -11,7 +11,20 @@ import { getActivePalette, generatePaletteCss } from "@/lib/color-palette";
 import { getServiceList } from "@/lib/services";
 import { getAreaList } from "@/lib/service-areas";
 
-export const dynamic = 'force-dynamic';
+/**
+ * ISR. Public pages are prerendered and cached; the dashboard invalidates the
+ * affected paths on save (see the `revalidatePath` calls in the dashboard
+ * action files), so an edit is live on the next request.
+ *
+ * `revalidate` is the backstop for the case that invalidation is *missed* — a
+ * write path that forgets to call `revalidatePath` would otherwise serve stale
+ * HTML forever, silently. One hour caps that at an hour.
+ *
+ * Everything under here must stay free of request APIs (`cookies()`,
+ * `headers()`, `searchParams`) or the route silently drops back to
+ * per-request rendering. That is what `lib/pocketbase-public.ts` is for.
+ */
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const businessInfo = await getBusinessInfo();
@@ -62,7 +75,7 @@ export default async function PublicLayout({
   const seoSettings = await getSeoSettings();
   const siteUrl = process.env.SITE_URL || '';
 
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   let serviceAreas: ServiceAreaNode[] = [];
   let testimonials: Testimonial[] = [];
   let services: ServiceNode[] = [];

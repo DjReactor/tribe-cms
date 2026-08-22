@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { ProjectDetailPageProps } from '@/types/template';
 import { StarRating } from '@/components/shared/StarRating';
 import { ProjectGallery } from './ProjectGallery';
@@ -16,7 +17,7 @@ export function ProjectDetailPage({ project, businessInfo, relatedProjects }: Pr
       {/* Hero */}
       <section className="relative h-80 overflow-hidden" style={{ backgroundColor: 'var(--tribe-surface-alt)' }}>
         {project.cover_image_url && (
-          <img src={project.cover_image_url} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
+          <Image src={project.cover_image_url} alt={project.title} fill priority sizes="100vw" className="object-cover" />
         )}
         <div className="absolute inset-0" style={{ backgroundColor: 'var(--tribe-overlay)' }} />
         <div className="relative h-full flex flex-col justify-end max-w-7xl mx-auto px-4 pb-8">
@@ -78,7 +79,7 @@ export function ProjectDetailPage({ project, businessInfo, relatedProjects }: Pr
             </blockquote>
             <div className="flex items-center gap-3">
               {project.testimonial.client_image_url && (
-                <img src={project.testimonial.client_image_url} alt={project.testimonial.client} className="h-10 w-10 rounded-full object-cover" />
+                <Image src={project.testimonial.client_image_url} alt={project.testimonial.client} width={40} height={40} className="h-10 w-10 rounded-full object-cover" />
               )}
               <div>
                 <p className="font-semibold" style={{ color: 'var(--tribe-heading)' }}>{project.testimonial.client}</p>
@@ -98,7 +99,9 @@ export function ProjectDetailPage({ project, businessInfo, relatedProjects }: Pr
               {relatedProjects.map((p) => (
                 <Link key={p.id} href={`/projects/${p.slug}`} className="group block rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--tribe-surface)', boxShadow: '0 2px 8px var(--tribe-shadow)' }}>
                   {p.cover_image_url && (
-                    <img src={p.cover_image_url} alt={p.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <div className="relative h-36 w-full overflow-hidden">
+                      <Image src={p.cover_image_url} alt={p.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    </div>
                   )}
                   <div className="p-4">
                     <p className="font-semibold" style={{ color: 'var(--tribe-heading)' }}>{p.title}</p>

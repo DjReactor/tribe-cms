@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -27,7 +27,7 @@ export default async function BlogIndexPageWrapper({ searchParams }: { searchPar
   if (!settings.blog_enabled) return notFound();
 
   const businessInfo = await getBusinessInfo();
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   
   const resolvedSearch = await searchParams;
   const page = parseInt(resolvedSearch.page || '1');

@@ -47,6 +47,11 @@ async function allServices(): Promise<Service[]> {
 
 /** Service detail pages are dynamic under one segment - blow the lot away. */
 function revalidateServices() {
+  // Every one of these records is passed to the shared (public) layout
+  // (nav, JSON-LD, global props), so a change affects every public page,
+  // not just this section's routes. Public pages are cached, so scope the
+  // invalidation to the layout rather than enumerating routes that drift.
+  revalidatePath('/', 'layout');
   revalidatePath('/dashboard/services');
   revalidatePath('/services');
   revalidatePath('/services/[slug]', 'page');

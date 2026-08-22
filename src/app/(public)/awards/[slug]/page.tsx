@@ -61,3 +61,22 @@ export default async function AwardDetailPageWrapper({ params }: { params: Promi
     </div>
   );
 }
+
+/**
+ * ISR for a dynamic route.
+ *
+ * An empty list means nothing is prerendered at build time — the build has no
+ * PocketBase to query, and enumerating every slug would make build time scale
+ * with client content. What this export DOES do is opt the route into caching:
+ * the first request for a slug renders and caches it, and later requests are
+ * served from cache until `revalidatePath` or the layout `revalidate` backstop
+ * invalidates it.
+ *
+ * Without this export the route is plain dynamic and is never cached at all,
+ * however many `revalidate` values sit above it. Verified by build output.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;

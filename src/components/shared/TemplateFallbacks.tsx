@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { BlockNoteRenderer } from './BlockNoteRenderer';
 import { ContactForm } from './ContactForm';
 import type {
@@ -127,8 +128,7 @@ export function ServiceDetailFallback({
       <h1 className="text-4xl font-bold">{service.name}</h1>
       {service.short_description && <p className="text-lg text-slate-600">{service.short_description}</p>}
       {service.cover_image_url && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={service.cover_image_url} alt={service.name} className="w-full rounded-xl" />
+        <Image src={service.cover_image_url} alt={service.name} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 66vw" className="w-full h-auto rounded-xl" />
       )}
       {Array.isArray(service.page_content) && service.page_content.length > 0 && (
         <BlockNoteRenderer content={service.page_content} />
@@ -292,8 +292,7 @@ export function BlogPostFallback({ post }: { post: BlogPost }) {
       <h1 className="text-4xl font-bold">{post.title}</h1>
       {post.excerpt && <p className="text-lg text-slate-600">{post.excerpt}</p>}
       {post.cover_image_url && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={post.cover_image_url} alt={post.title} className="w-full rounded-xl" />
+        <Image src={post.cover_image_url} alt={post.title} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 66vw" className="w-full h-auto rounded-xl" />
       )}
       {Array.isArray(post.content) && post.content.length > 0 && (
         <BlockNoteRenderer content={post.content} />

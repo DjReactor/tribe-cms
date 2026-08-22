@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { loadTemplate } from '@/lib/template-loader';
 import { getSettings, getBusinessInfo } from '@/lib/settings';
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getProjects } from '@/lib/projects';
 import { getCatalog } from "@/lib/catalog";
 import { notFound } from 'next/navigation';
@@ -21,7 +21,7 @@ export default async function LocationsIndexPageWrapper() {
   const settings = await getSettings();
   if (!settings.locations_enabled) return notFound();
 
-  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPocketBaseClient()]);
+  const [businessInfo, pb] = await Promise.all([getBusinessInfo(), getPublicPocketBase()]);
   const siteUrl = process.env.SITE_URL || '';
 
   let locations: Location[] = [];

@@ -3,6 +3,7 @@ import { styles } from './theme';
 import { BlockNoteRenderer } from '@/components/shared/BlockNoteRenderer';
 import { StarRating } from '@/components/shared/StarRating';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, MapPin } from 'lucide-react';
 
 /**
@@ -91,7 +92,9 @@ export function PairPage({
                   {localProjects.slice(0, 4).map(project => (
                     <Link key={project.id} href={`/projects/${project.slug}`} className="group block rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:shadow-lg transition-all">
                       {project.cover_image_url && (
-                        <img src={project.cover_image_url} alt={project.title} className="w-full h-48 object-cover" />
+                        <div className="relative h-48 w-full overflow-hidden">
+                          <Image src={project.cover_image_url} alt={project.title} fill sizes="(max-width: 640px) 100vw, 50vw" className="object-cover" />
+                        </div>
                       )}
                       <div className="p-6">
                         <h3 className="font-bold text-lg text-[var(--tribe-heading)] mb-2 group-hover:text-[var(--tribe-brand)] transition-colors">

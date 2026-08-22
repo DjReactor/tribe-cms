@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -30,7 +30,7 @@ export default async function TermsOfServicePageWrapper() {
   // ── Attempt DB fetch ──────────────────────────────────────────────────────
   let content: string;
   try {
-    const pb     = await getPocketBaseClient();
+    const pb     = await getPublicPocketBase();
     const record = await pb.collection("legal_pages").getFirstListItem<{ content: string }>(
       `slug="terms-of-service"`
     );

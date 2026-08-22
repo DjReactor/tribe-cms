@@ -1,11 +1,15 @@
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import type { MediaItem, BlogPost, Service } from '@/types';
 import { getMediaFileUrl } from '@/lib/images';
 import { getServices, indexServices, getServicePath } from '@/lib/services';
 import { NextResponse } from 'next/server';
 
+// Explicit: this handler no longer inherits a `force-dynamic` from the root
+// layout (removed when ISR was enabled), and its output tracks live data.
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   const baseUrl = process.env.SITE_URL || 'http://localhost:3000';
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;

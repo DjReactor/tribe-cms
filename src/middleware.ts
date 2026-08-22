@@ -91,20 +91,17 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     }
   }
 
-  // 4. Template Preview Mode
-  // If `tribe_preview_template` cookie is present, pass it as a header
-  // so the layout/template-loader can pick it up.
-  const previewTemplate = request.cookies.get('tribe_preview_template');
-  if (previewTemplate && !pathname.startsWith('/dashboard') && !pathname.startsWith('/api')) {
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set('x-preview-template', previewTemplate.value);
-
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
+  // 4. Template Preview Mode — REMOVED.
+  //
+  // This used to read a `tribe_preview_template` cookie and forward it as an
+  // `x-preview-template` header. Nothing ever read that header, so it was
+  // inert: the feature was started and never finished.
+  //
+  // If template preview is built for real, do NOT rebuild it this way. Public
+  // pages are cached (ISR), and cached HTML cannot vary by cookie or header —
+  // a header-driven preview would either show the production template anyway
+  // or, worse, cache the preview render and serve it to the public. Use Next's
+  // draft mode, which is designed for this and bypasses the route cache.
 
   return NextResponse.next();
 }

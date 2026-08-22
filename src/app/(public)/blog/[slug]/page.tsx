@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
 import { getCatalog } from "@/lib/catalog";
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   let post: BlogPost | null = null;
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const { slug } = await params;
     post = await pb.collection('blog_posts').getFirstListItem<BlogPost>(`slug="${slug}" && status="published"`);
   } catch {}
@@ -50,7 +50,7 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
   const settings = await getSettings();
   const businessInfo = await getBusinessInfo();
   const seoSettings = await getSeoSettings();
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
   const siteUrl = process.env.SITE_URL || '';
 
   if (!settings.blog_enabled) return notFound();
@@ -121,3 +121,22 @@ export default async function BlogPostPageWrapper({ params }: { params: Promise<
     </>
   );
 }
+
+/**
+ * ISR for a dynamic route.
+ *
+ * An empty list means nothing is prerendered at build time — the build has no
+ * PocketBase to query, and enumerating every slug would make build time scale
+ * with client content. What this export DOES do is opt the route into caching:
+ * the first request for a slug renders and caches it, and later requests are
+ * served from cache until `revalidatePath` or the layout `revalidate` backstop
+ * invalidates it.
+ *
+ * Without this export the route is plain dynamic and is never cached at all,
+ * however many `revalidate` values sit above it. Verified by build output.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;

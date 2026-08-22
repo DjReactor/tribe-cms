@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getPocketBaseClient } from '@/lib/pocketbase';
+import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { authenticateWebhook } from '@/lib/webhook-auth';
+import { revalidatePath } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   const secret = process.env.WEBHOOK_SECRET;
@@ -21,8 +24,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const pb = await getPocketBaseClient();
-    
+    // Admin client, not the cookie client. A webhook carries no `pb_auth`
+    // cookie, and `testimonials.createRule` is `@request.auth.id != ''`, so the
+    // cookie client was creating anonymously and every call was rejected. The
+    // blog webhook authenticates as superuser inline for the same reason; this
+    // one simply never did. See the write-path rule in AGENTS.md.
+    const pb = await getAdminPocketBase();
+
     const testimonial = await pb.collection('testimonials').create({
       author_name: data.author_name,
       author_photo_url: data.author_photo_url || '',
@@ -34,6 +42,13 @@ export async function POST(req: Request) {
       is_visible: data.rating >= 4, // Auto-approve 4+ star reviews
       sort_order: 0
     });
+
+    // Testimonials render on the homepage, /testimonials, and in the
+    // LocalBusiness JSON-LD built in the public layout. Public pages are cached
+    // (ISR), so without this the review would not appear until the layout's
+    // revalidate backstop expired — matching what dashboard/testimonials does.
+    revalidatePath('/');
+    revalidatePath('/testimonials');
 
     return NextResponse.json({ success: true, testimonial: { id: testimonial.id } });
   } catch (error: any) {

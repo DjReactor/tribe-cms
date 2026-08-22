@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { loadTemplate } from "@/lib/template-loader";
 import { getSettings, getBusinessInfo, getSeoSettings } from "@/lib/settings";
-import { getPocketBaseClient } from "@/lib/pocketbase";
+import { getPublicPocketBase } from '@/lib/pocketbase-public';
 import { cache } from "react";
 import { getLocations } from "@/lib/locations";
 import { getProjects } from "@/lib/projects";
@@ -47,7 +47,7 @@ import { ServiceAreaFallback } from '@/components/shared/TemplateFallbacks';
  */
 const findArea = cache(async (slug: string): Promise<ServiceArea | null> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const record = await pb.collection('service_areas').getFirstListItem<ServiceArea>(
       `slug="${slug}" && is_active=true`,
       { expand: 'state' },
@@ -86,7 +86,7 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
   const businessInfo = await getBusinessInfo();
   const seoSettings = await getSeoSettings();
   const siteUrl = process.env.SITE_URL || '';
-  const pb = await getPocketBaseClient();
+  const pb = await getPublicPocketBase();
 
   const resolvedParams = await params;
   const area = await findArea(resolvedParams['area-slug']);
@@ -218,3 +218,22 @@ export default async function ServiceAreaPageWrapper({ params }: { params: Promi
     </>
   );
 }
+
+/**
+ * ISR for a dynamic route.
+ *
+ * An empty list means nothing is prerendered at build time — the build has no
+ * PocketBase to query, and enumerating every slug would make build time scale
+ * with client content. What this export DOES do is opt the route into caching:
+ * the first request for a slug renders and caches it, and later requests are
+ * served from cache until `revalidatePath` or the layout `revalidate` backstop
+ * invalidates it.
+ *
+ * Without this export the route is plain dynamic and is never cached at all,
+ * however many `revalidate` values sit above it. Verified by build output.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;

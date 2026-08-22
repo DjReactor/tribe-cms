@@ -27,6 +27,9 @@ export async function uploadMedia(formData: FormData) {
     
     await pb.collection('media').create(formData);
     revalidatePath('/dashboard', 'layout');
+    // Media renders in the public homepage gallery and on service pages, so a
+    // dashboard-only invalidation left the live site serving stale HTML under ISR.
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -39,6 +42,9 @@ export async function deleteMedia(id: string) {
     const pb = await getPocketBaseClient();
     await pb.collection('media').delete(id);
     revalidatePath('/dashboard', 'layout');
+    // Media renders in the public homepage gallery and on service pages, so a
+    // dashboard-only invalidation left the live site serving stale HTML under ISR.
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -51,6 +57,9 @@ export async function updateMedia(id: string, data: any) {
     const pb = await getPocketBaseClient();
     await pb.collection('media').update(id, data);
     revalidatePath('/dashboard', 'layout');
+    // Media renders in the public homepage gallery and on service pages, so a
+    // dashboard-only invalidation left the live site serving stale HTML under ISR.
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

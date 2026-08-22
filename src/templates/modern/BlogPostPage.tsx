@@ -2,6 +2,7 @@ import type { BlogPostProps } from '@/types/template';
 import { styles } from './theme';
 import { BlockNoteRenderer } from '@/components/shared/BlockNoteRenderer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, User } from 'lucide-react';
 
 export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogPostProps) {
@@ -33,8 +34,8 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
 
       <div className={`${styles.container} max-w-4xl py-16`}>
         {post.cover_image_url && (
-          <div className="rounded-3xl overflow-hidden mb-16 shadow-lg -mt-24 relative z-10 border-4 border-white">
-            <img src={post.cover_image_url} alt={post.title} className="w-full h-auto aspect-video object-cover" />
+          <div className="rounded-3xl overflow-hidden mb-16 shadow-lg -mt-24 relative z-10 border-4 border-white aspect-video">
+            <Image src={post.cover_image_url} alt={post.title} fill priority sizes="(max-width: 896px) 100vw, 896px" className="object-cover" />
           </div>
         )}
 
@@ -76,8 +77,8 @@ export function BlogPostPage({ post, businessInfo, relatedPosts, config }: BlogP
               {relatedPosts.map(related => (
                 <Link key={related.id} href={`/blog/${related.slug}`} className="group block bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:shadow-lg transition-all">
                   {related.cover_image_url && (
-                    <div className="aspect-[3/2] overflow-hidden">
-                      <img src={related.cover_image_url} alt={related.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="relative aspect-[3/2] overflow-hidden">
+                      <Image src={related.cover_image_url} alt={related.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   )}
                   <div className="p-6">

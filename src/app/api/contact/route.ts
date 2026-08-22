@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server';
+
+// Explicit: this handler no longer inherits a `force-dynamic` from the root
+// layout (removed when ISR was enabled), and its output tracks live data.
+export const dynamic = 'force-dynamic';
 import { getAdminPocketBase } from '@/lib/pocketbase-admin';
 import { dispatchEvent } from '@/lib/automation';
 import { resolveLeadSourceId } from '@/lib/lead-sources';

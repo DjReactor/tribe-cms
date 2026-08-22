@@ -1,10 +1,10 @@
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import type { TemplateSettings, BusinessInfo, SeoSettings } from '@/types/index';
 import { cache } from 'react';
 
 export const getSettings = cache(async (): Promise<TemplateSettings & { id: string; template_config: any }> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const record = await pb.collection('settings').getFirstListItem('');
     if (record) {
       return {
@@ -38,6 +38,8 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
         automation_enabled:        record.automation_enabled        ?? false,
         automation_events:         record.automation_events         || {},
         automation_allowed_host:   record.automation_allowed_host   || '',
+        cache_ttl_minutes: Number(record.cache_ttl_minutes) || 0,
+        cache_last_purged: record.cache_last_purged || '',
         niche_schema: record.niche_schema || undefined,
       };
     }
@@ -72,13 +74,15 @@ export const getSettings = cache(async (): Promise<TemplateSettings & { id: stri
     automation_enabled:        false,
     automation_events:         {},
     automation_allowed_host:   '',
+    cache_ttl_minutes: 0,
+    cache_last_purged: '',
     niche_schema: undefined,
   };
 });
 
 export const getSeoSettings = cache(async (): Promise<SeoSettings | null> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const record = await pb.collection('seo_settings').getFirstListItem<SeoSettings>('');
     return record || null;
   } catch {
@@ -88,7 +92,7 @@ export const getSeoSettings = cache(async (): Promise<SeoSettings | null> => {
 
 export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const record = await pb.collection('business_info').getFirstListItem<BusinessInfo>('');
     if (record) return record;
   } catch (e) {

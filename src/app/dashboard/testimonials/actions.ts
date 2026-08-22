@@ -79,7 +79,7 @@ export async function createTestimonial(data: any) {
     });
 
     revalidatePath('/dashboard/testimonials');
-    revalidatePath('/');
+    revalidatePath('/', 'layout');   // homepage, /testimonials, and the layout JSON-LD
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
@@ -99,7 +99,7 @@ export async function updateTestimonial(id: string, data: any) {
     const pb = await getPocketBaseClient();
     await pb.collection('testimonials').update(id, parsedData);
     revalidatePath('/dashboard/testimonials');
-    revalidatePath('/');
+    revalidatePath('/', 'layout');   // homepage, /testimonials, and the layout JSON-LD
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) {
@@ -119,7 +119,7 @@ export async function updateTestimonialsOrder(items: { id: string; sort_order: n
     }
 
     revalidatePath('/dashboard/testimonials');
-    revalidatePath('/');
+    revalidatePath('/', 'layout');   // homepage, /testimonials, and the layout JSON-LD
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -132,7 +132,7 @@ export async function toggleTestimonialVisible(id: string, is_visible: boolean) 
     const pb = await getPocketBaseClient();
     await pb.collection('testimonials').update(id, { is_visible });
     revalidatePath('/dashboard/testimonials');
-    revalidatePath('/');
+    revalidatePath('/', 'layout');   // homepage, /testimonials, and the layout JSON-LD
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -145,7 +145,7 @@ export async function deleteTestimonial(id: string) {
     const pb = await getPocketBaseClient();
     await pb.collection('testimonials').delete(id);
     revalidatePath('/dashboard/testimonials');
-    revalidatePath('/');
+    revalidatePath('/', 'layout');   // homepage, /testimonials, and the layout JSON-LD
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

@@ -45,6 +45,19 @@ if (!PORT || !SECRET) {
 
 const url = `http://127.0.0.1:${PORT}/api/internal/outbox/drain`;
 
+/**
+ * The ISR cache interval check rides along on this worker rather than getting a
+ * PM2 process of its own — a new process would mean editing the generated
+ * `ecosystem.config.js` in BOTH update-instance.sh and the host-side
+ * deploy-instance.sh, and those are not auto-synced.
+ *
+ * The worker stays dumb: it just ticks. Whether a purge is actually due is
+ * decided by the app from `settings.cache_ttl_minutes` and
+ * `settings.cache_last_purged`, so the schedule lives in the database and
+ * survives a restart of this process.
+ */
+const revalidateUrl = `http://127.0.0.1:${PORT}/api/internal/revalidate`;
+
 async function tick() {
   try {
     const res = await fetch(url, { method: 'POST', headers: { Authorization: `Bearer ${SECRET}` } });
@@ -52,8 +65,24 @@ async function tick() {
   } catch (err) {
     console.warn('[drain-worker] drain request failed:', err && err.message);
   }
+
+  try {
+    const res = await fetch(revalidateUrl, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${SECRET}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ mode: 'ttl' }),
+    });
+    if (res.ok) {
+      const body = await res.json().catch(() => null);
+      if (body && body.revalidated) console.log('[drain-worker] ISR cache purged on interval');
+    } else if (res.status !== 401) {
+      console.warn(`[drain-worker] revalidate returned ${res.status}`);
+    }
+  } catch (err) {
+    console.warn('[drain-worker] revalidate request failed:', err && err.message);
+  }
 }
 
 setInterval(tick, INTERVAL_MS);
 tick();
-console.log(`[drain-worker] started — draining ${url} every ${INTERVAL_MS}ms`);
+console.log(`[drain-worker] started — draining ${url} every ${INTERVAL_MS}ms (also checking the ISR purge interval)`);

@@ -1,6 +1,7 @@
 import type { ServicesIndexProps } from '@/types/template';
 import type { ServiceNode } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import { styles } from './theme';
 
 /**
@@ -19,8 +20,8 @@ function ServiceCard({ service }: { service: ServiceNode }) {
     <div className="group flex flex-col h-full bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:border-[var(--tribe-brand)] hover:shadow-xl transition-all">
       <Link href={service.path} className="flex flex-col flex-1">
         {service.cover_image_url ? (
-          <div className="aspect-video w-full overflow-hidden bg-slate-100">
-            <img src={service.cover_image_url} alt={service.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
+            <Image src={service.cover_image_url} alt={service.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
         ) : (
           <div className="aspect-video w-full bg-slate-100 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500">
@@ -92,8 +93,8 @@ export function ServicesIndexPage({
                 className="group flex flex-col h-full bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:border-[var(--tribe-brand)] hover:shadow-xl transition-all"
               >
                 {service.cover_image_url ? (
-                  <div className="aspect-video w-full overflow-hidden bg-slate-100">
-                    <img src={service.cover_image_url} alt={service.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
+                    <Image src={service.cover_image_url} alt={service.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                 ) : (
                   <div className="aspect-video w-full bg-slate-100 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500">

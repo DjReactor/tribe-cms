@@ -1,5 +1,6 @@
 import type { BlogIndexProps } from '@/types/template';
 import Link from 'next/link';
+import Image from 'next/image';
 import { styles } from './theme';
 import { Calendar, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -23,7 +24,7 @@ export function BlogIndexPage({ posts, businessInfo, currentPage, totalPages, co
                 <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col h-full bg-[var(--tribe-surface)] rounded-2xl overflow-hidden border border-[var(--tribe-border)] hover:shadow-xl transition-shadow">
                   {post.cover_image_url ? (
                     <div className="aspect-video w-full overflow-hidden bg-slate-100 relative">
-                      <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={post.cover_image_url} alt={post.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   ) : (
                     <div className="aspect-video w-full bg-slate-100 flex items-center justify-center">
