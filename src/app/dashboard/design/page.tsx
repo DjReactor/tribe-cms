@@ -32,16 +32,16 @@ export default async function DesignPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Design</h1>
-        <p className="text-slate-500 mt-2">
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Design</h1>
+        <p className="text-muted-foreground mt-2">
           Choose a template for your website. Changes go live immediately after activation.
         </p>
       </div>
 
-      <section className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+      <section className="bg-card p-6 rounded-xl shadow-xs border border-border">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-slate-900">Color Palette</h2>
-          <p className="text-slate-500 mt-1">
+          <h2 className="text-xl font-bold text-foreground">Color Palette</h2>
+          <p className="text-muted-foreground mt-1">
             Customize your site's colors. Changes apply instantly.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default async function DesignPage() {
       </section>
 
       <div className="mt-12">
-        <h2 className="text-xl font-bold text-slate-900 mb-6">Templates</h2>
+        <h2 className="text-xl font-bold text-foreground mb-6">Templates</h2>
 
         <DesignClient
           templates={templates}

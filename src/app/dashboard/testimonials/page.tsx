@@ -7,8 +7,8 @@ export default async function TestimonialsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Testimonials</h1>
-        <p className="text-slate-500 mt-2">Manage customer reviews. Drag to reorder them on your site.</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Testimonials</h1>
+        <p className="text-muted-foreground mt-2">Manage customer reviews. Drag to reorder them on your site.</p>
       </div>
       
       <TestimonialsList initialTestimonials={items} />

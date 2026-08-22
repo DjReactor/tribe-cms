@@ -88,8 +88,8 @@ export default async function DashboardHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Welcome Back</h1>
-        <p className="text-slate-500 mt-1">Here is what is happening with your website today.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Welcome Back</h1>
+        <p className="text-muted-foreground mt-1">Here is what is happening with your website today.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -100,7 +100,7 @@ export default async function DashboardHome() {
               <CardTitle className="text-4xl font-light">{totalContacts}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-slate-500">All time leads</div>
+              <div className="text-xs text-muted-foreground">All time leads</div>
             </CardContent>
           </Card>
         )}
@@ -111,7 +111,7 @@ export default async function DashboardHome() {
             <CardTitle className="text-4xl font-light">{activeServicesCount}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xs text-slate-500">Live on website</div>
+            <div className="text-xs text-muted-foreground">Live on website</div>
           </CardContent>
         </Card>
         
@@ -119,31 +119,31 @@ export default async function DashboardHome() {
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>SEO Health Score</CardDescription>
-              <CardTitle className="text-4xl font-light text-blue-600">{seoScore}/100</CardTitle>
+              <CardTitle className="text-4xl font-light text-primary">{seoScore}/100</CardTitle>
             </CardHeader>
             <CardContent>
               <div className={`text-xs font-medium ${
-                seoScore >= 90 ? 'text-emerald-600' : seoScore >= 70 ? 'text-amber-600' : 'text-red-600'
+                seoScore >= 90 ? 'text-success' : seoScore >= 70 ? 'text-warning' : 'text-destructive'
               }`}>{seoScoreLabel}</div>
             </CardContent>
           </Card>
         )}
       </div>
 
-      <Card className="bg-gradient-to-br from-white to-slate-50/50">
+      <Card className="bg-gradient-to-br from-white to-muted/50">
         <CardHeader>
           <CardTitle>Setup Guide</CardTitle>
           <CardDescription>
             Complete these steps to get your website ready for launch.
           </CardDescription>
           <div className="mt-4 flex items-center gap-4">
-            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
               <div 
-                className="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out"
+                className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-sm font-medium text-slate-600">{completedSteps} of {setupSteps.length}</span>
+            <span className="text-sm font-medium text-muted-foreground">{completedSteps} of {setupSteps.length}</span>
           </div>
         </CardHeader>
         <CardContent className="space-y-4 pt-4">
@@ -151,16 +151,16 @@ export default async function DashboardHome() {
             <Link 
               key={i} 
               href={step.href}
-              className="flex items-start gap-4 p-4 rounded-xl border border-slate-200/60 bg-white hover:border-blue-200 hover:shadow-sm transition-all"
+              className="flex items-start gap-4 p-4 rounded-xl border border-border/60 bg-card hover:border-ring hover:shadow-xs transition-all"
             >
               {step.isComplete ? (
-                <CheckCircle2 className="h-6 w-6 text-emerald-500 shrink-0" />
+                <CheckCircle2 className="h-6 w-6 text-success shrink-0" />
               ) : (
-                <Circle className="h-6 w-6 text-slate-300 shrink-0" />
+                <Circle className="h-6 w-6 text-muted-foreground shrink-0" />
               )}
               <div className="flex-1 space-y-1">
-                <p className="font-medium text-slate-900">{step.name}</p>
-                <p className="text-sm text-slate-500">{step.description}</p>
+                <p className="font-medium text-foreground">{step.name}</p>
+                <p className="text-sm text-muted-foreground">{step.description}</p>
               </div>
               <Button variant={step.isComplete ? "ghost" : "outline"} size="sm">
                 {step.isComplete ? 'Review' : 'Start'}

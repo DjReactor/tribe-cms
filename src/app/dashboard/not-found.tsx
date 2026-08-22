@@ -7,12 +7,12 @@ import { ShieldOff } from 'lucide-react';
 export default function DashboardNotFound() {
   return (
     <div className="max-w-xl mx-auto text-center py-24 space-y-4">
-      <ShieldOff className="h-10 w-10 mx-auto text-slate-300" />
-      <h1 className="text-2xl font-bold text-slate-900">Page not available</h1>
-      <p className="text-slate-500">
+      <ShieldOff className="h-10 w-10 mx-auto text-muted-foreground" />
+      <h1 className="text-2xl font-bold text-foreground">Page not available</h1>
+      <p className="text-muted-foreground">
         This section is managed by your agency and isn&apos;t part of your dashboard.
       </p>
-      <Link href="/dashboard" className="inline-block text-sm font-medium text-blue-600 hover:underline">
+      <Link href="/dashboard" className="inline-block text-sm font-medium text-primary hover:underline">
         Back to Overview
       </Link>
     </div>

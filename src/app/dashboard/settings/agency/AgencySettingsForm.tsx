@@ -46,15 +46,15 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <Card className="border-red-200">
-        <CardHeader className="bg-red-50/50 border-b border-red-100 rounded-t-xl">
-          <CardTitle className="text-red-900">Core Modules & Integrations</CardTitle>
-          <CardDescription className="text-red-700">Enable or disable features for this client.</CardDescription>
+      <Card className="border-destructive">
+        <CardHeader className="bg-destructive/5 border-b border-destructive/20 rounded-t-xl">
+          <CardTitle className="text-destructive">Core Modules & Integrations</CardTitle>
+          <CardDescription className="text-destructive">Enable or disable features for this client.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8 pt-6">
           
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">CRM & Leads</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">CRM & Leads</h3>
             <Toggle 
               checked={watch('crm_enabled')} 
               onChange={(e) => setValue('crm_enabled', e.target.checked)} 
@@ -67,7 +67,7 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Retell AI Voice Agent</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Retell AI Voice Agent</h3>
             <Toggle 
               checked={watch('retell_enabled')} 
               onChange={(e) => setValue('retell_enabled', e.target.checked)} 
@@ -81,7 +81,7 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Content & SEO</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Content & SEO</h3>
             <Toggle 
               checked={watch('blog_enabled')} 
               onChange={(e) => setValue('blog_enabled', e.target.checked)} 
@@ -111,7 +111,7 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Analytics</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Analytics</h3>
             <Toggle 
               checked={watch('analytics_enabled')} 
               onChange={(e) => setValue('analytics_enabled', e.target.checked)} 
@@ -127,10 +127,10 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
         </CardContent>
       </Card>
 
-      <Card className="border-red-200">
-        <CardHeader className="bg-red-50/50 border-b border-red-100 rounded-t-xl">
-          <CardTitle className="text-red-900">Instance Infrastructure</CardTitle>
-          <CardDescription className="text-red-700">Manage updates for this specific VPS instance.</CardDescription>
+      <Card className="border-destructive">
+        <CardHeader className="bg-destructive/5 border-b border-destructive/20 rounded-t-xl">
+          <CardTitle className="text-destructive">Instance Infrastructure</CardTitle>
+          <CardDescription className="text-destructive">Manage updates for this specific VPS instance.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
           <Toggle 
@@ -146,7 +146,7 @@ export function AgencySettingsForm({ initialData }: { initialData: any }) {
       </Card>
 
       <div className="flex justify-end pb-12">
-        <Button type="submit" isLoading={isPending} size="lg" className="bg-red-600 hover:bg-red-700 text-white">
+        <Button type="submit" isLoading={isPending} size="lg" className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
           Save Agency Settings
         </Button>
       </div>

@@ -49,8 +49,8 @@ function renderHighlightedText(text: string): React.ReactNode[] {
       <span
         key={`token-${match.index}`}
         style={{
-          background: 'var(--tribe-brand, #2563eb)',
-          color: 'var(--tribe-brand-text, #ffffff)',
+          background: 'var(--primary)',
+          color: 'var(--primary-foreground)',
           borderRadius: '4px',
           padding: '0 4px',
           fontSize: 'inherit',
@@ -88,7 +88,7 @@ function splitIncomplete(text: string, keyPrefix: string): React.ReactNode[] {
     before && <span key={`${keyPrefix}-pre`}>{before}</span>,
     <span
       key={`${keyPrefix}-inc`}
-      style={{ color: '#d97706' /* amber-600 */ }}
+      style={{ color: 'var(--warning)' }}
     >
       {incomplete}
     </span>,
@@ -152,10 +152,10 @@ function TokenDropdown({ query, tokens, onSelect, onClose, anchorRef }: TokenDro
         top: '100%',
         left: 0,
         zIndex: 50,
-        background: '#ffffff',
-        border: '1px solid #e2e8f0',
-        borderRadius: '8px',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+        background: 'var(--popover)',
+        border: '1px solid var(--border)',
+        borderRadius: '12px',
+        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
         padding: '4px',
         minWidth: '220px',
         margin: '2px 0 0',
@@ -179,13 +179,13 @@ function TokenDropdown({ query, tokens, onSelect, onClose, anchorRef }: TokenDro
             flexDirection: 'column',
             gap: '1px',
           }}
-          onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
+          onMouseEnter={e => (e.currentTarget.style.background = 'var(--accent)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
-          <span style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--tribe-brand, #2563eb)', fontWeight: 600 }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--foreground)', fontWeight: 600 }}>
             {`{{${token.name}}}`}
           </span>
-          <span style={{ fontSize: '11px', color: '#64748b' }}>{token.description}</span>
+          <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{token.description}</span>
         </li>
       ))}
     </ul>
@@ -297,11 +297,11 @@ export function TokenInput({
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
       {/* Label */}
       <label
         htmlFor={inputId}
-        style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}
+        style={{ fontSize: '14px', fontWeight: 500, color: 'var(--foreground)' }}
       >
         {label}
       </label>
@@ -319,7 +319,7 @@ export function TokenInput({
             inset: 0,
             pointerEvents: 'none',
             overflow: 'hidden',
-            color: '#1e293b',
+            color: 'var(--foreground)',
             border: '1px solid transparent',
             // Must sit behind the textarea but be visible through it
             zIndex: 0,
@@ -348,15 +348,15 @@ export function TokenInput({
               position: 'relative',
               zIndex: 1,
               color: 'transparent',
-              caretColor: '#1e293b',
+              caretColor: 'var(--foreground)',
               background: 'transparent',
-              border: '1px solid #cbd5e1',
+              border: '1px solid var(--input)',
               outline: 'none',
               resize: 'vertical',
               display: 'block',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = 'var(--tribe-brand, #2563eb)'; }}
-            onBlur={e => { e.currentTarget.style.borderColor = '#cbd5e1'; }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--ring)'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = 'var(--input)'; }}
           />
         ) : (
           <input
@@ -376,15 +376,15 @@ export function TokenInput({
               position: 'relative',
               zIndex: 1,
               color: 'transparent',
-              caretColor: '#1e293b',
+              caretColor: 'var(--foreground)',
               background: 'transparent',
-              border: '1px solid #cbd5e1',
+              border: '1px solid var(--input)',
               outline: 'none',
               display: 'block',
-              height: '38px',
+              height: '36px',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = 'var(--tribe-brand, #2563eb)'; }}
-            onBlur={e => { e.currentTarget.style.borderColor = '#cbd5e1'; }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--ring)'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = 'var(--input)'; }}
           />
         )}
 
@@ -402,7 +402,7 @@ export function TokenInput({
 
       {/* Hint text */}
       {hint && (
-        <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>{hint}</p>
+        <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', margin: 0 }}>{hint}</p>
       )}
     </div>
   );

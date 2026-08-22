@@ -33,8 +33,8 @@ export const BlockNoteEditor = dynamic<BlockNoteEditorProps>(
     ssr: false,
     // Same box as the editor so the form does not jump when it loads.
     loading: () => (
-      <div className="min-h-[300px] rounded-xl border border-slate-200/80 bg-white shadow-sm flex items-center justify-center">
-        <span className="text-sm text-slate-400">Loading editor…</span>
+      <div className="min-h-[300px] rounded-xl border border-border/80 bg-card shadow-xs flex items-center justify-center">
+        <span className="text-sm text-muted-foreground">Loading editor…</span>
       </div>
     ),
   },

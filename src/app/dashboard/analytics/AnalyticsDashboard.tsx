@@ -82,11 +82,11 @@ export function AnalyticsDashboard({ analytics, spend, sources }: { analytics: a
             {analytics.topReferrers.length === 0 ? (
               <Empty>No referral deals yet.</Empty>
             ) : (
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-border">
                 {analytics.topReferrers.map((r: any) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
-                    <span className="font-medium text-slate-800">{r.referrer}</span>
-                    <span className="text-slate-500">{num(r.referred_deals)} deals · {money(r.referred_revenue)}</span>
+                    <span className="font-medium text-foreground">{r.referrer}</span>
+                    <span className="text-muted-foreground">{num(r.referred_deals)} deals · {money(r.referred_revenue)}</span>
                   </li>
                 ))}
               </ul>
@@ -101,11 +101,11 @@ export function AnalyticsDashboard({ analytics, spend, sources }: { analytics: a
             {analytics.callOutcomes.length === 0 ? (
               <Empty>No calls yet.</Empty>
             ) : (
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-border">
                 {analytics.callOutcomes.map((c: any) => (
                   <li key={c.id} className="flex items-center justify-between py-2 text-sm">
-                    <span className="capitalize text-slate-800">{c.sentiment}</span>
-                    <span className="text-slate-500">{num(c.calls)} calls · {num(c.successful)} successful</span>
+                    <span className="capitalize text-foreground">{c.sentiment}</span>
+                    <span className="text-muted-foreground">{num(c.calls)} calls · {num(c.successful)} successful</span>
                   </li>
                 ))}
               </ul>
@@ -123,15 +123,15 @@ function Stat({ label, value }: { label: string; value: any }) {
   return (
     <Card>
       <CardContent className="pt-5">
-        <p className="text-xs font-medium uppercase tracking-wider text-slate-400">{label}</p>
-        <p className="mt-1 text-2xl font-bold text-slate-900">{value}</p>
+        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
+        <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
       </CardContent>
     </Card>
   );
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="py-6 text-center text-sm text-slate-400">{children}</p>;
+  return <p className="py-6 text-center text-sm text-muted-foreground">{children}</p>;
 }
 
 function BarList({ rows, empty }: { rows: { label: string; value: number; sub?: string; money?: boolean }[]; empty: string }) {
@@ -142,13 +142,13 @@ function BarList({ rows, empty }: { rows: { label: string; value: number; sub?: 
       {rows.map((r, i) => (
         <div key={i}>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-700">{r.label}</span>
-            <span className="font-medium text-slate-900">
-              {r.money ? money(r.value) : r.value}{r.sub ? <span className="ml-2 text-xs font-normal text-slate-400">{r.sub}</span> : null}
+            <span className="text-foreground">{r.label}</span>
+            <span className="font-medium text-foreground">
+              {r.money ? money(r.value) : r.value}{r.sub ? <span className="ml-2 text-xs font-normal text-muted-foreground">{r.sub}</span> : null}
             </span>
           </div>
-          <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" style={{ width: `${(r.value / max) * 100}%` }} />
+          <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-primary" style={{ width: `${(r.value / max) * 100}%` }} />
           </div>
         </div>
       ))}
@@ -160,7 +160,7 @@ function RoasTable({ title, rows, provisional }: { title: string; rows: any[]; p
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
-        <p className="text-sm font-medium text-slate-700">{title}</p>
+        <p className="text-sm font-medium text-foreground">{title}</p>
         {provisional && <Badge variant="warning">provisional</Badge>}
       </div>
       {rows.length === 0 ? (
@@ -169,21 +169,21 @@ function RoasTable({ title, rows, provisional }: { title: string; rows: any[]; p
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
                 <th className="py-2 pr-4">Source</th><th className="py-2 pr-4">Period</th><th className="py-2 pr-4">Spend</th>
                 <th className="py-2 pr-4">Jobs Won</th><th className="py-2 pr-4">Revenue</th><th className="py-2 pr-4">Cost/Job</th><th className="py-2">ROAS</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r: any) => (
-                <tr key={r.id} className="border-b border-slate-100 last:border-0">
-                  <td className="py-2 pr-4 font-medium text-slate-800">{r.source}</td>
-                  <td className="py-2 pr-4 text-slate-500">{r.period}</td>
-                  <td className="py-2 pr-4 text-slate-600">{money(r.spend)}</td>
-                  <td className="py-2 pr-4 text-slate-600">{num(r.jobs_won)}</td>
-                  <td className="py-2 pr-4 text-slate-600">{money(r.revenue)}</td>
-                  <td className="py-2 pr-4 text-slate-600">{r.jobs_won ? money(r.cost_per_job) : '—'}</td>
-                  <td className="py-2 font-medium text-slate-900">{r.roas ? `${num(r.roas).toFixed(1)}×` : '—'}</td>
+                <tr key={r.id} className="border-b border-border last:border-0">
+                  <td className="py-2 pr-4 font-medium text-foreground">{r.source}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{r.period}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{money(r.spend)}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{num(r.jobs_won)}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{money(r.revenue)}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{r.jobs_won ? money(r.cost_per_job) : '—'}</td>
+                  <td className="py-2 font-medium text-foreground">{r.roas ? `${num(r.roas).toFixed(1)}×` : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -234,18 +234,18 @@ function AdSpendPanel({ spend, sources }: { spend: any[]; sources: any[] }) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-400">
+                <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
                   <th className="py-2 pr-4">Source</th><th className="py-2 pr-4">Period</th><th className="py-2 pr-4">Amount</th><th className="py-2"></th>
                 </tr>
               </thead>
               <tbody>
                 {spend.map((r: any) => (
-                  <tr key={r.id} className="border-b border-slate-100 last:border-0">
-                    <td className="py-2 pr-4 font-medium text-slate-800">{r.expand?.source?.label || '—'}</td>
-                    <td className="py-2 pr-4 text-slate-500">{r.period}</td>
-                    <td className="py-2 pr-4 text-slate-600">{money(r.amount)}</td>
+                  <tr key={r.id} className="border-b border-border last:border-0">
+                    <td className="py-2 pr-4 font-medium text-foreground">{r.expand?.source?.label || '—'}</td>
+                    <td className="py-2 pr-4 text-muted-foreground">{r.period}</td>
+                    <td className="py-2 pr-4 text-muted-foreground">{money(r.amount)}</td>
                     <td className="py-2 text-right">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:bg-red-50" onClick={() => onDelete(r.id)}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:bg-destructive/10" onClick={() => onDelete(r.id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </td>

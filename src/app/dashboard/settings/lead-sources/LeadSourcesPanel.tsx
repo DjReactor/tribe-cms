@@ -88,7 +88,7 @@ export function LeadSourcesPanel({ initialSources }: { initialSources: LeadSourc
           <CardDescription>Shown in source dropdowns when attributing leads and deals.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {active.length === 0 && <p className="text-sm text-slate-400">No active sources.</p>}
+          {active.length === 0 && <p className="text-sm text-muted-foreground">No active sources.</p>}
           {active.map((s) => (
             <LeadSourceRow key={s.id} source={s} pending={isPending} run={run} archived={false} />
           ))}
@@ -127,18 +127,18 @@ function LeadSourceRow({
   const dirty = label.trim() !== source.label && label.trim().length > 0;
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+    <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl border border-border/60">
       <div className="flex-1 min-w-0">
         <input
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          className="w-full bg-transparent text-sm font-medium text-slate-900 focus:outline-none"
+          className="w-full bg-transparent text-sm font-medium text-foreground focus:outline-none"
         />
-        <code className="text-xs text-slate-400">{source.slug}</code>
+        <code className="text-xs text-muted-foreground">{source.slug}</code>
       </div>
 
       {source.needs_review && (
-        <span className="shrink-0 text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
+        <span className="shrink-0 text-xs font-medium text-warning bg-warning/10 px-2 py-0.5 rounded-full">
           Needs review
         </span>
       )}

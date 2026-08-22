@@ -146,16 +146,16 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
           <Input label="Business Type (e.g. Plumber, HVAC)" error={errors.business_type?.message} {...register('business_type')} />
           <Input label="Tagline (Optional)" error={errors.tagline?.message} {...register('tagline')} className="md:col-span-2" />
           <div className="flex flex-col gap-2 md:col-span-2">
-            <label className="text-sm font-medium text-slate-900">Business Logo</label>
+            <label className="text-sm font-medium text-foreground">Business Logo</label>
             <div className="flex items-center gap-4">
-              {logoUrl && <img src={logoUrl} alt="Business logo" className="h-16 w-16 object-contain rounded border bg-white p-1" />}
+              {logoUrl && <img src={logoUrl} alt="Business logo" className="h-16 w-16 object-contain rounded border bg-card p-1" />}
               <button type="button" onClick={() => {
                 setCurrentMediaField('logo_url');
                 setMediaPickerOpen(true);
-              }} className="px-3 py-2 bg-white border shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 rounded">
+              }} className="px-3 py-2 bg-card border shadow-xs text-sm font-medium text-foreground hover:bg-muted/50 rounded">
                 {logoUrl ? 'Change Logo' : 'Select Logo'}
               </button>
-              {logoUrl && <button type="button" onClick={() => setValue('logo_url', '', { shouldDirty: true })} className="px-3 py-2 text-sm text-red-600 hover:text-red-700 font-medium">Clear</button>}
+              {logoUrl && <button type="button" onClick={() => setValue('logo_url', '', { shouldDirty: true })} className="px-3 py-2 text-sm text-muted-foreground hover:text-destructive font-medium">Clear</button>}
             </div>
           </div>
           <Textarea label="Short Description (Max 300 chars)" error={errors.short_description?.message} {...register('short_description')} className="md:col-span-2" />
@@ -189,11 +189,11 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
             const status = statusOf(h);
             return (
               <div key={h.day} className="grid grid-cols-1 sm:grid-cols-[7rem_9rem_1fr] gap-3 sm:items-center">
-                <span className="text-sm font-medium text-slate-900">{DAY_LABELS[h.day]}</span>
+                <span className="text-sm font-medium text-foreground">{DAY_LABELS[h.day]}</span>
                 <select
                   value={status}
                   onChange={(e) => setDayStatus(h.day, e.target.value as HoursStatus)}
-                  className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                  className="h-10 rounded-md border border-input bg-card px-3 text-sm text-foreground focus:border-input focus:outline-none"
                 >
                   <option value="open">Open</option>
                   <option value="closed">Closed</option>
@@ -205,18 +205,18 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
                       type="time"
                       value={h.open}
                       onChange={(e) => setDayTime(h.day, 'open', e.target.value)}
-                      className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                      className="h-10 rounded-md border border-input bg-card px-3 text-sm text-foreground focus:border-input focus:outline-none"
                     />
-                    <span className="text-slate-400">–</span>
+                    <span className="text-muted-foreground">–</span>
                     <input
                       type="time"
                       value={h.close}
                       onChange={(e) => setDayTime(h.day, 'close', e.target.value)}
-                      className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none"
+                      className="h-10 rounded-md border border-input bg-card px-3 text-sm text-foreground focus:border-input focus:outline-none"
                     />
                   </div>
                 ) : (
-                  <span className="text-sm text-slate-400">{status === 'open24' ? 'Open all day' : 'Closed all day'}</span>
+                  <span className="text-sm text-muted-foreground">{status === 'open24' ? 'Open all day' : 'Closed all day'}</span>
                 )}
               </div>
             );
@@ -261,16 +261,16 @@ export default function BusinessInfoForm({ initialData, nicheSchema }: { initial
               if (attr.type === 'image') {
                 return (
                   <div key={attr.key} className="flex flex-col gap-2">
-                     <label className="text-sm font-medium text-slate-900">{attr.label}</label>
+                     <label className="text-sm font-medium text-foreground">{attr.label}</label>
                      <div className="flex items-center gap-4">
                        {value && <img src={value} alt="" className="h-16 w-16 object-cover rounded border" />}
                        <button type="button" onClick={() => {
                          setCurrentMediaField(attr.key);
                          setMediaPickerOpen(true);
-                       }} className="px-3 py-2 bg-white border shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 rounded">
+                       }} className="px-3 py-2 bg-card border shadow-xs text-sm font-medium text-foreground hover:bg-muted/50 rounded">
                          {value ? 'Change Image' : 'Select Image'}
                        </button>
-                       {value && <button type="button" onClick={() => setValue(`niche_attributes.${attr.key}` as any, '', { shouldDirty: true })} className="px-3 py-2 text-sm text-red-600 hover:text-red-700 font-medium">Clear</button>}
+                       {value && <button type="button" onClick={() => setValue(`niche_attributes.${attr.key}` as any, '', { shouldDirty: true })} className="px-3 py-2 text-sm text-muted-foreground hover:text-destructive font-medium">Clear</button>}
                      </div>
                   </div>
                 );

@@ -85,11 +85,11 @@ export default function SiteContentForm({
 
   if (pages.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-10 text-center text-slate-500">
+      <div className="rounded-xl border border-border bg-muted/50 p-10 text-center text-muted-foreground">
         <p className="font-medium">No editable text fields defined.</p>
         <p className="text-sm mt-1">
           The active template has no copy slots configured. Ask your template
-          builder to add <code className="text-xs bg-white px-1 py-0.5 rounded border border-slate-200">supportedCopyKeys</code> to the template manifest.
+          builder to add <code className="text-xs bg-card px-1 py-0.5 rounded border border-border">supportedCopyKeys</code> to the template manifest.
         </p>
       </div>
     );
@@ -101,7 +101,7 @@ export default function SiteContentForm({
     <div className="space-y-6">
 
       {/* ── Tabs ── */}
-      <div className="border-b border-slate-200">
+      <div className="border-b border-border">
         <nav className="flex gap-1 -mb-px">
           {pages.map(page => (
             <button
@@ -112,8 +112,8 @@ export default function SiteContentForm({
               onClick={() => setActiveTab(page)}
               className={`px-4 py-2.5 text-sm font-medium rounded-t-lg border-b-2 transition-colors ${
                 activeTab === page
-                  ? 'border-blue-600 text-blue-600 bg-blue-50/50'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                  ? 'border-primary text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-input'
               }`}
             >
               {page}
@@ -145,16 +145,16 @@ export default function SiteContentForm({
 
               {/* Right column — live Preview */}
               <div className="flex flex-col gap-1 pt-5">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                   Preview
                 </span>
                 <p
-                  className={`text-sm text-slate-700 leading-relaxed min-h-[38px] ${
+                  className={`text-sm text-foreground leading-relaxed min-h-[38px] ${
                     def.type === 'textarea' ? 'whitespace-pre-wrap' : ''
                   }`}
                 >
                   {previewValue || (
-                    <span className="text-slate-400 italic">No default set</span>
+                    <span className="text-muted-foreground italic">No default set</span>
                   )}
                 </p>
               </div>
@@ -165,10 +165,10 @@ export default function SiteContentForm({
       </div>
 
       {/* ── Save button + status ── */}
-      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         <span className={`text-sm font-medium transition-colors ${
-          saveStatus === 'saved' ? 'text-emerald-600'
-          : saveStatus === 'error' ? 'text-red-600'
+          saveStatus === 'saved' ? 'text-success'
+          : saveStatus === 'error' ? 'text-destructive'
           : 'text-transparent'
         }`}>
           {saveStatus === 'saved' && '✓ Changes saved'}
@@ -179,7 +179,7 @@ export default function SiteContentForm({
           id="site-content-save"
           onClick={handleSave}
           disabled={isPending}
-          className="px-6 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? 'Saving…' : 'Save Content'}
         </button>

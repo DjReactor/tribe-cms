@@ -111,7 +111,7 @@ export default function LocationsList({ initialLocations }: { initialLocations: 
     <div className="space-y-6">
       <div className="flex justify-end">
         <Button onClick={openAdd}>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Add Location
         </Button>
       </div>
@@ -122,8 +122,8 @@ export default function LocationsList({ initialLocations }: { initialLocations: 
         renderItem={(item) => (
           <div className="flex items-center justify-between w-full pointer-events-none">
             <div className="flex flex-col flex-1 pr-6">
-              <span className="font-medium text-slate-900">{item.area_name}</span>
-              <span className="text-sm text-slate-500 flex items-center gap-4 flex-wrap mt-0.5">
+              <span className="font-medium text-foreground">{item.area_name}</span>
+              <span className="text-sm text-muted-foreground flex items-center gap-4 flex-wrap mt-0.5">
                 {item.address && (
                   <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{item.address}</span>
                 )}
@@ -138,10 +138,10 @@ export default function LocationsList({ initialLocations }: { initialLocations: 
                 onChange={() => handleToggle(item.id, item.is_active)}
                 label={item.is_active ? 'Visible' : 'Hidden'}
               />
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50" onClick={() => openEdit(item)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10" onClick={() => openEdit(item)}>
                 <Pencil className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(item.id)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(item.id)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

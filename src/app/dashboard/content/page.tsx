@@ -16,11 +16,11 @@ export default async function SiteContentPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Site Content</h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Site Content</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Customise the text on your website. Leave any field blank to use the
           template&apos;s smart default. Type{' '}
-          <code className="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">{'{{'}
+          <code className="text-xs bg-muted px-1 py-0.5 rounded font-mono">{'{{'}
           </code>{' '}
           in any field to insert an auto-fill variable.
         </p>

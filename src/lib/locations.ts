@@ -1,4 +1,4 @@
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import { getSettings } from './settings';
 import type { Location } from '@/types/index';
 import { cache } from 'react';
@@ -16,7 +16,7 @@ export const getLocations = cache(async (): Promise<Location[]> => {
   const settings = await getSettings();
   if (!settings.locations_enabled) return [];
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('locations').getFullList<Location>({
       filter: 'is_active = true',
       sort: 'sort_order',

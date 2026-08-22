@@ -1,4 +1,4 @@
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import type { Service, ServiceNode } from '@/types/index';
 import { cache } from 'react';
 
@@ -13,7 +13,7 @@ import { buildServiceTree, flattenServiceTree } from './service-tree';
 /** Active services only, in sibling order. Cached per request. */
 export const getServices = cache(async (): Promise<Service[]> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('services').getFullList<Service>({
       filter: 'is_active = true',
       sort: 'sort_order',

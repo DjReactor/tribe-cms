@@ -166,10 +166,10 @@ export default function ServiceAreaDetailForm(
           <CardDescription>Core details about this service area.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Visibility</p>
-              <p className="text-sm text-slate-500">
+              <p className="font-medium text-foreground">Visibility</p>
+              <p className="text-sm text-muted-foreground">
                 Show this area on the live website. Hiding it also unpublishes its landing pages.
               </p>
             </div>
@@ -231,20 +231,20 @@ export default function ServiceAreaDetailForm(
             ))}
           </Select>
 
-          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
-            <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
-            <p className="font-mono text-sm text-slate-900 break-all">{previewPath}</p>
+          <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
+            <p className="text-xs font-medium text-muted-foreground mb-1">Page URL</p>
+            <p className="font-mono text-sm text-foreground break-all">{previewPath}</p>
             {parentName && (
-              <p className="text-xs text-slate-500 mt-2">
-                Shown under <span className="font-medium text-slate-700">{parentName}</span> in
+              <p className="text-xs text-muted-foreground mt-2">
+                Shown under <span className="font-medium text-foreground">{parentName}</span> in
                 navigation and breadcrumbs.
               </p>
             )}
           </div>
 
           {(slugReserved || slugTaken) && (
-            <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
+            <div className="flex gap-3 rounded-xl border border-warning/25 bg-warning/10 p-4 text-sm text-warning">
+              <AlertTriangle className="h-5 w-5 shrink-0 text-warning" />
               <p>
                 {slugReserved
                   ? `"${previewPath}" is a built-in page. An area with this slug would not error — it would silently sit behind the real page and never be reachable.`
@@ -255,7 +255,7 @@ export default function ServiceAreaDetailForm(
           )}
 
           {!isNew && ownHeight > 1 && (
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               This area has sub-areas beneath it, so it can only move somewhere with room
               for {ownHeight} levels.
             </p>
@@ -289,14 +289,14 @@ export default function ServiceAreaDetailForm(
               error={errors.focus_keyword?.message}
               {...register('focus_keyword')}
             />
-            <p className="mt-1.5 text-sm text-slate-500">
+            <p className="mt-1.5 text-sm text-muted-foreground">
               The search this page is meant to win. Everything below is checked against it.
             </p>
           </div>
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
 
-          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
+          <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
             <FocusKeywordAnalysis
               subject={{
                 keyword: focusKeyword || '',
@@ -316,10 +316,10 @@ export default function ServiceAreaDetailForm(
             <Input label="Longitude (for GeoSchema)" error={errors.geo_longitude?.message} {...register('geo_longitude')} />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60 mt-4">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60 mt-4">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines (Noindex)</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this page</p>
+              <p className="font-medium text-foreground">Hide from Search Engines (Noindex)</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this page</p>
             </div>
             <Toggle
               checked={watch('noindex')}

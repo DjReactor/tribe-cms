@@ -142,20 +142,20 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
   const tabClass = (tab: 'template' | 'cms') =>
     `px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition ${
       activeTab === tab
-        ? 'border-slate-900 text-slate-900'
-        : 'border-transparent text-slate-500 hover:text-slate-700'
+        ? 'border-foreground text-foreground'
+        : 'border-transparent text-muted-foreground hover:text-foreground'
     }`
 
   return (
     <div>
       {/* Tab bar — the green dot marks the currently-active source, not the open tab */}
-      <div className="flex gap-1 border-b border-slate-200 mb-6">
+      <div className="flex gap-1 border-b border-border mb-6">
         <button onClick={() => setActiveTab('template')} className={tabClass('template')}>
-          {source === 'template' && <span className="text-green-500 mr-1.5">●</span>}
+          {source === 'template' && <span className="text-success mr-1.5">●</span>}
           Template Palette
         </button>
         <button onClick={() => setActiveTab('cms')} className={tabClass('cms')}>
-          {source === 'cms' && <span className="text-green-500 mr-1.5">●</span>}
+          {source === 'cms' && <span className="text-success mr-1.5">●</span>}
           Custom Palette
         </button>
       </div>
@@ -164,21 +164,21 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
       {activeTab === 'template' && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-900">{templateName} — Default Colors</h3>
+            <h3 className="text-lg font-semibold text-foreground">{templateName} — Default Colors</h3>
             {source === 'template' && (
-              <span className="px-2.5 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+              <span className="px-2.5 py-1 text-xs font-medium bg-success/10 text-success rounded-full">
                 Active
               </span>
             )}
           </div>
 
           {source === 'cms' && (
-            <div className="mb-6 flex items-center justify-between gap-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <p className="text-sm text-amber-800">Custom Palette is currently active.</p>
+            <div className="mb-6 flex items-center justify-between gap-4 p-4 bg-warning/10 border border-warning/25 rounded-lg">
+              <p className="text-sm text-warning">Custom Palette is currently active.</p>
               <button
                 onClick={handleUseTemplatePalette}
                 disabled={isSaving}
-                className="shrink-0 px-3 py-1.5 text-sm font-medium bg-white border border-amber-300 text-amber-800 rounded-lg hover:bg-amber-100 disabled:opacity-50"
+                className="shrink-0 px-3 py-1.5 text-sm font-medium bg-card border border-warning/25 text-warning rounded-md hover:bg-warning/10 disabled:opacity-50"
               >
                 Use Template Palette
               </button>
@@ -202,21 +202,21 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-medium text-slate-900 text-sm">{COLOR_SLOTS[key].label}</span>
+                          <span className="font-medium text-foreground text-sm">{COLOR_SLOTS[key].label}</span>
                           {isOverridden && (
                             <>
-                              <span className="text-amber-500" title="Overridden">●</span>
+                              <span className="text-warning" title="Overridden">●</span>
                               <button
                                 onClick={() => handleResetSlot(key)}
                                 disabled={isSaving}
-                                className="text-xs text-slate-400 hover:text-slate-700 underline disabled:opacity-50"
+                                className="text-xs text-muted-foreground hover:text-foreground underline disabled:opacity-50"
                               >
                                 Reset
                               </button>
                             </>
                           )}
                         </div>
-                        <div className="text-xs text-slate-500 truncate">{COLOR_SLOTS[key].description}</div>
+                        <div className="text-xs text-muted-foreground truncate">{COLOR_SLOTS[key].description}</div>
                       </div>
                       <input
                         type="text"
@@ -236,14 +236,14 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
                 <button
                   onClick={handleSaveTemplateOverrides}
                   disabled={isSaving}
-                  className="px-5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-medium disabled:opacity-50"
                 >
                   {isSaving ? 'Saving…' : 'Save Changes'}
                 </button>
                 <button
                   onClick={handleResetAllOverrides}
                   disabled={isSaving || Object.keys(templateOverrides).length === 0}
-                  className="px-5 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2 text-muted-foreground hover:bg-muted rounded-md font-medium disabled:opacity-50"
                 >
                   Reset All Overrides
                 </button>
@@ -262,21 +262,21 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
       {activeTab === 'cms' && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-900">Custom Palette</h3>
+            <h3 className="text-lg font-semibold text-foreground">Custom Palette</h3>
             {source === 'cms' && (
-              <span className="px-2.5 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+              <span className="px-2.5 py-1 text-xs font-medium bg-success/10 text-success rounded-full">
                 Active
               </span>
             )}
           </div>
 
           {source === 'template' ? (
-            <div className="mb-6 flex items-center justify-between gap-4 p-4 bg-slate-50 border border-slate-200 rounded-lg">
-              <p className="text-sm text-slate-600">Template palette is currently active.</p>
+            <div className="mb-6 flex items-center justify-between gap-4 p-4 bg-muted/50 border border-border rounded-lg">
+              <p className="text-sm text-muted-foreground">Template palette is currently active.</p>
               <button
                 onClick={handleActivateCms}
                 disabled={isSaving}
-                className="shrink-0 px-3 py-1.5 text-sm font-medium bg-slate-900 text-white rounded-lg hover:bg-slate-800 disabled:opacity-50"
+                className="shrink-0 px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
               >
                 Activate Custom Palette
               </button>
@@ -286,7 +286,7 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
               <button
                 onClick={handleBackToTemplate}
                 disabled={isSaving}
-                className="text-sm text-slate-500 hover:text-slate-800 disabled:opacity-50"
+                className="text-sm text-muted-foreground hover:text-foreground disabled:opacity-50"
               >
                 ← Back to template palette
               </button>
@@ -306,8 +306,8 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
                       className="w-10 h-10 rounded cursor-pointer shrink-0"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-slate-900 text-sm">{COLOR_SLOTS[key].label}</div>
-                      <div className="text-xs text-slate-500 truncate">{COLOR_SLOTS[key].description}</div>
+                      <div className="font-medium text-foreground text-sm">{COLOR_SLOTS[key].label}</div>
+                      <div className="text-xs text-muted-foreground truncate">{COLOR_SLOTS[key].description}</div>
                     </div>
                     <input
                       type="text"
@@ -326,14 +326,14 @@ export function PaletteClient({ templateName, templateDefaultPalette, initialSta
                 <button
                   onClick={handleSaveCms}
                   disabled={isSaving}
-                  className="px-5 py-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2 bg-card border border-input text-foreground hover:bg-muted/50 rounded-md font-medium disabled:opacity-50"
                 >
                   {isSaving ? 'Saving…' : 'Save'}
                 </button>
                 <button
                   onClick={handleActivateCms}
                   disabled={isSaving}
-                  className="px-5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-medium disabled:opacity-50"
+                  className="px-5 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-medium disabled:opacity-50"
                 >
                   Save &amp; Activate
                 </button>

@@ -19,15 +19,15 @@ export default async function SeoOverviewPage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-gradient-to-br from-blue-500 to-blue-700 text-white border-none">
+        <Card className="bg-primary text-primary-foreground border-none">
           <CardContent className="p-6">
-            <p className="text-blue-100 font-medium mb-1">SEO Health Score</p>
+            <p className="text-primary-foreground/70 font-medium mb-1">SEO Health Score</p>
             <div className="flex items-end gap-2">
               <span className="text-4xl font-bold">{score}</span>
-              <span className="text-blue-200 mb-1">/ 100</span>
+              <span className="text-primary-foreground/60 mb-1">/ 100</span>
             </div>
             {score < 90 && (
-              <p className="text-sm text-blue-100 mt-4">
+              <p className="text-sm text-primary-foreground/70 mt-4">
                 Fill out your core settings and resolve 404 errors to improve your score.
               </p>
             )}
@@ -36,15 +36,15 @@ export default async function SeoOverviewPage() {
         
         <Card>
           <CardContent className="p-6">
-            <p className="text-slate-500 font-medium mb-1">Active Redirects</p>
-            <div className="text-3xl font-bold text-slate-900">{activeRedirects}</div>
+            <p className="text-muted-foreground font-medium mb-1">Active Redirects</p>
+            <div className="text-3xl font-bold text-foreground">{activeRedirects}</div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6">
-            <p className="text-slate-500 font-medium mb-1">Unresolved 404s</p>
-            <div className="text-3xl font-bold text-red-600">{unresolved404s}</div>
+            <p className="text-muted-foreground font-medium mb-1">Unresolved 404s</p>
+            <div className="text-3xl font-bold text-destructive">{unresolved404s}</div>
           </CardContent>
         </Card>
       </div>

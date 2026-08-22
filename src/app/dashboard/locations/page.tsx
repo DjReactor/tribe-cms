@@ -7,8 +7,8 @@ export default async function LocationsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Locations</h1>
-        <p className="text-slate-500 mt-2">Manage your business locations. Drag to reorder how they appear on your site.</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Locations</h1>
+        <p className="text-muted-foreground mt-2">Manage your business locations. Drag to reorder how they appear on your site.</p>
       </div>
 
       <LocationsList initialLocations={items} />

@@ -70,8 +70,8 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Security</h1>
-        <p className="text-slate-500 mt-1">Manage your account credentials and universal API access.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Security</h1>
+        <p className="text-muted-foreground mt-1">Manage your account credentials and universal API access.</p>
       </div>
 
       {userRole === 'agency_admin' && (
@@ -86,7 +86,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
           <CardContent className="space-y-6">
             <form onSubmit={handleApiKeySubmit(onGenerateKey)} className="flex items-end gap-4">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-slate-700 mb-1">Key Title</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Key Title</label>
                 <Input placeholder="e.g. n8n Main Workflow" {...registerApiKey('title')} required />
               </div>
               <Button type="submit" isLoading={isPendingKeys}>Generate Key</Button>
@@ -94,22 +94,22 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
 
             {apiKeys.length > 0 && (
               <div className="space-y-3 mt-6">
-                <h4 className="text-sm font-semibold text-slate-700">Active Keys</h4>
+                <h4 className="text-sm font-semibold text-foreground">Active Keys</h4>
                 {apiKeys.map((k) => (
-                  <div key={k.id} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                  <div key={k.id} className="flex items-center justify-between p-3 bg-muted/50 border border-border rounded-lg">
                     <div className="overflow-hidden mr-4">
-                      <p className="font-medium text-sm text-slate-900">{k.title}</p>
+                      <p className="font-medium text-sm text-foreground">{k.title}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <code className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded truncate max-w-[200px] sm:max-w-[400px]">
+                        <code className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded truncate max-w-[200px] sm:max-w-[400px]">
                           {k.key}
                         </code>
                         <button
                           type="button"
                           onClick={() => copyToClipboard(k.key)}
-                          className="text-slate-400 hover:text-slate-600 transition-colors shrink-0"
+                          className="text-muted-foreground hover:text-muted-foreground transition-colors shrink-0"
                           title="Copy to clipboard"
                         >
-                          {copiedKey === k.key ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
+                          {copiedKey === k.key ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                         </button>
                       </div>
                     </div>
@@ -117,7 +117,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
                       type="button"
                       onClick={() => onDeleteKey(k.id)}
                       disabled={isPendingKeys}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0 disabled:opacity-50"
+                      className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors shrink-0 disabled:opacity-50"
                       title="Delete API Key"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -127,7 +127,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
               </div>
             )}
             {apiKeys.length === 0 && (
-              <p className="text-sm text-slate-500 mt-4 italic">No API keys generated yet.</p>
+              <p className="text-sm text-muted-foreground mt-4 italic">No API keys generated yet.</p>
             )}
           </CardContent>
         </Card>
@@ -145,11 +145,11 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
         <CardContent>
           <form onSubmit={handleCredsSubmit(onUpdateCredentials)} className="space-y-4 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">New Email</label>
+              <label className="block text-sm font-medium text-foreground mb-1">New Email</label>
               <Input type="email" placeholder="New email address" {...registerCreds('email')} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
+              <label className="block text-sm font-medium text-foreground mb-1">New Password</label>
               <div className="relative">
                 <Input 
                   type={showPassword ? "text" : "password"} 
@@ -161,7 +161,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -169,7 +169,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Confirm Password</label>
               <div className="relative">
                 <Input 
                   type={showConfirmPassword ? "text" : "password"} 
@@ -181,7 +181,7 @@ export function SecurityClient({ userRole, userEmail, apiKeys }: { userRole: str
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground transition-colors"
                   tabIndex={-1}
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

@@ -69,24 +69,24 @@ export function TagInput({
   };
 
   return (
-    <div className={cn('w-full space-y-1.5', className)}>
+    <div className={cn('w-full space-y-2', className)}>
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-slate-700">
+        <label htmlFor={inputId} className="block text-sm font-medium leading-none text-foreground">
           {label}
         </label>
       )}
       <div
         onClick={() => inputRef.current?.focus()}
         className={cn(
-          'flex min-h-11 w-full flex-wrap items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/50 backdrop-blur-sm px-2 py-1.5 text-sm shadow-sm transition-all',
-          'focus-within:border-blue-500 focus-within:bg-white focus-within:outline-none focus-within:ring-4 focus-within:ring-blue-500/10',
-          error && 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/10'
+          'flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-input bg-background px-2 py-1.5 text-sm shadow-xs transition-[color,box-shadow]',
+          'focus-within:border-ring focus-within:outline-none focus-within:ring-[3px] focus-within:ring-ring/50',
+          error && 'border-destructive focus-within:border-destructive focus-within:ring-destructive/20'
         )}
       >
         {value.map((tag, i) => (
           <span
             key={`${tag}-${i}`}
-            className="inline-flex items-center gap-1 rounded-lg bg-blue-50 py-1 pl-2.5 pr-1 text-xs font-medium text-blue-700"
+            className="inline-flex items-center gap-1 rounded-md bg-secondary py-1 pl-2.5 pr-1 text-xs font-medium text-secondary-foreground"
           >
             {tag}
             <button
@@ -96,7 +96,7 @@ export function TagInput({
                 e.stopPropagation();
                 removeAt(i);
               }}
-              className="flex h-4 w-4 items-center justify-center rounded text-blue-400 transition-colors hover:bg-blue-100 hover:text-blue-700"
+              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground"
             >
               ×
             </button>
@@ -112,11 +112,11 @@ export function TagInput({
           onPaste={handlePaste}
           onBlur={() => commit(draft)}
           placeholder={value.length === 0 ? placeholder : ''}
-          className="h-7 min-w-[8ch] flex-1 bg-transparent px-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+          className="h-6 min-w-[8ch] flex-1 bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
       </div>
-      {hint && !error && <p className="text-sm text-slate-500">{hint}</p>}
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {hint && !error && <p className="text-sm text-muted-foreground">{hint}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
 }

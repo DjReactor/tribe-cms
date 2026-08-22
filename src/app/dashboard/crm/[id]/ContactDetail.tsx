@@ -65,7 +65,7 @@ export function ContactDetail({
 
   return (
     <div className="space-y-6">
-      <Link href="/dashboard/crm" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/dashboard/crm" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Back to CRM
       </Link>
 
@@ -74,13 +74,13 @@ export function ContactDetail({
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">{contact.name || '(no name)'}</h1>
-              <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+              <h1 className="text-2xl font-bold text-foreground">{contact.name || '(no name)'}</h1>
+              <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
                 {contact.email && <span className="inline-flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{contact.email}</span>}
                 {contact.phone && <span className="inline-flex items-center gap-1"><Phone className="h-3.5 w-3.5" />{contact.phone}</span>}
               </div>
               {(contact.address_full || contact.address_city) && (
-                <p className="mt-1 text-sm text-slate-400">
+                <p className="mt-1 text-sm text-muted-foreground">
                   {contact.address_full || [contact.address_city, contact.address_state, contact.address_zip].filter(Boolean).join(', ')}
                 </p>
               )}
@@ -115,7 +115,7 @@ export function ContactDetail({
             <CardHeader><CardTitle>Activity Timeline</CardTitle></CardHeader>
             <CardContent>
               {timeline.length === 0 ? (
-                <p className="py-8 text-center text-sm text-slate-400">No activity yet.</p>
+                <p className="py-8 text-center text-sm text-muted-foreground">No activity yet.</p>
               ) : (
                 <ol className="space-y-4">
                   {timeline.map((item, i) => <TimelineItem key={i} item={item} />)}
@@ -142,19 +142,19 @@ function TimelineItem({ item }: { item: any }) {
     return (
       <li className="flex gap-3">
         <IconDot className="bg-violet-100 text-violet-600"><Phone className="h-4 w-4" /></IconDot>
-        <div className="flex-1 rounded-xl border border-slate-200/70 bg-white p-3">
+        <div className="flex-1 rounded-xl border border-border/70 bg-card p-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium text-slate-900">Call · {data.from_number || data.caller_number || 'Unknown'}</span>
-            <span className="text-xs text-slate-400">{fmtTime(ts)}</span>
+            <span className="text-sm font-medium text-foreground">Call · {data.from_number || data.caller_number || 'Unknown'}</span>
+            <span className="text-xs text-muted-foreground">{fmtTime(ts)}</span>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
             <Badge variant={data.call_successful ? 'success' : 'default'} className="capitalize">
               {data.call_successful ? 'Successful' : (data.disconnection_reason || data.call_status || 'Unknown')}
             </Badge>
-            {data.sentiment && <span className="capitalize text-slate-500">{data.sentiment}</span>}
+            {data.sentiment && <span className="capitalize text-muted-foreground">{data.sentiment}</span>}
           </div>
-          {data.summary && <p className="mt-2 line-clamp-3 text-sm text-slate-600">{data.summary}</p>}
-          <Link href="/dashboard/call-logs" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:underline">
+          {data.summary && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{data.summary}</p>}
+          <Link href="/dashboard/call-logs" className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline">
             Open in Call Logs <ExternalLink className="h-3 w-3" />
           </Link>
         </div>
@@ -169,17 +169,17 @@ function TimelineItem({ item }: { item: any }) {
         <IconDot className="bg-sky-100 text-sky-600">
           {data.channel === 'email' ? <Mail className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
         </IconDot>
-        <div className="flex-1 rounded-xl border border-slate-200/70 bg-white p-3">
+        <div className="flex-1 rounded-xl border border-border/70 bg-card p-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 capitalize">
-              {outbound ? <ArrowUpRight className="h-3.5 w-3.5 text-emerald-500" /> : <ArrowDownLeft className="h-3.5 w-3.5 text-blue-500" />}
+            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground capitalize">
+              {outbound ? <ArrowUpRight className="h-3.5 w-3.5 text-success" /> : <ArrowDownLeft className="h-3.5 w-3.5 text-primary" />}
               {data.direction} {data.channel}
             </span>
-            <span className="text-xs text-slate-400">{fmtTime(ts)}</span>
+            <span className="text-xs text-muted-foreground">{fmtTime(ts)}</span>
           </div>
-          {data.subject && <p className="mt-1 text-sm font-medium text-slate-700">{data.subject}</p>}
-          {data.body && <p className="mt-1 whitespace-pre-wrap text-sm text-slate-600">{data.body}</p>}
-          {data.status && <span className="mt-1 inline-block text-xs capitalize text-slate-400">{data.status}</span>}
+          {data.subject && <p className="mt-1 text-sm font-medium text-foreground">{data.subject}</p>}
+          {data.body && <p className="mt-1 whitespace-pre-wrap text-sm text-muted-foreground">{data.body}</p>}
+          {data.status && <span className="mt-1 inline-block text-xs capitalize text-muted-foreground">{data.status}</span>}
         </div>
       </li>
     );
@@ -188,13 +188,13 @@ function TimelineItem({ item }: { item: any }) {
   // activity
   return (
     <li className="flex gap-3">
-      <IconDot className="bg-slate-100 text-slate-500"><Activity className="h-4 w-4" /></IconDot>
+      <IconDot className="bg-muted text-muted-foreground"><Activity className="h-4 w-4" /></IconDot>
       <div className="flex-1 pt-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-sm text-slate-700">{data.title || data.type}</span>
-          <span className="text-xs text-slate-400">{fmtTime(ts)}</span>
+          <span className="text-sm text-foreground">{data.title || data.type}</span>
+          <span className="text-xs text-muted-foreground">{fmtTime(ts)}</span>
         </div>
-        {data.detail && <p className="mt-0.5 text-sm text-slate-500">{data.detail}</p>}
+        {data.detail && <p className="mt-0.5 text-sm text-muted-foreground">{data.detail}</p>}
       </div>
     </li>
   );
@@ -252,22 +252,22 @@ function DealsPanel({ contactId, deals, sources, onChanged }: { contactId: strin
         <Button size="sm" onClick={() => setOpen(true)}>New</Button>
       </CardHeader>
       <CardContent className="space-y-3">
-        {deals.length === 0 && <p className="text-sm text-slate-400">No deals yet.</p>}
+        {deals.length === 0 && <p className="text-sm text-muted-foreground">No deals yet.</p>}
         {deals.map((d) => (
-          <div key={d.id} className="rounded-xl border border-slate-200/70 p-3">
+          <div key={d.id} className="rounded-xl border border-border/70 p-3">
             <div className="flex items-center justify-between gap-2">
-              <span className="truncate text-sm font-medium text-slate-900">{d.title || 'Untitled deal'}</span>
-              <button className="text-xs text-slate-400 hover:text-slate-700" onClick={() => setEditing({ ...d })}>Edit</button>
+              <span className="truncate text-sm font-medium text-foreground">{d.title || 'Untitled deal'}</span>
+              <button className="text-xs text-muted-foreground hover:text-foreground" onClick={() => setEditing({ ...d })}>Edit</button>
             </div>
             <div className="mt-2 flex items-center gap-2">
               <Select value={d.stage} disabled={isPending} onChange={(e) => onStage(d.id, e.target.value)} className="h-8 py-0 text-xs">
                 {STAGE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </Select>
-              <span className="shrink-0 text-sm font-medium text-slate-700">
+              <span className="shrink-0 text-sm font-medium text-foreground">
                 {d.stage === 'won' ? money(d.won_value) : money(d.estimate_value)}
               </span>
             </div>
-            {d.expand?.source?.label && <p className="mt-1 text-xs text-slate-400">via {d.expand.source.label}</p>}
+            {d.expand?.source?.label && <p className="mt-1 text-xs text-muted-foreground">via {d.expand.source.label}</p>}
           </div>
         ))}
       </CardContent>
@@ -347,7 +347,7 @@ function ComposeBox({ contactId }: { contactId: string }) {
         <Button onClick={onSend} isLoading={isPending} className="w-full">
           <Send className="mr-2 h-4 w-4" /> Request send
         </Button>
-        <p className="text-xs text-slate-400">The message is sent by your automation (n8n) and logged back to this timeline.</p>
+        <p className="text-xs text-muted-foreground">The message is sent by your automation (n8n) and logged back to this timeline.</p>
       </CardContent>
     </Card>
   );

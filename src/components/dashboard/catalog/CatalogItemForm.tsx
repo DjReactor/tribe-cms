@@ -78,10 +78,10 @@ export default function CatalogItemForm({ kind, initialData }: { kind: CatalogKi
           <CardDescription>Core details about this {meta.singular.toLowerCase()}.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Visibility</p>
-              <p className="text-sm text-slate-500">Show this {meta.singular.toLowerCase()} on the live website</p>
+              <p className="font-medium text-foreground">Visibility</p>
+              <p className="text-sm text-muted-foreground">Show this {meta.singular.toLowerCase()} on the live website</p>
             </div>
             <Toggle
               checked={watch('is_active')}
@@ -118,12 +118,12 @@ export default function CatalogItemForm({ kind, initialData }: { kind: CatalogKi
               <Input label="Image URL" placeholder="https://..." {...register('image_url')} />
             </div>
             <Button type="button" variant="outline" onClick={() => setImagePickerOpen(true)}>
-              <ImageIcon className="h-4 w-4 mr-2" />
+              <ImageIcon className="h-4 w-4" />
               Select from Media Library
             </Button>
           </div>
           {imageUrl && (
-            <img src={imageUrl} alt="Image preview" className="h-40 w-full object-contain rounded-xl bg-slate-50" />
+            <img src={imageUrl} alt="Image preview" className="h-40 w-full object-contain rounded-xl bg-muted/50" />
           )}
         </CardContent>
       </Card>
@@ -150,10 +150,10 @@ export default function CatalogItemForm({ kind, initialData }: { kind: CatalogKi
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines (Noindex)</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this page</p>
+              <p className="font-medium text-foreground">Hide from Search Engines (Noindex)</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this page</p>
             </div>
             <Toggle
               checked={watch('noindex')}

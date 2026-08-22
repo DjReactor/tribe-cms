@@ -14,7 +14,7 @@ export function SeoTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="flex space-x-1 border-b border-slate-200">
+    <div className="flex space-x-1 border-b border-border">
       {tabs.map((tab) => {
         const isActive = pathname === tab.href;
         return (
@@ -24,8 +24,8 @@ export function SeoTabs() {
             className={cn(
               "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors",
               isActive
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                ? "border-ring text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground hover:border-input"
             )}
           >
             {tab.name}

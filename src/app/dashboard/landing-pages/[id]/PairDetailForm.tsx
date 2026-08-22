@@ -111,8 +111,8 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {pair.auto_unpublished && (
-        <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
+        <div className="flex gap-3 rounded-xl border border-warning/25 bg-warning/10 p-4 text-sm text-warning">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-warning" />
           <p>
             This page was unpublished automatically because its service or area was hidden. It was
             kept rather than deleted so somebody could decide. Publish it again once both are live,
@@ -130,19 +130,19 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
-            <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
-            <p className="font-mono text-sm text-slate-900 break-all">
+          <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
+            <p className="text-xs font-medium text-muted-foreground mb-1">Page URL</p>
+            <p className="font-mono text-sm text-foreground break-all">
               {getPairPath(area?.slug || '…', slugify(slug || '') || 'your-page')}
             </p>
           </div>
 
           <Input label="URL Slug" error={errors.slug?.message} {...register('slug')} />
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div className="pr-6">
-              <p className="font-medium text-slate-900">Published</p>
-              <p className="text-sm text-slate-500">
+              <p className="font-medium text-foreground">Published</p>
+              <p className="text-sm text-muted-foreground">
                 {publishBlocker
                   ? `${publishBlocker} A landing page with no body of its own is exactly the page family Google acts on.`
                   : 'Live on the site.'}
@@ -169,7 +169,7 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
           <Input label="H1 Headline" error={errors.h1?.message} {...register('h1')} />
           <Textarea label="Intro Paragraph" error={errors.intro?.message} {...register('intro')} />
           <div>
-            <p className="block text-sm font-medium text-slate-700 mb-1.5">Page Body</p>
+            <p className="block text-sm font-medium text-foreground mb-1.5">Page Body</p>
             <BlockNoteEditor
               initialContent={pair.body as any}
               onChange={(content) => setValue('body', content, { shouldDirty: true })}
@@ -205,9 +205,9 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
         </CardHeader>
         <CardContent className="space-y-4">
           {checklistItems.length === 0 ? (
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               No checklist items yet.{' '}
-              <Link href="/dashboard/landing-pages/checklist" className="text-blue-600 hover:underline">
+              <Link href="/dashboard/landing-pages/checklist" className="text-primary hover:underline">
                 Add some
               </Link>{' '}
               and they appear on every landing page.
@@ -216,11 +216,11 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
             checklistItems.map((item) => (
               <label
                 key={item.id}
-                className="flex items-start gap-3 rounded-xl border border-slate-200/60 p-4 cursor-pointer hover:bg-slate-50"
+                className="flex items-start gap-3 rounded-xl border border-border/60 p-4 cursor-pointer hover:bg-muted/50"
               >
                 <input
                   type="checkbox"
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="mt-0.5 h-4 w-4 rounded border-input text-primary focus:ring-ring"
                   checked={Boolean(checklist?.[item.id])}
                   onChange={(e) => setValue(
                     'manual_checklist',
@@ -229,8 +229,8 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
                   )}
                 />
                 <div>
-                  <p className="text-sm font-medium text-slate-900">{item.label}</p>
-                  {item.description && <p className="text-sm text-slate-500">{item.description}</p>}
+                  <p className="text-sm font-medium text-foreground">{item.label}</p>
+                  {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
                 </div>
               </label>
             ))
@@ -247,10 +247,10 @@ export function PairDetailForm({ pair, service, area, source, checklistItems }: 
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines (Noindex)</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this page</p>
+              <p className="font-medium text-foreground">Hide from Search Engines (Noindex)</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this page</p>
             </div>
             <Toggle
               checked={watch('noindex')}

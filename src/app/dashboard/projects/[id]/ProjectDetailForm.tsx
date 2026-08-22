@@ -73,9 +73,9 @@ interface Props {
 }
 
 function charCountClass(len: number, warn: number, max: number) {
-  if (len > max) return 'text-red-500';
-  if (len >= warn) return 'text-amber-500';
-  return 'text-slate-400';
+  if (len > max) return 'text-destructive';
+  if (len >= warn) return 'text-warning';
+  return 'text-muted-foreground';
 }
 
 export default function ProjectDetailForm({
@@ -205,20 +205,20 @@ export default function ProjectDetailForm({
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex gap-6">
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60 flex-1">
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60 flex-1">
               <div>
-                <p className="font-medium text-slate-900">Active</p>
-                <p className="text-sm text-slate-500">Visible on website</p>
+                <p className="font-medium text-foreground">Active</p>
+                <p className="text-sm text-muted-foreground">Visible on website</p>
               </div>
               <Toggle
                 checked={watch('is_active')}
                 onChange={(e) => setValue('is_active', e.target.checked)}
               />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60 flex-1">
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60 flex-1">
               <div>
-                <p className="font-medium text-slate-900">Featured</p>
-                <p className="text-sm text-slate-500">Feature on homepage</p>
+                <p className="font-medium text-foreground">Featured</p>
+                <p className="text-sm text-muted-foreground">Feature on homepage</p>
               </div>
               <Toggle
                 checked={watch('featured')}
@@ -256,13 +256,13 @@ export default function ProjectDetailForm({
           </Select>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700">Services</label>
+            <label className="block text-sm font-medium text-foreground">Services</label>
             <div className="grid grid-cols-2 gap-2">
               {availableServices.map((svc: any) => (
-                <label key={svc.id} className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-slate-50">
+                <label key={svc.id} className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-muted/50">
                   <input
                     type="checkbox"
-                    className="rounded border-slate-300 text-blue-600"
+                    className="rounded border-input text-primary"
                     checked={serviceIds.includes(svc.id)}
                     onChange={(e) => {
                       const next = e.target.checked
@@ -271,7 +271,7 @@ export default function ProjectDetailForm({
                       setValue('service_ids', next);
                     }}
                   />
-                  <span className="text-sm text-slate-700">{svc.name}</span>
+                  <span className="text-sm text-foreground">{svc.name}</span>
                 </label>
               ))}
             </div>
@@ -320,7 +320,7 @@ export default function ProjectDetailForm({
               <Input label="Cover Image URL" placeholder="https://..." {...register('cover_image_url')} />
             </div>
             <Button type="button" variant="outline" onClick={() => setCoverPickerOpen(true)}>
-              <ImageIcon className="h-4 w-4 mr-2" />
+              <ImageIcon className="h-4 w-4" />
               Select from Media Library
             </Button>
           </div>
@@ -345,21 +345,21 @@ export default function ProjectDetailForm({
                   <button
                     type="button"
                     onClick={() => removeGalleryItem(item.id)}
-                    className="absolute top-1.5 right-1.5 bg-white/90 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                    className="absolute top-1.5 right-1.5 bg-card rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/10"
                   >
-                    <X className="h-3.5 w-3.5 text-slate-700" />
+                    <X className="h-3.5 w-3.5 text-foreground" />
                   </button>
                 </div>
               ))}
             </div>
           )}
           <Button type="button" variant="outline" onClick={() => setGalleryPickerOpen(true)}>
-            <ImageIcon className="h-4 w-4 mr-2" />
+            <ImageIcon className="h-4 w-4" />
             Select from Media Library
           </Button>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             To add new images, upload them in the{' '}
-            <a href="/dashboard/media" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">
+            <a href="/dashboard/media" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground">
               Media Library
             </a>{' '}
             first.
@@ -387,8 +387,8 @@ export default function ProjectDetailForm({
           <CardTitle>Client Testimonial</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
-            <p className="font-medium text-slate-900">Include a testimonial with this project</p>
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
+            <p className="font-medium text-foreground">Include a testimonial with this project</p>
             <Toggle
               checked={testimonialEnabled}
               onChange={(e) => setValue('testimonial_enabled', e.target.checked)}
@@ -412,7 +412,7 @@ export default function ProjectDetailForm({
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Star Rating (optional)</label>
+                <label className="block text-sm font-medium text-foreground">Star Rating (optional)</label>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((n) => (
                     <button
@@ -424,8 +424,8 @@ export default function ProjectDetailForm({
                       <Star
                         className={`h-7 w-7 transition-colors ${
                           (testimonialRating ?? 0) >= n
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'text-slate-300'
+                            ? 'fill-warning text-warning'
+                            : 'text-muted-foreground'
                         }`}
                       />
                     </button>
@@ -434,7 +434,7 @@ export default function ProjectDetailForm({
                     <button
                       type="button"
                       onClick={() => setValue('testimonial_rating', undefined)}
-                      className="ml-2 text-xs text-slate-400 hover:text-slate-600"
+                      className="ml-2 text-xs text-muted-foreground hover:text-muted-foreground"
                     >
                       Clear
                     </button>
@@ -443,7 +443,7 @@ export default function ProjectDetailForm({
               </div>
 
               <div className="space-y-3">
-                <label className="block text-sm font-medium text-slate-700">Client Photo (optional)</label>
+                <label className="block text-sm font-medium text-foreground">Client Photo (optional)</label>
                 {(clientPhotoPreview || watch('testimonial_client_image_url')) && (
                   <div className="flex items-center gap-3">
                     <img
@@ -457,7 +457,7 @@ export default function ProjectDetailForm({
                         setClientPhotoPreview('');
                         setValue('testimonial_client_image_url', '');
                       }}
-                      className="text-xs text-slate-400 hover:text-red-500"
+                      className="text-xs text-muted-foreground hover:text-destructive"
                     >
                       Remove
                     </button>
@@ -469,7 +469,7 @@ export default function ProjectDetailForm({
                   size="sm"
                   onClick={() => setClientPhotoPickerOpen(true)}
                 >
-                  <ImageIcon className="h-3.5 w-3.5 mr-1.5" />
+                  <ImageIcon className="h-3.5 w-3.5" />
                   Select from Media Library
                 </Button>
               </div>
@@ -508,15 +508,15 @@ export default function ProjectDetailForm({
               />
             </div>
             <Button type="button" variant="outline" onClick={() => setOgPickerOpen(true)}>
-              <ImageIcon className="h-4 w-4 mr-2" />
+              <ImageIcon className="h-4 w-4" />
               Pick
             </Button>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this project page.</p>
+              <p className="font-medium text-foreground">Hide from Search Engines</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this project page.</p>
             </div>
             <Toggle
               checked={watch('noindex')}

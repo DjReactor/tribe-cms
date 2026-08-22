@@ -1,35 +1,45 @@
 'use client';
-import { LogOut, User, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { LogOut, User, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 export function TopBar({ userDisplayName, userRole }: { userDisplayName: string, userRole: string }) {
   return (
-    <header className="h-16 border-b border-slate-200/60 bg-white/50 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-40 shrink-0 shadow-sm">
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background px-6 lg:px-8">
+      <div className="flex items-center gap-3">
         {userRole === 'agency_admin' && (
-          <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-            Agency Admin Mode
+          <span className="inline-flex h-6 items-center rounded-full bg-destructive/10 px-2.5 text-xs font-medium text-destructive">
+            Agency Admin
           </span>
         )}
-        <Link href="/" target="_blank" className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-100 px-3 py-1.5 rounded-md transition-colors">
-          <Globe className="h-4 w-4" />
+        <Link
+          href="/"
+          target="_blank"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
           View Website
+          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
         </Link>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3 text-sm font-medium text-slate-700">
-          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 ring-2 ring-white shadow-sm">
-            <User className="h-4 w-4" />
-          </div>
-          {userDisplayName}
+
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5 pr-1 text-sm font-medium">
+          <span className="hidden max-w-[180px] truncate text-foreground sm:block">
+            {userDisplayName}
+          </span>
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground">
+            <User className="h-4 w-4" strokeWidth={1.75} />
+          </span>
         </div>
-        <div className="h-6 w-px bg-slate-200" />
+        <div className="h-6 w-px bg-border" />
         <form action="/api/auth/logout" method="POST">
-          <Button variant="ghost" size="sm" className="text-slate-500 hover:text-red-600 hover:bg-red-50" type="submit">
-            <LogOut className="h-4 w-4 mr-2" />
-            Log Out
-          </Button>
+          <button
+            type="submit"
+            aria-label="Log out"
+            title="Log out"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <LogOut className="h-4 w-4" strokeWidth={1.75} />
+          </button>
         </form>
       </div>
     </header>

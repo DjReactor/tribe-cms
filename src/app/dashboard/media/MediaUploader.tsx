@@ -32,7 +32,7 @@ export function MediaUploader() {
   };
 
   return (
-    <div className="relative group rounded-xl border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50 transition-all p-12 text-center cursor-pointer overflow-hidden">
+    <div className="relative group rounded-xl border-2 border-dashed border-input hover:border-ring hover:bg-primary/10 transition-all p-12 text-center cursor-pointer overflow-hidden">
       <Input 
         type="file" 
         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
@@ -42,14 +42,14 @@ export function MediaUploader() {
         accept="image/*"
       />
       <div className="flex flex-col items-center justify-center gap-3 pointer-events-none">
-        <div className="h-12 w-12 rounded-full bg-slate-100 group-hover:bg-blue-100 flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors">
+        <div className="h-12 w-12 rounded-full bg-muted group-hover:bg-primary/10 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
           <UploadCloud className="h-6 w-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-slate-900">
+          <p className="text-sm font-medium text-foreground">
             {isPending ? 'Uploading...' : 'Click to upload or drag and drop'}
           </p>
-          <p className="text-xs text-slate-500 mt-1">PNG, JPG, SVG or WEBP (max. 5MB)</p>
+          <p className="text-xs text-muted-foreground mt-1">PNG, JPG, SVG or WEBP (max. 5MB)</p>
         </div>
       </div>
     </div>

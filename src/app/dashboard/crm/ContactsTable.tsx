@@ -65,10 +65,10 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200/60">
+            <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border/60">
               <tr>
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Contact Info</th>
@@ -78,15 +78,15 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {contacts.map((contact) => (
-                <tr key={contact.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={contact.id} className="hover:bg-muted/50 transition-colors">
                   <td className="px-6 py-4 font-medium">
-                    <Link href={`/dashboard/crm/${contact.id}`} className="text-slate-900 hover:text-blue-600 hover:underline">
+                    <Link href={`/dashboard/crm/${contact.id}`} className="text-foreground hover:text-primary hover:underline">
                       {contact.name}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 text-slate-500">
+                  <td className="px-6 py-4 text-muted-foreground">
                     <div>{contact.email}</div>
                     <div>{contact.phone}</div>
                   </td>
@@ -95,7 +95,7 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
                       <Badge variant="default">{contact.expand.source.label}</Badge>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-slate-500 text-xs max-w-[180px] truncate">
+                  <td className="px-6 py-4 text-muted-foreground text-xs max-w-[180px] truncate">
                     {contact.address_full
                       ? contact.address_full
                       : [contact.address_city, contact.address_state].filter(Boolean).join(', ') || '—'}
@@ -118,7 +118,7 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-blue-600 hover:bg-blue-50"
+                      className="h-8 w-8 text-primary hover:bg-primary/10"
                       onClick={() => {
                         setSelectedContact(contact);
                         setNotesDraft(contact.notes || '');
@@ -129,7 +129,7 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-red-600 hover:bg-red-50"
+                      className="h-8 w-8 text-destructive hover:bg-destructive/10"
                       onClick={() => handleDelete(contact.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -139,7 +139,7 @@ export function ContactsTable({ initialContacts }: { initialContacts: any[] }) {
               ))}
               {contacts.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                     No contacts found.
                   </td>
                 </tr>

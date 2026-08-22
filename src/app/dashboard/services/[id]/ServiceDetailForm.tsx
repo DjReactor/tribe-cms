@@ -124,10 +124,10 @@ export default function ServiceDetailForm(
           <CardDescription>Core details about this service.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Visibility</p>
-              <p className="text-sm text-slate-500">Show this service on the live website</p>
+              <p className="font-medium text-foreground">Visibility</p>
+              <p className="text-sm text-muted-foreground">Show this service on the live website</p>
             </div>
             <Toggle 
               checked={watch('is_active')} 
@@ -170,19 +170,19 @@ export default function ServiceDetailForm(
             ))}
           </Select>
 
-          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
-            <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
-            <p className="font-mono text-sm text-slate-900 break-all">{previewPath}</p>
+          <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
+            <p className="text-xs font-medium text-muted-foreground mb-1">Page URL</p>
+            <p className="font-mono text-sm text-foreground break-all">{previewPath}</p>
             {parentName && (
-              <p className="text-xs text-slate-500 mt-2">
-                Shown under <span className="font-medium text-slate-700">{parentName}</span> in
+              <p className="text-xs text-muted-foreground mt-2">
+                Shown under <span className="font-medium text-foreground">{parentName}</span> in
                 navigation and breadcrumbs.
               </p>
             )}
           </div>
 
           {!isNew && ownHeight > 1 && (
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               This service has sub-services beneath it, so it can only move somewhere with
               room for {ownHeight} levels.
             </p>
@@ -201,7 +201,7 @@ export default function ServiceDetailForm(
               <Input label="Cover Image URL" placeholder="https://..." {...register('cover_image_url')} />
             </div>
             <Button type="button" variant="outline" onClick={() => setCoverPickerOpen(true)}>
-              <ImageIcon className="h-4 w-4 mr-2" />
+              <ImageIcon className="h-4 w-4" />
               Select from Media Library
             </Button>
           </div>
@@ -233,10 +233,10 @@ export default function ServiceDetailForm(
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
           
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines (Noindex)</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this page</p>
+              <p className="font-medium text-foreground">Hide from Search Engines (Noindex)</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this page</p>
             </div>
             <Toggle 
               checked={watch('noindex')} 

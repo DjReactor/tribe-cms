@@ -53,10 +53,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
           <CardDescription>Choose which events you want to be notified about.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Content Published</p>
-              <p className="text-sm text-slate-500">Get notified when a new page or service goes live.</p>
+              <p className="font-medium text-foreground">Content Published</p>
+              <p className="text-sm text-muted-foreground">Get notified when a new page or service goes live.</p>
             </div>
             <Toggle 
               checked={watch('notify_on_publish')} 
@@ -64,10 +64,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
           
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Monthly Summary</p>
-              <p className="text-sm text-slate-500">Receive a monthly report of traffic and leads.</p>
+              <p className="font-medium text-foreground">Monthly Summary</p>
+              <p className="text-sm text-muted-foreground">Receive a monthly report of traffic and leads.</p>
             </div>
             <Toggle 
               checked={watch('notify_monthly_summary')} 
@@ -75,10 +75,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">New Blog Post Alerts</p>
-              <p className="text-sm text-slate-500">Get notified when an AI-generated blog post is published.</p>
+              <p className="font-medium text-foreground">New Blog Post Alerts</p>
+              <p className="text-sm text-muted-foreground">Get notified when an AI-generated blog post is published.</p>
             </div>
             <Toggle 
               checked={watch('notify_new_blog_post')} 
@@ -110,7 +110,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             placeholder="Sent as Authorization: Bearer ..."
             type="password"
           />
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             Leave blank to disable webhook dispatch. The secret is sent as a Bearer token in the Authorization header.
           </p>
         </CardContent>
@@ -125,10 +125,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Enable Automation</p>
-              <p className="text-sm text-slate-500">Emit signed CRM events to n8n. Leave off to pause all outbound events.</p>
+              <p className="font-medium text-foreground">Enable Automation</p>
+              <p className="text-sm text-muted-foreground">Emit signed CRM events to n8n. Leave off to pause all outbound events.</p>
             </div>
             <Toggle
               checked={watch('automation_enabled')}
@@ -155,7 +155,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             onChange={(e) => setValue('automation_allowed_host', e.target.value)}
             placeholder="e.g. your-n8n-instance.com — permits this host past the SSRF guard"
           />
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             The allowed host lets the webhook URL bypass the private-network SSRF block for self-hosted n8n.
             Only set it to a host you control.
           </p>
@@ -168,10 +168,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
           <CardDescription>Manage how the website displays agency attribution.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Show "Powered by Tribe CMS"</p>
-              <p className="text-sm text-slate-500">Display a small badge in the footer of your website.</p>
+              <p className="font-medium text-foreground">Show "Powered by Tribe CMS"</p>
+              <p className="text-sm text-muted-foreground">Display a small badge in the footer of your website.</p>
             </div>
             <Toggle 
               checked={watch('show_powered_by')} 
@@ -198,7 +198,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             <option value="flat">Flat — one list, every service side by side</option>
             <option value="tree">Grouped — always show sub-services under their parent</option>
           </Select>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             This only changes the index page. Service URLs always follow the hierarchy,
             and each service keeps its own page either way.
           </p>
@@ -211,10 +211,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
           <CardDescription>Enable optional sections on your website.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Projects Showcase</p>
-              <p className="text-sm text-slate-500">Display a portfolio of completed work on your site.</p>
+              <p className="font-medium text-foreground">Projects Showcase</p>
+              <p className="text-sm text-muted-foreground">Display a portfolio of completed work on your site.</p>
             </div>
             <Toggle
               checked={watch('projects_enabled')}
@@ -222,10 +222,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Locations</p>
-              <p className="text-sm text-slate-500">Show your business locations (address &amp; phone) and per-location pages.</p>
+              <p className="font-medium text-foreground">Locations</p>
+              <p className="text-sm text-muted-foreground">Show your business locations (address &amp; phone) and per-location pages.</p>
             </div>
             <Toggle
               checked={watch('locations_enabled')}
@@ -233,10 +233,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Brands</p>
-              <p className="text-sm text-slate-500">Showcase the brands you work with, carry, or service.</p>
+              <p className="font-medium text-foreground">Brands</p>
+              <p className="text-sm text-muted-foreground">Showcase the brands you work with, carry, or service.</p>
             </div>
             <Toggle
               checked={watch('brands_enabled')}
@@ -244,10 +244,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Certifications</p>
-              <p className="text-sm text-slate-500">Showcase certifications, partnerships, and affiliations.</p>
+              <p className="font-medium text-foreground">Certifications</p>
+              <p className="text-sm text-muted-foreground">Showcase certifications, partnerships, and affiliations.</p>
             </div>
             <Toggle
               checked={watch('certifications_enabled')}
@@ -255,10 +255,10 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60">
             <div>
-              <p className="font-medium text-slate-900">Awards &amp; Nominations</p>
-              <p className="text-sm text-slate-500">Showcase awards and nominations your business has earned.</p>
+              <p className="font-medium text-foreground">Awards &amp; Nominations</p>
+              <p className="text-sm text-muted-foreground">Showcase awards and nominations your business has earned.</p>
             </div>
             <Toggle
               checked={watch('awards_enabled')}

@@ -60,15 +60,15 @@ export function RedirectsTable({ initialData }: { initialData: any[] }) {
     <div className="space-y-6">
       <div className="flex justify-end">
         <Button onClick={() => setIsModalOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Add Redirect
         </Button>
       </div>
       
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200/60">
+            <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border/60">
               <tr>
                 <th className="px-6 py-4">From Path</th>
                 <th className="px-6 py-4 w-8"></th>
@@ -78,23 +78,23 @@ export function RedirectsTable({ initialData }: { initialData: any[] }) {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {redirects.map((redirect) => (
-                <tr key={redirect.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-mono text-slate-900">{redirect.from_path}</td>
-                  <td className="px-2 py-4 text-slate-400"><ArrowRight className="h-4 w-4" /></td>
-                  <td className="px-6 py-4 font-mono text-slate-600">{redirect.to_path}</td>
+                <tr key={redirect.id} className="hover:bg-muted/50 transition-colors">
+                  <td className="px-6 py-4 font-mono text-foreground">{redirect.from_path}</td>
+                  <td className="px-2 py-4 text-muted-foreground"><ArrowRight className="h-4 w-4" /></td>
+                  <td className="px-6 py-4 font-mono text-muted-foreground">{redirect.to_path}</td>
                   <td className="px-6 py-4">
                     <Badge variant={redirect.type === '301' ? 'success' : 'warning'}>
                       {redirect.type === '301' ? '301 Permanent' : '302 Temporary'}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-slate-500">{redirect.hit_count || 0}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{redirect.hit_count || 0}</td>
                   <td className="px-6 py-4 text-right">
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       onClick={() => handleDelete(redirect.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -104,7 +104,7 @@ export function RedirectsTable({ initialData }: { initialData: any[] }) {
               ))}
               {redirects.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                     No redirects configured.
                   </td>
                 </tr>

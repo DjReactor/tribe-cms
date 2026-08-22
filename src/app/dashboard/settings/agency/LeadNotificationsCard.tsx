@@ -76,10 +76,10 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <Card className="border-red-200">
-        <CardHeader className="bg-red-50/50 border-b border-red-100 rounded-t-xl">
-          <CardTitle className="text-red-900">Lead Notifications — built-in</CardTitle>
-          <CardDescription className="text-red-700">
+      <Card className="border-destructive">
+        <CardHeader className="bg-destructive/5 border-b border-destructive/20 rounded-t-xl">
+          <CardTitle className="text-destructive">Lead Notifications — built-in</CardTitle>
+          <CardDescription className="text-destructive">
             CMS-native sends on a new lead (no n8n dependency). Immediate, single-shot only —
             sequences and follow-ups belong in n8n. If n8n workflows also notify, keep these off
             to avoid double sends.
@@ -88,7 +88,7 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
         <CardContent className="space-y-8 pt-6">
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Owner notification</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Owner notification</h3>
             <Toggle
               checked={watch('notify_owner_email_enabled')}
               onChange={(e) => setValue('notify_owner_email_enabled', e.target.checked)}
@@ -106,7 +106,7 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Lead acknowledgement</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Lead acknowledgement</h3>
             <Toggle
               checked={watch('lead_ack_email_enabled')}
               onChange={(e) => setValue('lead_ack_email_enabled', e.target.checked)}
@@ -117,14 +117,14 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
               onChange={(e) => setValue('lead_ack_sms_enabled', e.target.checked)}
               label="Text the lead an acknowledgement (requires form consent)"
             />
-            <p className="text-xs text-slate-500 pl-6">
+            <p className="text-xs text-muted-foreground pl-6">
               The ack SMS only ever sends when the lead checked the consent box on the contact
               form — the toggle alone is not enough (TCPA).
             </p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">SMS provider</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">SMS provider</h3>
             <Select label="Provider" {...register('sms_provider')}>
               <option value="">Not configured</option>
               <option value="twilio">Twilio</option>
@@ -146,7 +146,7 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Email provider (Postmark)</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Email provider (Postmark)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label="Server token" type="password" {...register('postmark_server_token')} />
               <Input label="From email (verified sender)" {...register('postmark_from_email')} placeholder="hello@business.com" />
@@ -154,8 +154,8 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Templates (blank = default)</h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="font-semibold text-foreground border-b pb-2">Templates (blank = default)</h3>
+            <p className="text-xs text-muted-foreground">
               Placeholders: {'{{name}} {{phone}} {{email}} {{message}} {{business_name}} {{business_phone}}'}
             </p>
             <Input label="Ack email subject" {...register('lead_ack_email_subject')} placeholder={initialData.defaults.ack_email_subject} />
@@ -170,7 +170,7 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Send test</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Send test</h3>
             <div className="flex flex-col md:flex-row gap-3 md:items-end">
               <div className="flex-1">
                 <Input
@@ -189,11 +189,11 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
                 </Button>
               </div>
             </div>
-            <p className="text-xs text-slate-500">Tests use the saved credentials — save first.</p>
+            <p className="text-xs text-muted-foreground">Tests use the saved credentials — save first.</p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-slate-900 border-b pb-2">Outbound webhook extras (n8n lane)</h3>
+            <h3 className="font-semibold text-foreground border-b pb-2">Outbound webhook extras (n8n lane)</h3>
             <Textarea
               label='Custom request headers (JSON object, e.g. {"X-Api-Key": "..."}) — X-Tribe-*/Content-Type protected'
               rows={3}
@@ -210,7 +210,7 @@ export function LeadNotificationsCard({ initialData }: { initialData: Notificati
       </Card>
 
       <div className="flex justify-end">
-        <Button type="submit" isLoading={isPending} size="lg" className="bg-red-600 hover:bg-red-700 text-white">
+        <Button type="submit" isLoading={isPending} size="lg" className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
           Save Lead Notifications
         </Button>
       </div>

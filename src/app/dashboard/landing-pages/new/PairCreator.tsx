@@ -90,8 +90,8 @@ export function PairCreator({ services, areas, pairs, source }: Props) {
   return (
     <div className="space-y-8">
       {pairs.length >= PAIR_COUNT_WARNING_THRESHOLD && (
-        <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
+        <div className="flex gap-3 rounded-xl border border-warning/25 bg-warning/10 p-4 text-sm text-warning">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-warning" />
           <p>
             This site already has {pairs.length} landing pages. Volume alone has drawn manual
             thin-content actions on sites whose copy was unique and human-written. Add this one only
@@ -125,12 +125,12 @@ export function PairCreator({ services, areas, pairs, source }: Props) {
           </div>
 
           {chosen && (
-            <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
-              <p className="text-xs font-medium text-slate-500 mb-1">Page URL</p>
-              <p className="font-mono text-sm text-slate-900 break-all">
+            <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Page URL</p>
+              <p className="font-mono text-sm text-foreground break-all">
                 {getPairPath(area!.slug, service!.slug)}
               </p>
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 The second segment defaults to the service slug and can be changed on the page
                 itself.
               </p>
@@ -142,7 +142,7 @@ export function PairCreator({ services, areas, pairs, source }: Props) {
       {chosen && existing && (
         <Card>
           <CardContent className="pt-6">
-            <p className="text-sm text-slate-700">
+            <p className="text-sm text-foreground">
               {service!.name} in {area!.name} already has a landing page.
             </p>
             <Link href={`/dashboard/landing-pages/${existing.id}`} className="inline-block mt-4">

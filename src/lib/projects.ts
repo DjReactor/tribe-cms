@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import { getSettings } from './settings';
 import type { Project } from '@/types';
 
@@ -63,7 +63,7 @@ export const getProjects = cache(async (): Promise<Project[]> => {
   const settings = await getSettings();
   if (!settings.projects_enabled) return [];
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     const raw = await pb.collection('projects').getFullList({
       filter: 'is_active = true',
       sort: 'sort_order',

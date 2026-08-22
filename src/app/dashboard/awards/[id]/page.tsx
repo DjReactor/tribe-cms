@@ -22,10 +22,10 @@ export default async function CatalogKindDetailPage({ params }: { params: Promis
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {id === 'new' ? `New ${meta.singular}` : `Edit ${meta.singular}`}
         </h1>
-        <p className="text-slate-500 mt-2">
+        <p className="text-muted-foreground mt-2">
           {id === 'new'
             ? `Add a new ${meta.singular.toLowerCase()} to your website.`
             : `Update the content and SEO details for ${item.name}.`}

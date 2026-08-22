@@ -1,4 +1,4 @@
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import { getSettings } from './settings';
 import type { CatalogItem, TemplateSettings } from '@/types/index';
 import { cache } from 'react';
@@ -17,7 +17,7 @@ function catalogFetcher(collection: string, flag: keyof TemplateSettings) {
     const settings = await getSettings();
     if (!settings[flag]) return [];
     try {
-      const pb = await getPocketBaseClient();
+      const pb = await getPublicPocketBase();
       return await pb.collection(collection).getFullList<CatalogItem>({
         filter: 'is_active = true',
         sort: 'sort_order',

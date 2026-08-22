@@ -81,16 +81,16 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
       <div className="flex justify-end">
         <Link href="/dashboard/landing-pages/new">
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             New Landing Page
           </Button>
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200/60">
+            <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border/60">
               <tr>
                 <th className="px-6 py-4">Service</th>
                 <th className="px-6 py-4">Area</th>
@@ -100,22 +100,22 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {rows.map(({ pair, service, area, score }) => (
-                <tr key={pair.id} className="hover:bg-slate-50/50">
-                  <td className="px-6 py-4 font-medium text-slate-900">
-                    {service?.name || <span className="text-red-600">Service deleted</span>}
+                <tr key={pair.id} className="hover:bg-muted/50">
+                  <td className="px-6 py-4 font-medium text-foreground">
+                    {service?.name || <span className="text-destructive">Service deleted</span>}
                     {service && !service.is_active && (
                       <Badge variant="warning" className="ml-2">Hidden</Badge>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-slate-700">
-                    {area?.name || <span className="text-red-600">Area deleted</span>}
+                  <td className="px-6 py-4 text-foreground">
+                    {area?.name || <span className="text-destructive">Area deleted</span>}
                     {area && !area.is_active && (
                       <Badge variant="warning" className="ml-2">Hidden</Badge>
                     )}
                   </td>
-                  <td className="px-6 py-4 font-mono text-xs text-slate-500">
+                  <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
                     {/* Live only while the page is published — an unpublished
                         pair 404s, so linking it would send the agency to the
                         404 page rather than their draft. */}
@@ -124,7 +124,7 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
                         href={getPairPath(area.slug, pair.slug)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 hover:text-blue-600 hover:underline"
+                        className="inline-flex items-center gap-1 hover:text-primary hover:underline"
                       >
                         {getPairPath(area.slug, pair.slug)}
                         <ExternalLink className="h-3 w-3" />
@@ -141,7 +141,7 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
                       <Toggle checked={pair.is_published} onChange={() => handleToggle(pair)} />
                       {pair.auto_unpublished && (
                         <span
-                          className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800"
+                          className="inline-flex items-center gap-1 rounded-full bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning"
                           title="Its service or area was hidden, so this page was taken down automatically."
                         >
                           <AlertTriangle className="h-3 w-3" />
@@ -153,14 +153,14 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <Link href={`/dashboard/landing-pages/${pair.id}`}>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10">
                           <Edit2 className="h-4 w-4" />
                         </Button>
                       </Link>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                         onClick={() => handleDelete(pair)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -171,7 +171,7 @@ export function PairsList({ initialPairs, services, areas, source }: Props) {
               ))}
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                     No landing pages yet. Create one for a service and area you can write
                     genuinely local copy about.
                   </td>

@@ -95,10 +95,10 @@ export function DealsManager({ initialDeals, sources }: { initialDeals: any[]; s
         <Button onClick={() => setOpen(true)}>New Deal</Button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <tr className="border-b border-border bg-muted/50 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <th className="px-4 py-3">Contact</th>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Stage</th>
@@ -110,17 +110,17 @@ export function DealsManager({ initialDeals, sources }: { initialDeals: any[]; s
           <tbody>
             {initialDeals.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-slate-400">
+                <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
                   No deals yet. Create one to start capturing revenue.
                 </td>
               </tr>
             )}
             {initialDeals.map((d) => (
-              <tr key={d.id} className="border-b border-slate-100 last:border-0">
-                <td className="px-4 py-3 font-medium text-slate-900">
+              <tr key={d.id} className="border-b border-border last:border-0">
+                <td className="px-4 py-3 font-medium text-foreground">
                   {d.expand?.contact?.name || '—'}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{d.title || '—'}</td>
+                <td className="px-4 py-3 text-muted-foreground">{d.title || '—'}</td>
                 <td className="px-4 py-3">
                   <Select
                     value={d.stage}
@@ -135,11 +135,11 @@ export function DealsManager({ initialDeals, sources }: { initialDeals: any[]; s
                     ))}
                   </Select>
                 </td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className="px-4 py-3 text-muted-foreground">
                   {d.stage === 'won' ? money(d.won_value) : money(d.estimate_value)}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{d.expand?.source?.label || '—'}</td>
-                <td className="px-4 py-3 text-slate-600">{d.expand?.referred_by?.name || '—'}</td>
+                <td className="px-4 py-3 text-muted-foreground">{d.expand?.source?.label || '—'}</td>
+                <td className="px-4 py-3 text-muted-foreground">{d.expand?.referred_by?.name || '—'}</td>
               </tr>
             ))}
           </tbody>
@@ -253,12 +253,12 @@ function ContactPicker({
   if (value) {
     return (
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1.5">{label}</label>
-        <div className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5">
-          <span className="truncate text-sm font-medium text-slate-900">{value.name || value.id}</span>
+        <label className="block text-sm font-medium text-foreground mb-1.5">{label}</label>
+        <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-muted/50 px-4 py-2.5">
+          <span className="truncate text-sm font-medium text-foreground">{value.name || value.id}</span>
           <button
             type="button"
-            className="text-xs font-medium text-slate-500 hover:text-red-600"
+            className="text-xs font-medium text-muted-foreground hover:text-destructive"
             onClick={() => {
               onChange(null);
               setQ('');
@@ -280,27 +280,27 @@ function ContactPicker({
         placeholder={placeholder || 'Search by name, phone, or email…'}
         autoComplete="off"
       />
-      {loading && <p className="mt-1 text-xs text-slate-400">Searching…</p>}
+      {loading && <p className="mt-1 text-xs text-muted-foreground">Searching…</p>}
       {open && results.length > 0 && (
-        <div className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-xl border border-slate-200 bg-white shadow-lg">
+        <div className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-xl border border-border bg-card shadow-lg">
           {results.map((c) => (
             <button
               key={c.id}
               type="button"
-              className="flex w-full flex-col items-start px-4 py-2 text-left hover:bg-slate-50"
+              className="flex w-full flex-col items-start px-4 py-2 text-left hover:bg-muted/50"
               onClick={() => {
                 onChange({ id: c.id, name: c.name });
                 setOpen(false);
               }}
             >
-              <span className="text-sm font-medium text-slate-900">{c.name || '(no name)'}</span>
-              <span className="text-xs text-slate-400">{c.email || c.phone || c.id}</span>
+              <span className="text-sm font-medium text-foreground">{c.name || '(no name)'}</span>
+              <span className="text-xs text-muted-foreground">{c.email || c.phone || c.id}</span>
             </button>
           ))}
         </div>
       )}
       {open && !loading && results.length === 0 && q.trim() && (
-        <p className="mt-1 text-xs text-slate-400">No matching contacts.</p>
+        <p className="mt-1 text-xs text-muted-foreground">No matching contacts.</p>
       )}
     </div>
   );

@@ -78,15 +78,15 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
+          <div className="flex bg-muted rounded-xl p-1 gap-1">
             {tabs.map(tab => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   activeTab === tab.key
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
+                    ? 'bg-card text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {tab.label}
@@ -97,8 +97,8 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
             onClick={() => setFeaturedOnly(v => !v)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
               featuredOnly
-                ? 'bg-amber-50 border-amber-300 text-amber-700'
-                : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700'
+                ? 'bg-warning/10 border-warning/25 text-warning'
+                : 'bg-card border-border text-muted-foreground hover:text-foreground'
             }`}
           >
             <Star className="h-3.5 w-3.5" />
@@ -107,15 +107,15 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
         </div>
         <Link href="/dashboard/projects/new">
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             New Project
           </Button>
         </Link>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-12 text-center">
-          <p className="text-slate-500 mb-4">
+        <div className="bg-card rounded-xl border border-border/60 shadow-xs p-12 text-center">
+          <p className="text-muted-foreground mb-4">
             {items.length === 0
               ? 'No projects yet. Add your first project to start showcasing your work.'
               : 'No projects match the current filter.'}
@@ -123,7 +123,7 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
           {items.length === 0 && (
             <Link href="/dashboard/projects/new">
               <Button>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="h-4 w-4" />
                 Create First Project
               </Button>
             </Link>
@@ -142,22 +142,22 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
                   className="h-10 w-10 rounded-lg object-cover shrink-0"
                 />
               ) : (
-                <div className="h-10 w-10 rounded-lg bg-slate-100 shrink-0" />
+                <div className="h-10 w-10 rounded-lg bg-muted shrink-0" />
               )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium text-slate-900 truncate">{item.title}</span>
+                  <span className="font-medium text-foreground truncate">{item.title}</span>
                   {item.featured && (
-                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 shrink-0" />
+                    <Star className="h-3.5 w-3.5 fill-warning text-warning shrink-0" />
                   )}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  <span className="text-xs text-slate-400">/{item.slug}</span>
+                  <span className="text-xs text-muted-foreground">/{item.slug}</span>
                   {item.location_city && (
-                    <span className="text-xs text-slate-400">· {item.location_city}{item.location_state ? `, ${item.location_state}` : ''}</span>
+                    <span className="text-xs text-muted-foreground">· {item.location_city}{item.location_state ? `, ${item.location_state}` : ''}</span>
                   )}
                   {(item.expand?.services ?? []).map((s: any) => (
-                    <span key={s.id} className="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md">
+                    <span key={s.id} className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded-md">
                       {s.name}
                     </span>
                   ))}
@@ -174,14 +174,14 @@ export function ProjectsList({ initialProjects }: { initialProjects: any[] }) {
                 />
                 <div className="flex items-center gap-1">
                   <Link href={`/dashboard/projects/${item.id}`}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10">
                       <Edit2 className="h-4 w-4" />
                     </Button>
                   </Link>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     onClick={() => handleDelete(item.id)}
                   >
                     <Trash2 className="h-4 w-4" />

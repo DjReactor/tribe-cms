@@ -125,14 +125,14 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
               error={errors.focus_keyword?.message}
               {...register('focus_keyword')}
             />
-            <p className="mt-1.5 text-sm text-slate-500">
+            <p className="mt-1.5 text-sm text-muted-foreground">
               The search this post is meant to win. Everything below is checked against it.
             </p>
           </div>
           <Input label="SEO Title (Max 70 chars)" error={errors.seo_title?.message} {...register('seo_title')} />
           <Textarea label="SEO Description (Max 160 chars)" error={errors.seo_description?.message} {...register('seo_description')} />
 
-          <div className="rounded-xl border border-slate-200/60 bg-slate-50 p-4">
+          <div className="rounded-xl border border-border/60 bg-muted/50 p-4">
             <FocusKeywordAnalysis
               subject={{
                 keyword: watch('focus_keyword') || '',
@@ -147,10 +147,10 @@ export default function BlogDetailForm({ initialData }: { initialData: any }) {
           </div>
           <Input label="Canonical URL (Optional)" placeholder="https://..." error={errors.canonical_url?.message} {...register('canonical_url')} />
           
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60 mt-4">
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl border border-border/60 mt-4">
             <div>
-              <p className="font-medium text-slate-900">Hide from Search Engines (Noindex)</p>
-              <p className="text-sm text-slate-500">Prevent Google from indexing this post</p>
+              <p className="font-medium text-foreground">Hide from Search Engines (Noindex)</p>
+              <p className="text-sm text-muted-foreground">Prevent Google from indexing this post</p>
             </div>
             <Toggle 
               checked={watch('noindex')} 

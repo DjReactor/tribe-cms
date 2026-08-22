@@ -76,14 +76,14 @@ export function SortableList({ items, onReorder, renderItem, renderBelow, emptyL
             onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
             className={cn(
-              'group relative flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white p-3 shadow-sm transition-all',
+              'group relative flex items-center gap-3 rounded-xl border border-border/60 bg-card p-3 shadow-xs transition-all',
               isDragged && 'opacity-0',
-              !isDragged && 'hover:border-blue-200 hover:shadow-md cursor-grab active:cursor-grabbing',
+              !isDragged && 'hover:border-ring hover:shadow-md cursor-grab active:cursor-grabbing',
               dropPosition === 'top' && 'border-t-2 border-t-blue-500 rounded-t-none',
               dropPosition === 'bottom' && 'border-b-2 border-b-blue-500 rounded-b-none'
             )}
           >
-            <div className="flex items-center justify-center text-slate-300 group-hover:text-slate-500 cursor-grab px-1 shrink-0">
+            <div className="flex items-center justify-center text-muted-foreground group-hover:text-muted-foreground cursor-grab px-1 shrink-0">
               <GripVertical className="h-5 w-5" />
             </div>
             <div className="flex-1 flex items-center min-w-0">
@@ -101,7 +101,7 @@ export function SortableList({ items, onReorder, renderItem, renderBelow, emptyL
         );
       })}
       {items.length === 0 && (
-        <div className="p-8 text-center text-slate-500 text-sm border-2 border-dashed border-slate-200 rounded-xl">
+        <div className="p-8 text-center text-muted-foreground text-sm border-2 border-dashed border-border rounded-xl">
           {emptyLabel || 'No items found. Add one to get started.'}
         </div>
       )}

@@ -1,5 +1,5 @@
 import { ColorPaletteColors, COLOR_SLOTS, DEFAULT_PALETTE_COLORS } from '@/types/color-palette'
-import { getPocketBaseClient } from './pocketbase'
+import { getPublicPocketBase } from './pocketbase-public';
 
 export function generatePaletteCss(colors: ColorPaletteColors): string {
   const vars = Object.entries(COLOR_SLOTS)
@@ -20,7 +20,7 @@ export async function getActivePalette(
   const base = templateDefaultPalette ?? DEFAULT_PALETTE_COLORS
 
   try {
-    const pb = await getPocketBaseClient()
+    const pb = await getPublicPocketBase()
     const settingsList = await pb.collection('settings').getList(1, 1)
     if (settingsList.items.length > 0) {
       const settings = settingsList.items[0]

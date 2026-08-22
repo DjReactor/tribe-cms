@@ -10,21 +10,30 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:scale-100';
-    
+    const baseStyles = cn(
+      'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md',
+      'text-sm font-medium transition-all outline-none',
+      'focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring',
+      'disabled:pointer-events-none disabled:opacity-50',
+      "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:h-4 [&_svg:not([class*='size-'])]:w-4"
+    );
+
     const variants = {
-      primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-sm hover:shadow focus-visible:ring-blue-500',
-      secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 focus-visible:ring-slate-500',
-      outline: 'border border-slate-200 bg-white/50 hover:bg-slate-50 text-slate-900 focus-visible:ring-slate-500 shadow-sm',
-      ghost: 'bg-transparent hover:bg-slate-100 text-slate-700 focus-visible:ring-slate-500',
-      danger: 'bg-red-50 text-red-600 hover:bg-red-100 focus-visible:ring-red-500',
+      primary: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
+      secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
+      outline: 'border border-border bg-background text-foreground shadow-xs hover:bg-accent hover:text-accent-foreground',
+      ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground',
+      // Tinted, not solid. The one call site is a delete affordance sitting on a
+      // media thumbnail, where a solid red block shouts; this keeps the original
+      // subtle intent in the reference's tinted-chip language.
+      danger: 'bg-destructive/10 text-destructive hover:bg-destructive/15 focus-visible:ring-destructive/30',
     };
 
     const sizes = {
-      sm: 'h-9 px-4',
-      md: 'h-11 px-6',
-      lg: 'h-14 px-8 text-base',
-      icon: 'h-11 w-11',
+      sm: 'h-8 gap-1.5 px-3',
+      md: 'h-9 px-4',
+      lg: 'h-10 px-6',
+      icon: 'h-9 w-9 px-0',
     };
 
     return (
@@ -34,7 +43,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         {...props}
       >
-        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
         {children}
       </button>
     );

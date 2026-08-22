@@ -14,24 +14,24 @@ export default async function LandingPagesPage() {
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
       <div className="flex items-start justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Landing Pages</h1>
-          <p className="text-slate-500 mt-2 max-w-3xl">
-            One page for one service in one area, at <code className="font-mono text-slate-600">/area/service</code>.
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Landing Pages</h1>
+          <p className="text-muted-foreground mt-2 max-w-3xl">
+            One page for one service in one area, at <code className="font-mono text-muted-foreground">/area/service</code>.
             Each one is a record somebody deliberately created and wrote — combinations without a
             page simply do not exist on the site.
           </p>
         </div>
         <Link href="/dashboard/landing-pages/checklist" className="shrink-0">
           <Button variant="outline">
-            <ListChecks className="h-4 w-4 mr-2" />
+            <ListChecks className="h-4 w-4" />
             Checklist Items
           </Button>
         </Link>
       </div>
 
       {pairs.length >= PAIR_COUNT_WARNING_THRESHOLD && (
-        <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
+        <div className="flex gap-3 rounded-xl border border-warning/25 bg-warning/10 p-4 text-sm text-warning">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-warning" />
           <div className="space-y-1">
             <p className="font-medium">
               {pairs.length} landing pages. Worth pausing before the next one.

@@ -69,15 +69,15 @@ export function MediaLibraryModal({
       className="max-w-3xl"
     >
       {loading ? (
-        <div className="py-12 text-center text-slate-400 text-sm">Loading media…</div>
+        <div className="py-12 text-center text-muted-foreground text-sm">Loading media…</div>
       ) : media.length === 0 ? (
         <div className="py-12 text-center space-y-3">
-          <p className="text-slate-400 text-sm">No media uploaded yet.</p>
+          <p className="text-muted-foreground text-sm">No media uploaded yet.</p>
           <a
             href="/dashboard/media"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block text-sm text-blue-600 hover:underline"
+            className="inline-block text-sm text-primary hover:underline"
           >
             Go to Media Library to upload images ↗
           </a>
@@ -89,7 +89,7 @@ export function MediaLibraryModal({
               href="/dashboard/media"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 hover:underline"
+              className="text-xs text-primary hover:underline"
             >
               Upload new images in Media Library ↗
             </a>
@@ -109,8 +109,8 @@ export function MediaLibraryModal({
                   className={`relative rounded-lg overflow-hidden aspect-square group transition-all ${
                     isAlready
                       ? 'opacity-40 cursor-not-allowed'
-                      : 'cursor-pointer hover:ring-2 hover:ring-blue-400'
-                  } ${isChosen ? 'ring-2 ring-blue-500' : ''}`}
+                      : 'cursor-pointer hover:ring-2 hover:ring-ring'
+                  } ${isChosen ? 'ring-2 ring-ring' : ''}`}
                 >
                   <img
                     src={url}
@@ -118,15 +118,15 @@ export function MediaLibraryModal({
                     className="w-full h-full object-cover"
                   />
                   {isChosen && (
-                    <div className="absolute inset-0 bg-blue-500/30 flex items-center justify-center">
-                      <div className="bg-blue-500 rounded-full p-1">
-                        <Check className="h-4 w-4 text-white" />
+                    <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
+                      <div className="bg-primary rounded-full p-1">
+                        <Check className="h-4 w-4 text-primary-foreground" />
                       </div>
                     </div>
                   )}
                   {isAlready && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xs text-slate-600 bg-white/80 px-1.5 py-0.5 rounded">Added</span>
+                      <span className="text-xs text-muted-foreground bg-card px-1.5 py-0.5 rounded">Added</span>
                     </div>
                   )}
                 </button>
@@ -135,7 +135,7 @@ export function MediaLibraryModal({
           </div>
 
           {mode === 'multi' && (
-            <div className="flex justify-end mt-4 pt-4 border-t border-slate-200">
+            <div className="flex justify-end mt-4 pt-4 border-t border-border">
               <Button onClick={handleConfirm} disabled={selected.length === 0}>
                 Add Selected ({selected.length})
               </Button>

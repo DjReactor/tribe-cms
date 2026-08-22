@@ -41,7 +41,7 @@ export function BlockNoteEditorClient({ initialContent, onChange, editable = tru
   });
 
   return (
-    <div className="min-h-[300px] border border-slate-200/80 rounded-xl overflow-hidden bg-white shadow-sm focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all pb-8 pt-4">
+    <div className="min-h-[300px] border border-border/80 rounded-xl overflow-hidden bg-card shadow-xs focus-within:border-ring focus-within:ring-4 focus-within:ring-ring/10 transition-all pb-8 pt-4">
       <BlockNoteView 
         editor={editor} 
         editable={editable}

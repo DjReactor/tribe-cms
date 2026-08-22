@@ -89,7 +89,7 @@ export default function TestimonialsList({ initialTestimonials }: { initialTesti
     <div className="space-y-6">
       <div className="flex justify-end">
         <Button onClick={() => setIsModalOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Add Testimonial
         </Button>
       </div>
@@ -101,15 +101,15 @@ export default function TestimonialsList({ initialTestimonials }: { initialTesti
           <div className="flex items-center justify-between w-full pointer-events-none">
             <div className="flex flex-col flex-1 pr-6">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-slate-900">{item.author_name}</span>
+                <span className="font-medium text-foreground">{item.author_name}</span>
                 {item.author_location && (
-                  <span className="text-sm text-slate-400">{item.author_location}</span>
+                  <span className="text-sm text-muted-foreground">{item.author_location}</span>
                 )}
-                <span className="flex text-yellow-400">
+                <span className="flex text-warning">
                   {Array.from({ length: item.rating }).map((_, i) => <Star key={i} className="h-3 w-3 fill-current" />)}
                 </span>
               </div>
-              <span className="text-sm text-slate-500 truncate max-w-md">"{item.content}"</span>
+              <span className="text-sm text-muted-foreground truncate max-w-md">"{item.content}"</span>
             </div>
             <div className="flex items-center gap-6 pointer-events-auto shrink-0">
               <Toggle
@@ -117,7 +117,7 @@ export default function TestimonialsList({ initialTestimonials }: { initialTesti
                 onChange={() => handleToggle(item.id, item.is_visible)}
                 label={item.is_visible ? 'Visible' : 'Hidden'}
               />
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(item.id)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(item.id)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

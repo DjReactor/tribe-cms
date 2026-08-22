@@ -9,17 +9,17 @@ export interface ToggleProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
 export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
   ({ className, label, description, id, checked, onChange, disabled, ...props }, ref) => {
     const toggleId = id || React.useId();
-    
+
     return (
       <div className={cn('flex items-center justify-between gap-4', className)}>
         {(label || description) && (
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-0.5">
             {label && (
-              <label htmlFor={toggleId} className="text-sm font-medium text-slate-900 cursor-pointer">
+              <label htmlFor={toggleId} className="cursor-pointer text-sm font-medium leading-none text-foreground">
                 {label}
               </label>
             )}
-            {description && <p className="text-sm text-slate-500">{description}</p>}
+            {description && <p className="text-sm text-muted-foreground">{description}</p>}
           </div>
         )}
         <button
@@ -36,8 +36,9 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
             onChange?.(event);
           }}
           className={cn(
-            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            checked ? 'bg-blue-600' : 'bg-slate-200',
+            'relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-transparent shadow-xs transition-all outline-none',
+            'focus-visible:ring-[3px] focus-visible:ring-ring/50',
+            checked ? 'bg-primary' : 'bg-input',
             disabled && 'cursor-not-allowed opacity-50'
           )}
         >
@@ -45,8 +46,8 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
           <span
             aria-hidden="true"
             className={cn(
-              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-              checked ? 'translate-x-5' : 'translate-x-0'
+              'pointer-events-none block h-4 w-4 rounded-full bg-background ring-0 transition-transform',
+              checked ? 'translate-x-[18px]' : 'translate-x-0.5'
             )}
           />
         </button>

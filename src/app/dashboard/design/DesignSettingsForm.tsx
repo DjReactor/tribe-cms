@@ -42,29 +42,29 @@ export function DesignSettingsForm({
   };
 
   return (
-    <div className="space-y-6 mt-12 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-      <h2 className="text-xl font-bold text-slate-900">Template Layout Images</h2>
-      <p className="text-slate-500 text-sm mb-6">Customize the core images for your active template.</p>
+    <div className="space-y-6 mt-12 bg-card p-8 rounded-xl border border-border shadow-xs">
+      <h2 className="text-xl font-bold text-foreground">Template Layout Images</h2>
+      <p className="text-muted-foreground text-sm mb-6">Customize the core images for your active template.</p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Object.entries(manifest.supportedImageKeys).map(([key, slot]) => {
           const currentImage = imageOverrides[key] || slot.defaultFallback;
           
           return (
-            <div key={key} className="border rounded-xl p-4 bg-slate-50 shadow-sm flex flex-col">
-              <h3 className="font-semibold text-slate-800 mb-4">{slot.label}</h3>
+            <div key={key} className="border rounded-xl p-4 bg-muted/50 shadow-xs flex flex-col">
+              <h3 className="font-semibold text-foreground mb-4">{slot.label}</h3>
               
-              <div className="aspect-video w-full bg-slate-200 rounded-lg overflow-hidden mb-4 border relative">
+              <div className="aspect-video w-full bg-muted rounded-lg overflow-hidden mb-4 border relative">
                 {currentImage ? (
                   <img src={currentImage} alt={slot.label} className="object-cover w-full h-full" />
                 ) : (
-                  <div className="flex items-center justify-center w-full h-full text-slate-400 text-sm">No image set</div>
+                  <div className="flex items-center justify-center w-full h-full text-muted-foreground text-sm">No image set</div>
                 )}
               </div>
               
               <button 
                 onClick={() => setActiveSlotKey(key)}
-                className="w-full bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 py-2 rounded-lg transition-colors font-medium text-sm mt-auto"
+                className="w-full bg-card border border-border hover:bg-muted text-foreground py-2 rounded-lg transition-colors font-medium text-sm mt-auto"
                 disabled={isSaving}
               >
                 {isSaving ? 'Saving...' : 'Change Image'}

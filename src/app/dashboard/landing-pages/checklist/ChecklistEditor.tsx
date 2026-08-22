@@ -67,7 +67,7 @@ export function ChecklistEditor({ initialItems }: { initialItems: ManualChecklis
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="mt-7 h-9 w-9 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                  className="mt-7 h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                   onClick={() => remove(index)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function ChecklistEditor({ initialItems }: { initialItems: ManualChecklis
         ))}
 
         {items.length === 0 && (
-          <div className="p-8 text-center text-slate-500 text-sm border-2 border-dashed border-slate-200 rounded-xl">
+          <div className="p-8 text-center text-muted-foreground text-sm border-2 border-dashed border-border rounded-xl">
             No checklist items. Landing pages will show only the readiness checks.
           </div>
         )}
@@ -90,7 +90,7 @@ export function ChecklistEditor({ initialItems }: { initialItems: ManualChecklis
           variant="outline"
           onClick={() => setItems((prev) => [...prev, { id: '', label: '', description: '' }])}
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Add Item
         </Button>
         <Button onClick={handleSave} isLoading={isPending}>Save Checklist</Button>

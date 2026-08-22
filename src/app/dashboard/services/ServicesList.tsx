@@ -109,15 +109,15 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
     return (
       <div className="flex items-center justify-between w-full pointer-events-none">
         <div className="flex items-center gap-2 min-w-0">
-          {node.depth > 1 && <CornerDownRight className="h-4 w-4 text-slate-300 shrink-0" />}
+          {node.depth > 1 && <CornerDownRight className="h-4 w-4 text-muted-foreground shrink-0" />}
           <div className="flex flex-col min-w-0">
-            <span className="font-medium text-slate-900 truncate">{node.name}</span>
-            <span className="text-xs text-slate-500 truncate">
+            <span className="font-medium text-foreground truncate">{node.name}</span>
+            <span className="text-xs text-muted-foreground truncate">
               {getServicePath(node, byId)}
             </span>
           </div>
           {node.children.length > 0 && (
-            <span className="ml-2 shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+            <span className="ml-2 shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
               {node.children.length} sub
             </span>
           )}
@@ -130,14 +130,14 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
           />
           <div className="flex items-center gap-2">
             <Link href={`/dashboard/services/${node.id}`}>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10">
                 <Edit2 className="h-4 w-4" />
               </Button>
             </Link>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
               onClick={() => handleDelete(node.id)}
             >
               <Trash2 className="h-4 w-4" />
@@ -158,7 +158,7 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
         const node = item as ServiceNode;
         if (node.children.length === 0) return null;
         return (
-          <div className="ml-8 mt-2 space-y-2 border-l-2 border-slate-100 pl-4">
+          <div className="ml-8 mt-2 space-y-2 border-l-2 border-border pl-4">
             {renderLevel(node.children, node.id)}
           </div>
         );
@@ -171,7 +171,7 @@ export default function ServicesList({ initialServices }: { initialServices: Ser
       <div className="flex justify-end">
         <Link href="/dashboard/services/new">
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             Add Service
           </Button>
         </Link>

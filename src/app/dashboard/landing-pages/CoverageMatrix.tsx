@@ -23,24 +23,24 @@ export function CoverageMatrix(
 
   if (serviceRows.length === 0 || areaColumns.length === 0) {
     return (
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted-foreground">
         Add at least one service and one service area to see coverage.
       </p>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200/60 bg-white shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-border/60 bg-card shadow-xs">
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
-            <th className="sticky left-0 z-10 bg-slate-50 px-4 py-3 text-left font-medium text-slate-500 border-b border-r border-slate-200/60 min-w-52">
+            <th className="sticky left-0 z-10 bg-muted/50 px-4 py-3 text-left font-medium text-muted-foreground border-b border-r border-border/60 min-w-52">
               Service \ Area
             </th>
             {areaColumns.map((area) => (
               <th
                 key={area.id}
-                className="bg-slate-50 px-3 py-3 text-left font-medium text-slate-500 border-b border-slate-200/60 whitespace-nowrap"
+                className="bg-muted/50 px-3 py-3 text-left font-medium text-muted-foreground border-b border-border/60 whitespace-nowrap"
               >
                 <span style={{ paddingLeft: `${(area.depth - 1) * 10}px` }}>{area.name}</span>
               </th>
@@ -49,28 +49,28 @@ export function CoverageMatrix(
         </thead>
         <tbody>
           {serviceRows.map((service) => (
-            <tr key={service.id} className="hover:bg-slate-50/50">
+            <tr key={service.id} className="hover:bg-muted/50">
               <th
                 scope="row"
-                className="sticky left-0 z-10 bg-white px-4 py-2.5 text-left font-medium text-slate-700 border-r border-slate-200/60 whitespace-nowrap"
+                className="sticky left-0 z-10 bg-card px-4 py-2.5 text-left font-medium text-foreground border-r border-border/60 whitespace-nowrap"
               >
                 <span style={{ paddingLeft: `${(service.depth - 1) * 10}px` }}>{service.name}</span>
               </th>
               {areaColumns.map((area) => {
                 const pair = byKey.get(`${service.id}:${area.id}`);
                 return (
-                  <td key={area.id} className="px-3 py-2.5 text-center border-t border-slate-100">
+                  <td key={area.id} className="px-3 py-2.5 text-center border-t border-border">
                     {pair ? (
                       <Link
                         href={`/dashboard/landing-pages/${pair.id}`}
                         title={`${service.name} in ${area.name} — ${pair.is_published ? 'published' : 'draft'}`}
                         className={cn(
                           'inline-block h-2.5 w-2.5 rounded-full transition-transform hover:scale-150',
-                          pair.is_published ? 'bg-emerald-500' : 'bg-slate-300',
+                          pair.is_published ? 'bg-success' : 'bg-muted-foreground/30',
                         )}
                       />
                     ) : (
-                      <span className="text-slate-200 select-none">·</span>
+                      <span className="text-border select-none">·</span>
                     )}
                   </td>
                 );

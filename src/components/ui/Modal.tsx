@@ -35,18 +35,19 @@ export function Modal({ isOpen, onClose, title, description, children, className
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         ref={overlayRef}
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-foreground/40 transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* Dialog */}
-      <div 
+      <div
         className={cn(
-          "relative z-[101] w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200",
+          'relative z-[101] w-full max-w-lg rounded-xl border border-border bg-popover p-6 text-popover-foreground shadow-lg',
+          'animate-in fade-in zoom-in-95 duration-200',
           className
         )}
         role="dialog"
@@ -54,17 +55,17 @@ export function Modal({ isOpen, onClose, title, description, children, className
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="absolute right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" strokeWidth={1.75} />
           <span className="sr-only">Close</span>
         </button>
-        
-        <div className="mb-6 space-y-1">
-          <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
-          {description && <p className="text-sm text-slate-500">{description}</p>}
+
+        <div className="mb-6 space-y-1.5 pr-10">
+          <h2 className="text-lg font-medium leading-none tracking-tight text-foreground">{title}</h2>
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
-        
+
         {children}
       </div>
     </div>

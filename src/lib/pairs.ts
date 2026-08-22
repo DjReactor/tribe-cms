@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import { getPairPath, locationNamesArea } from './pair-readiness';
 import { getServices } from './services';
 import { getServiceAreas } from './service-areas';
@@ -32,7 +32,7 @@ import type {
 
 export async function getAllPairs(): Promise<Pair[]> {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('pairs').getFullList<Pair>({ sort: 'sort_order,created' });
   } catch {
     return [];
@@ -42,7 +42,7 @@ export async function getAllPairs(): Promise<Pair[]> {
 async function pairsReferencing(field: 'service' | 'service_area', id: string): Promise<Pair[]> {
   if (!id) return [];
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('pairs').getFullList<Pair>({ filter: `${field} = "${id}"` });
   } catch {
     return [];
@@ -78,7 +78,7 @@ export async function autoUnpublishPairsFor(
   if (affected.length === 0) return 0;
 
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     for (const pair of affected) {
       await pb.collection('pairs').update(pair.id, {
         is_published: false,
@@ -137,7 +137,7 @@ export interface LivePair {
 /** Every published pair. Liveness still depends on the two records underneath. */
 export const getPublishedPairs = cache(async (): Promise<Pair[]> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('pairs').getFullList<Pair>({
       filter: 'is_published = true',
       sort: 'sort_order,created',

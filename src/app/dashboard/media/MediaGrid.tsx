@@ -29,11 +29,11 @@ export function MediaGrid({ items, pbUrl }: { items: any[], pbUrl: string }) {
         const url = item.file ? `${pbUrl}/api/files/media/${item.id}/${item.file}` : '';
         
         return (
-          <div key={item.id} className="group relative rounded-2xl border border-slate-200/60 bg-white overflow-hidden shadow-sm hover:shadow-md transition-all">
-            <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden flex items-center justify-center">
+          <div key={item.id} className="group relative rounded-xl border border-border/60 bg-card overflow-hidden shadow-xs hover:shadow-md transition-all">
+            <div className="aspect-[4/3] bg-muted relative overflow-hidden flex items-center justify-center">
               {/* Using native img tag per instructions to avoid extra config overhead for PB URLs in Next Image */}
               <img src={url} alt={item.alt_text || item.label} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <div className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <Button size="icon" variant="secondary" onClick={() => handleCopy(url)}>
                   <LinkIcon className="h-4 w-4" />
                 </Button>
@@ -43,14 +43,14 @@ export function MediaGrid({ items, pbUrl }: { items: any[], pbUrl: string }) {
               </div>
             </div>
             <div className="p-3">
-              <p className="text-sm font-medium text-slate-900 truncate">{item.label}</p>
-              <p className="text-xs text-slate-500 uppercase tracking-wider mt-1">{item.category}</p>
+              <p className="text-sm font-medium text-foreground truncate">{item.label}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{item.category}</p>
             </div>
           </div>
         );
       })}
       {items.length === 0 && (
-        <div className="col-span-full py-12 text-center text-slate-500">
+        <div className="col-span-full py-12 text-center text-muted-foreground">
           No media uploaded yet.
         </div>
       )}

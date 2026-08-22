@@ -95,7 +95,7 @@ export default function StatesList({ initialStates }: { initialStates: StateItem
     <div className="space-y-6">
       <div className="flex justify-end">
         <Button onClick={openNew}>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Add State
         </Button>
       </div>
@@ -107,10 +107,10 @@ export default function StatesList({ initialStates }: { initialStates: StateItem
         renderItem={(item) => (
           <div className="flex items-center justify-between w-full pointer-events-none">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="rounded-lg bg-slate-100 px-2 py-1 font-mono text-xs font-semibold text-slate-600">
+              <span className="rounded-lg bg-muted px-2 py-1 font-mono text-xs font-semibold text-muted-foreground">
                 {item.code}
               </span>
-              <span className="font-medium text-slate-900 truncate">{item.name}</span>
+              <span className="font-medium text-foreground truncate">{item.name}</span>
             </div>
             <div className="flex items-center gap-6 pointer-events-auto shrink-0">
               <Toggle
@@ -122,7 +122,7 @@ export default function StatesList({ initialStates }: { initialStates: StateItem
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50"
+                  className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
                   onClick={() => openEdit(item as StateItem)}
                 >
                   <Edit2 className="h-4 w-4" />
@@ -130,7 +130,7 @@ export default function StatesList({ initialStates }: { initialStates: StateItem
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                   onClick={() => handleDelete(item.id)}
                 >
                   <Trash2 className="h-4 w-4" />

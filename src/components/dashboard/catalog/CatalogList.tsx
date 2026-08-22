@@ -55,7 +55,7 @@ export default function CatalogList({ kind, initialItems }: { kind: CatalogKind;
       <div className="flex justify-end">
         <Link href={`/dashboard/${kind}/new`}>
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             Add {meta.singular}
           </Button>
         </Link>
@@ -70,12 +70,12 @@ export default function CatalogList({ kind, initialItems }: { kind: CatalogKind;
               {item.image_url ? (
                 <img src={item.image_url} alt={item.name} className="h-10 w-10 rounded-lg object-cover shrink-0" />
               ) : (
-                <div className="h-10 w-10 rounded-lg bg-slate-100 shrink-0" />
+                <div className="h-10 w-10 rounded-lg bg-muted shrink-0" />
               )}
               <div className="flex flex-col min-w-0">
-                <span className="font-medium text-slate-900 truncate">{item.name}</span>
+                <span className="font-medium text-foreground truncate">{item.name}</span>
                 {item.description && (
-                  <span className="text-sm text-slate-500 truncate">{item.description}</span>
+                  <span className="text-sm text-muted-foreground truncate">{item.description}</span>
                 )}
               </div>
             </div>
@@ -86,11 +86,11 @@ export default function CatalogList({ kind, initialItems }: { kind: CatalogKind;
                 label={item.is_active ? 'Visible' : 'Hidden'}
               />
               <Link href={`/dashboard/${kind}/${item.id}`}>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10">
                   <Pencil className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(item.id)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(item.id)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

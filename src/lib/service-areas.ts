@@ -1,4 +1,4 @@
-import { getPocketBaseClient } from './pocketbase';
+import { getPublicPocketBase } from './pocketbase-public';
 import type { ServiceArea, ServiceAreaNode } from '@/types/index';
 import { cache } from 'react';
 
@@ -21,7 +21,7 @@ import { buildAreaTree, flattenAreaTree } from './area-tree';
 /** Active areas only, in sibling order. Cached per request. */
 export const getServiceAreas = cache(async (): Promise<ServiceArea[]> => {
   try {
-    const pb = await getPocketBaseClient();
+    const pb = await getPublicPocketBase();
     return await pb.collection('service_areas').getFullList<ServiceArea>({
       filter: 'is_active = true',
       sort: 'sort_order',

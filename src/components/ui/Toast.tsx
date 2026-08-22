@@ -50,23 +50,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) {
   const icons = {
-    success: <CheckCircle2 className="h-5 w-5 text-emerald-500" />,
-    error: <AlertCircle className="h-5 w-5 text-red-500" />,
-    info: <Info className="h-5 w-5 text-blue-500" />
+    success: <CheckCircle2 className="h-4 w-4 text-success" strokeWidth={1.75} />,
+    error: <AlertCircle className="h-4 w-4 text-destructive" strokeWidth={1.75} />,
+    info: <Info className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
   };
 
   return (
-    <div className="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-slate-200/60 bg-white/80 p-4 shadow-lg backdrop-blur-xl animate-in slide-in-from-right-5 fade-in duration-300">
-      <div className="shrink-0">{icons[toast.type || 'info']}</div>
+    <div className="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-lg animate-in slide-in-from-right-5 fade-in duration-300">
+      <div className="shrink-0 pt-0.5">{icons[toast.type || 'info']}</div>
       <div className="flex-1 space-y-1">
-        <p className="text-sm font-medium text-slate-900">{toast.title}</p>
-        {toast.description && <p className="text-sm text-slate-500">{toast.description}</p>}
+        <p className="text-sm font-medium text-foreground">{toast.title}</p>
+        {toast.description && <p className="text-sm text-muted-foreground">{toast.description}</p>}
       </div>
       <button
         onClick={onRemove}
-        className="shrink-0 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="shrink-0 cursor-pointer rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
       >
-        <X className="h-4 w-4" />
+        <X className="h-4 w-4" strokeWidth={1.75} />
       </button>
     </div>
   );

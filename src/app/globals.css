@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════
+   PUBLIC SITE PALETTE — per-client, template-driven.
+   Owned by the dual-palette system (see lib/color-palette.ts).
+   Never wire dashboard chrome to these: every client sets them
+   differently, and the dashboard must look the same on all of them.
+   ═══════════════════════════════════════════════════════════════ */
 :root {
   /* ── Backgrounds & Surfaces ───────────────────────── */
   --tribe-bg:            #0D1F05;
@@ -37,16 +43,165 @@
   --tribe-overlay:       #00000099;
 }
 
-@theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
-  --color-accent: var(--color-accent, #2D6A4F);
+/* ═══════════════════════════════════════════════════════════════
+   DASHBOARD CHROME TOKENS — agency-operated, client-independent.
+   Neutral scale. Consumed only by /dashboard and /login; the public
+   site uses no `bg-card` / `text-muted-foreground` / `bg-primary`
+   style utilities at all, so defining these here cannot leak into it.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --radius: 0.5rem;
+
+  --background:             oklch(1 0 0);
+  --foreground:             oklch(0.145 0 0);
+
+  --card:                   oklch(1 0 0);
+  --card-foreground:        oklch(0.145 0 0);
+
+  --popover:                oklch(1 0 0);
+  --popover-foreground:     oklch(0.145 0 0);
+
+  --primary:                oklch(0.205 0 0);
+  --primary-foreground:     oklch(0.985 0 0);
+
+  --secondary:              oklch(0.97 0 0);
+  --secondary-foreground:   oklch(0.205 0 0);
+
+  --muted:                  oklch(0.97 0 0);
+  --muted-foreground:       oklch(0.556 0 0);
+
+  --accent:                 oklch(0.97 0 0);
+  --accent-foreground:      oklch(0.205 0 0);
+
+  --destructive:            oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  /* Positive / caution accents. The reference tints these at /10 on a
+     transparent chip rather than using a solid fill — see Badge.
+     Deliberately darker than the reference's teal-500/amber-500: as
+     *chip text* those sit near 2.2:1 on white, which fails AA. These
+     land near 4.8:1 and still read as a light chip at /10. The bright
+     originals are kept for charts as --chart-2 / --chart-5. */
+  --success:                oklch(0.55 0.11 185);
+  --success-foreground:     oklch(0.985 0 0);
+  --warning:                oklch(0.55 0.12 65);
+  --warning-foreground:     oklch(0.985 0 0);
+
+  --border:                 oklch(0.922 0 0);
+  --input:                  oklch(0.922 0 0);
+  --ring:                   oklch(0.708 0 0);
+
+  --chart-1:                oklch(0.646 0.222 41.116);
+  --chart-2:                oklch(0.6 0.118 184.704);
+  --chart-3:                oklch(0.398 0.07 227.392);
+  --chart-4:                oklch(0.828 0.189 84.429);
+  --chart-5:                oklch(0.769 0.188 70.08);
+
+  --sidebar:                        oklch(0.985 0 0);
+  --sidebar-foreground:             oklch(0.145 0 0);
+  --sidebar-primary:                oklch(0.205 0 0);
+  --sidebar-primary-foreground:     oklch(0.985 0 0);
+  --sidebar-accent:                 oklch(0.97 0 0);
+  --sidebar-accent-foreground:      oklch(0.205 0 0);
+  --sidebar-border:                 oklch(0.922 0 0);
+  --sidebar-ring:                   oklch(0.708 0 0);
 }
 
+@theme inline {
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success:                var(--success);
+  --color-success-foreground:     var(--success-foreground);
+  --color-warning:                var(--warning);
+  --color-warning-foreground:     var(--warning-foreground);
+  --color-border:                 var(--border);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar:                    var(--sidebar);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar-primary:            var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-ring:               var(--sidebar-ring);
+
+  /* Radius scale is deliberately NOT remapped: Tailwind's stock
+     rounded-md/lg/xl (6/8/12px) already equal shadcn's calc() values
+     at --radius: 0.5rem, and remapping would shift rounded-sm on the
+     public site for no gain. */
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Pinned to literals so the public site's body is provably unaffected
+   by the token block above. Dashboard surfaces paint their own
+   background/text from tokens. */
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: #ffffff;
+  color: #171717;
   font-family: var(--font-sans);
+}
+
+/* Dashboard typography. Scoped rather than set on <body> so the public
+   site keeps the per-template --font-body (Inter/Merriweather on
+   `modern`) that each template's theme.ts supplies.
+   NB: never write a glob like templates-slash-star-slash here — the
+   inner star-slash closes this comment early and eats the rule below. */
+.tribe-dashboard {
+  --font-body: var(--font-geist-sans);
+  font-feature-settings: "cv11", "ss01";
+  font-variation-settings: "opsz" 32;
+}
+
+/* Tabular figures for stat readouts, so digits don't jitter between
+   renders of live CRM/analytics numbers. */
+.tribe-numeric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Slim scrollbars. The agency-admin sidebar runs past the fold on a laptop,
+   and the stock Windows bar is a heavy grey slab hard against the nav.
+   Scoped to the dashboard so the public site keeps native scrollbars. */
+.tribe-dashboard,
+.tribe-dashboard * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.tribe-dashboard *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.tribe-dashboard *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tribe-dashboard *::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+.tribe-dashboard *::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }

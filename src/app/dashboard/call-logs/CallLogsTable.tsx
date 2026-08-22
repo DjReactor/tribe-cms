@@ -18,10 +18,10 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200/60">
+            <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border/60">
               <tr>
                 <th className="px-6 py-4">Date</th>
                 <th className="px-6 py-4">Caller</th>
@@ -32,14 +32,14 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
                 <th className="px-6 py-4 text-right">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 text-slate-500 whitespace-nowrap">
+                <tr key={log.id} className="hover:bg-muted/50 transition-colors">
+                  <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
                     {dateOf(log) ? new Date(dateOf(log)).toLocaleString() : '—'}
                   </td>
-                  <td className="px-6 py-4 font-medium text-slate-900">{log.from_number || log.caller_number || '—'}</td>
-                  <td className="px-6 py-4 text-slate-500">
+                  <td className="px-6 py-4 font-medium text-foreground">{log.from_number || log.caller_number || '—'}</td>
+                  <td className="px-6 py-4 text-muted-foreground">
                     <span className="inline-flex items-center gap-1.5 capitalize">
                       {log.direction === 'outbound'
                         ? <PhoneOutgoing className="h-3.5 w-3.5" />
@@ -47,16 +47,16 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
                       {log.direction || 'inbound'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-slate-500">{formatDuration(log.duration)}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{formatDuration(log.duration)}</td>
                   <td className="px-6 py-4">
                     <Badge variant={log.call_successful ? 'success' : 'default'} className="capitalize">
                       {log.call_successful ? 'Successful' : (log.disconnection_reason || log.call_status || 'Unknown')}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 capitalize text-slate-600">{log.sentiment || '—'}</td>
+                  <td className="px-6 py-4 capitalize text-muted-foreground">{log.sentiment || '—'}</td>
                   <td className="px-6 py-4 text-right">
                     <Button variant="ghost" size="sm" onClick={() => setSelectedLog(log)}>
-                      <FileText className="h-4 w-4 mr-2" />
+                      <FileText className="h-4 w-4" />
                       View
                     </Button>
                   </td>
@@ -64,7 +64,7 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
               ))}
               {logs.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
                     No call logs found.
                   </td>
                 </tr>
@@ -86,30 +86,30 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
 
             {selectedLog.recording_url && (
               <div>
-                <p className="text-sm font-medium text-slate-900 mb-2">Recording</p>
+                <p className="text-sm font-medium text-foreground mb-2">Recording</p>
                 <audio controls src={selectedLog.recording_url} className="w-full" />
               </div>
             )}
 
             <div>
-              <p className="text-sm font-medium text-slate-900 mb-2">AI Summary</p>
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/60 text-sm text-slate-700">
+              <p className="text-sm font-medium text-foreground mb-2">AI Summary</p>
+              <div className="p-4 bg-muted/50 rounded-xl border border-border/60 text-sm text-foreground">
                 {selectedLog.summary || 'No summary available.'}
               </div>
             </div>
 
             {selectedLog.custom_analysis_data && Object.keys(selectedLog.custom_analysis_data).length > 0 && (
               <div>
-                <p className="text-sm font-medium text-slate-900 mb-2">Extracted Data</p>
-                <pre className="p-4 bg-slate-50 rounded-xl border border-slate-200/60 text-xs text-slate-700 overflow-x-auto">
+                <p className="text-sm font-medium text-foreground mb-2">Extracted Data</p>
+                <pre className="p-4 bg-muted/50 rounded-xl border border-border/60 text-xs text-foreground overflow-x-auto">
                   {JSON.stringify(selectedLog.custom_analysis_data, null, 2)}
                 </pre>
               </div>
             )}
 
             <div>
-              <p className="text-sm font-medium text-slate-900 mb-2">Transcript</p>
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/60 max-h-64 overflow-y-auto text-sm text-slate-700 whitespace-pre-wrap">
+              <p className="text-sm font-medium text-foreground mb-2">Transcript</p>
+              <div className="p-4 bg-muted/50 rounded-xl border border-border/60 max-h-64 overflow-y-auto text-sm text-foreground whitespace-pre-wrap">
                 {selectedLog.transcript || 'No transcript available.'}
               </div>
             </div>
@@ -119,7 +119,7 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
                 href={selectedLog.public_log_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-sm text-blue-600 hover:underline"
+                className="inline-block text-sm text-primary hover:underline"
               >
                 View full Retell log →
               </a>
@@ -134,8 +134,8 @@ export function CallLogsTable({ logs }: { logs: any[] }) {
 function Meta({ label, value }: { label: string; value?: any }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wider text-slate-400">{label}</p>
-      <p className="text-slate-800 capitalize">{value || '—'}</p>
+      <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="text-foreground capitalize">{value || '—'}</p>
     </div>
   );
 }

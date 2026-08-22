@@ -2,22 +2,26 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'solid' | 'outline';
 }
 
 export function Badge({ children, variant = 'default', className, ...props }: BadgeProps) {
+  // Tinted-on-transparent chips, per the reference. Each pairs a /10 wash with
+  // full-strength text of the same hue.
   const variants = {
-    default: 'bg-slate-100 text-slate-700',
-    success: 'bg-emerald-100 text-emerald-800',
-    warning: 'bg-yellow-100 text-yellow-800',
-    danger: 'bg-red-100 text-red-800',
-    info: 'bg-blue-100 text-blue-800',
+    default: 'bg-muted text-muted-foreground',
+    success: 'bg-success/10 text-success',
+    warning: 'bg-warning/10 text-warning',
+    danger: 'bg-destructive/10 text-destructive',
+    info: 'bg-primary/10 text-primary',
+    solid: 'bg-primary text-primary-foreground',
+    outline: 'border border-border text-foreground',
   };
 
   return (
-    <span 
+    <span
       className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+        'inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 text-xs font-medium',
         variants[variant],
         className
       )}

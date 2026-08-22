@@ -8,8 +8,8 @@ export default async function ServicesPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Services</h1>
-        <p className="text-slate-500 mt-2">Manage the services you provide. Drag to reorder within a level; nest a service by setting its parent when you edit it.</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Services</h1>
+        <p className="text-muted-foreground mt-2">Manage the services you provide. Drag to reorder within a level; nest a service by setting its parent when you edit it.</p>
       </div>
       
       <ServicesList initialServices={services as unknown as Service[]} />

@@ -9,8 +9,8 @@ export default async function SEOLayout({ children }: { children: React.ReactNod
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">SEO &amp; Visibility</h1>
-        <p className="text-slate-500 mt-2">Manage your search engine presence, metadata, and track broken links.</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">SEO &amp; Visibility</h1>
+        <p className="text-muted-foreground mt-2">Manage your search engine presence, metadata, and track broken links.</p>
       </div>
 
       <SeoTabs />

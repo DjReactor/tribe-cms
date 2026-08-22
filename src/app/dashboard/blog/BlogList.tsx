@@ -32,16 +32,16 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
       <div className="flex justify-end">
         <Link href="/dashboard/blog/new">
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4" />
             Create Post
           </Button>
         </Link>
       </div>
       
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-card rounded-xl border border-border/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-200/60">
+            <thead className="bg-muted/50 text-muted-foreground font-medium border-b border-border/60">
               <tr>
                 <th className="px-6 py-4 w-full">Title</th>
                 <th className="px-6 py-4">Status</th>
@@ -49,13 +49,13 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {posts.map((post) => (
-                <tr key={post.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={post.id} className="hover:bg-muted/50 transition-colors">
                   <td className="px-6 py-4">
                     <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="group block">
-                      <div className="font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{post.title}</div>
-                      <div className="text-xs text-slate-500 mt-1">/{post.slug}</div>
+                      <div className="font-medium text-foreground group-hover:text-primary transition-colors">{post.title}</div>
+                      <div className="text-xs text-muted-foreground mt-1">/{post.slug}</div>
                     </a>
                   </td>
                   <td className="px-6 py-4">
@@ -63,19 +63,19 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
                       {post.status}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-slate-500 whitespace-nowrap">
+                  <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
                     {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Draft'}
                   </td>
                   <td className="px-6 py-4 text-right space-x-2 whitespace-nowrap">
                     <Link href={`/dashboard/blog/${post.id}`}>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10">
                         <Edit2 className="h-4 w-4" />
                       </Button>
                     </Link>
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       onClick={() => handleDelete(post.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -85,7 +85,7 @@ export function BlogList({ initialPosts }: { initialPosts: any[] }) {
               ))}
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
                     No blog posts found.
                   </td>
                 </tr>

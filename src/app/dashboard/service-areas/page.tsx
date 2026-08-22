@@ -10,8 +10,8 @@ export default async function ServiceAreasPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Service Areas</h1>
-        <p className="text-slate-500 mt-2">
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Service Areas</h1>
+        <p className="text-muted-foreground mt-2">
           The places you serve, nested state → county → city → neighborhood. Drag to reorder within
           a level; nest an area by setting its parent when you edit it. Every area lives at the site
           root, so its URL stays the same however it is nested.
